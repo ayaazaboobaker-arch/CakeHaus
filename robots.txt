@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cakehaus.co.za/sitemap.xml
