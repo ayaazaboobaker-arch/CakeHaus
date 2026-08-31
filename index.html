@@ -2291,6 +2291,64 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
   .order-preview-actions { flex-direction: column; }
   .order-preview-back, .order-preview-confirm { flex: none; }
 }
+
+/* ========== MOBILE BOTTOM NAV ========== */
+.bottom-nav {
+  display: none;
+}
+@media (max-width: 768px) {
+  .bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9500;
+    background: rgba(26,26,26,0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(176,141,87,0.2);
+    padding: 6px 0;
+    padding-bottom: max(6px, env(safe-area-inset-bottom));
+    justify-content: space-around;
+    align-items: center;
+    transform: translateY(0);
+    transition: transform 0.35s ease;
+  }
+  .bottom-nav.hidden {
+    transform: translateY(100%);
+  }
+  .bottom-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    text-decoration: none;
+    color: var(--warm-gray);
+    font-family: var(--body);
+    font-size: 10px;
+    padding: 4px 8px;
+    transition: color 0.3s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .bottom-nav a.active {
+    color: var(--gold);
+  }
+  .bottom-nav a svg {
+    width: 22px;
+    height: 22px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .whatsapp-fab { bottom: 76px !important; }
+  .v3-footer { padding-bottom: 72px !important; }
+  html.dark-mode .bottom-nav {
+    background: rgba(17,17,17,0.95);
+  }
+}
 </style>
 </head>
 <body>
@@ -2564,6 +2622,10 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
           <div class="img-reveal"><img src="images/b6f0a6cc-a9c4-4785-9a80-e66472db240c.JPG" alt="Oreo Cupcakes" loading="lazy"></div>
           <div class="h-card-body"><h3>Oreo</h3></div>
         </div>
+        <div class="h-card" data-lightbox="images/e0874193-e876-49c9-bb7a-d052d4ff768e.JPG" data-caption="Rose Collection">
+          <div class="img-reveal"><img src="images/e0874193-e876-49c9-bb7a-d052d4ff768e.JPG" alt="Rose Cupcake Collection" loading="lazy"></div>
+          <div class="h-card-body"><h3>Rose Collection</h3></div>
+        </div>
       </div>
     </div>
 
@@ -2788,6 +2850,30 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
     <p>&copy; 2026 CakeHaus. Handcrafted in Pretoria.</p>
   </div>
 </footer>
+
+<!-- Mobile Bottom Nav -->
+<nav class="bottom-nav" id="bottomNav" aria-label="Mobile navigation">
+  <a data-scroll-to="hero">
+    <svg viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/></svg>
+    Home
+  </a>
+  <a data-scroll-to="secCakes">
+    <svg viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8v2m0 8v2M4 20h16M4 20V10a8 8 0 0116 0v10"/></svg>
+    Cakes
+  </a>
+  <a data-scroll-to="secCupcakes">
+    <svg viewBox="0 0 24 24"><path d="M8 14s1.5 2 4 2 4-2 4-2M6 18h12M5 22h14M12 2C9 2 7 5 7 8h10c0-3-2-6-5-6z"/></svg>
+    Cupcakes
+  </a>
+  <a data-scroll-to="secCustom">
+    <svg viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L3.063 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+    Custom
+  </a>
+  <a data-scroll-to="secReviews">
+    <svg viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+    Reviews
+  </a>
+</nav>
 
 <!-- WhatsApp FAB -->
 
@@ -4846,6 +4932,67 @@ var heroObserver = new IntersectionObserver(function(entries) {
 }, { threshold: 0 });
 var heroEl = document.getElementById('hero');
 if (heroEl) heroObserver.observe(heroEl);
+
+// ============================================================
+// MOBILE BOTTOM NAV - hide on scroll down, show on scroll up
+// ============================================================
+(function() {
+  var bottomNav = document.getElementById('bottomNav');
+  if (!bottomNav) return;
+  var lastY = 0;
+  var ticking = false;
+
+  function onScroll() {
+    var y = window.scrollY || window.pageYOffset;
+    if (y > lastY && y > 100) {
+      bottomNav.classList.add('hidden');
+    } else {
+      bottomNav.classList.remove('hidden');
+    }
+    lastY = y;
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      requestAnimationFrame(onScroll);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // Active state based on scroll position
+  var bnLinks = bottomNav.querySelectorAll('a[data-scroll-to]');
+  var bnSections = ['hero','secCakes','secCupcakes','secCustom','secReviews'];
+
+  function updateBottomActive() {
+    var scrollY = window.scrollY + window.innerHeight / 3;
+    var active = 'hero';
+    for (var i = 0; i < bnSections.length; i++) {
+      var sec = document.getElementById(bnSections[i]);
+      if (sec && sec.offsetTop <= scrollY) active = bnSections[i];
+    }
+    bnLinks.forEach(function(a) {
+      if (a.getAttribute('data-scroll-to') === active) {
+        a.classList.add('active');
+      } else {
+        a.classList.remove('active');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', function() {
+    requestAnimationFrame(updateBottomActive);
+  }, { passive: true });
+
+  // Click handlers
+  bnLinks.forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      var target = document.getElementById(a.getAttribute('data-scroll-to'));
+      if (target) lenis.scrollTo(target, { offset: -80 });
+    });
+  });
+})();
 
 // ============================================================
 // INIT
