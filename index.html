@@ -1,0 +1,4789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="CakeHaus - Handcrafted cakes and cupcakes in Pretoria, South Africa. Coconut almond glaze cakes, chocolate drizzle cakes, buttercream cupcakes, and custom celebration cakes. Order via WhatsApp.">
+<meta property="og:title" content="CakeHaus - Handcrafted Cakes & Cupcakes">
+<meta property="og:description" content="Handcrafted cakes and cupcakes in Pretoria. Coconut almond glaze, chocolate drizzle, buttercream cupcakes, and bespoke celebration cakes.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="images/c52fb9a8-227d-490c-87f7-32a78af4c649.JPG">
+<meta name="theme-color" content="#111111">
+<link rel="icon" type="image/jpeg" href="images/c52fb9a8-227d-490c-87f7-32a78af4c649.JPG">
+<title>CakeHaus - Handcrafted Cakes & Cupcakes | Pretoria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Bakery",
+  "name": "CakeHaus",
+  "description": "Handcrafted cakes and cupcakes in Pretoria, South Africa",
+  "address": { "@type": "PostalAddress", "addressLocality": "Pretoria", "addressCountry": "ZA" },
+  "url": "https://cakehaus.co.za",
+  "telephone": "+27753399401",
+  "priceRange": "R90-R410"
+}
+</script>
+
+<!-- CDN Libraries -->
+<!-- Three.js removed - hero uses 2D canvas particles now -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cream: #F5F0EB;
+  --dark: #1A1A1A;
+  --darker: #111111;
+  --gold: #B08D57;
+  --light-gold: #D4B896;
+  --warm-gray: #8C8279;
+  --soft-cream: #FAF7F3;
+  --white: #FFFFFF;
+  --heading: 'Lora', serif;
+  --body: 'Poppins', sans-serif;
+}
+
+html { scroll-behavior: auto; }
+
+body {
+  background: var(--darker);
+  color: var(--cream);
+  font-family: var(--body);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+/* Prevent double-tap zoom & 300ms delay on all interactive elements */
+button, a, input, textarea, select, [tabindex], .qty-btn, .flavour-pill, .order-card, .product-card, .h-card {
+  touch-action: manipulation;
+}
+
+/* ========== SCROLL PROGRESS BAR ========== */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  width: 0%; height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--light-gold));
+  z-index: 10000;
+  transition: none;
+  will-change: width;
+}
+
+/* ========== CURSOR ========== */
+.cursor-dot, .cursor-ring { display: none; }
+a, button, [tabindex], .product-card, .h-card { cursor: pointer; }
+
+@media (pointer: coarse) {
+  .cursor-dot, .cursor-ring { display: none; }
+}
+
+
+/* ========== LOADING SCREEN ========== */
+.loader {
+  position: fixed; inset: 0;
+  z-index: 9999;
+  background: var(--darker);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transition: opacity 0.8s ease, visibility 0.8s;
+}
+.loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.loader-logo {
+  position: relative;
+  margin-bottom: 30px;
+}
+.loader-logo svg {
+  width: 60px; height: 60px;
+}
+.loader-logo circle {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.5;
+  stroke-dasharray: 160;
+  stroke-dashoffset: 160;
+  animation: loaderCircle 2s ease forwards;
+}
+@keyframes loaderCircle {
+  to { stroke-dashoffset: 0; }
+}
+.loader-text {
+  font-family: var(--heading);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  color: var(--gold);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: loaderTextIn 0.8s ease 0.5s forwards;
+}
+@keyframes loaderTextIn {
+  to { opacity: 1; }
+}
+.loader-bar {
+  width: 120px; height: 2px;
+  background: rgba(176,141,87,0.2);
+  margin-top: 20px; border-radius: 2px; overflow: hidden;
+}
+.loader-bar-fill {
+  width: 0%; height: 100%;
+  background: var(--gold);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* ========== GRAIN OVERLAY ========== */
+.grain {
+  position: fixed; inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 150px;
+}
+
+/* ========== FLOATING PARTICLES ========== */
+.particles-container {
+  position: fixed; inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+.particle {
+  position: absolute;
+  width: 3px; height: 3px;
+  background: var(--gold);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+/* ========== NAVIGATION ========== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; width: 100%;
+  z-index: 1000;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.5s, padding 0.4s, backdrop-filter 0.5s;
+  opacity: 1;
+  pointer-events: auto;
+}
+.nav.scrolled {
+  background: rgba(17,17,17,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 14px 40px;
+}
+.nav.on-light.scrolled {
+  background: rgba(245,240,235,0.85);
+}
+.nav-logo {
+  font-family: var(--heading);
+  font-size: 1.2rem;
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  flex: 1;
+}
+.nav-links {
+  display: flex; gap: 32px;
+  list-style: none;
+  justify-content: center;
+}
+.nav-links a {
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--cream);
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 4px;
+  transition: color 0.3s;
+  cursor: pointer;
+}
+.nav-links a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+.nav.on-light .nav-links a { color: var(--dark); }
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 1px;
+  background: var(--gold);
+  transition: width 0.4s cubic-bezier(0.65,0,0.35,1);
+}
+.nav-links a:hover::after,
+.nav-links a.active::after { width: 100%; }
+.nav-links a:hover { color: var(--gold); }
+
+/* Mobile menu */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  z-index: 1002;
+  background: none; border: none; padding: 4px;
+}
+.nav-toggle:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+.nav-toggle span {
+  display: block;
+  width: 24px; height: 1.5px;
+  background: var(--gold);
+  transition: transform 0.3s, opacity 0.3s;
+}
+.nav-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 4px); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -4px); }
+
+.mobile-menu {
+  position: fixed; inset: 0;
+  background: rgba(17,17,17,0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 999;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 32px;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.5s, visibility 0.5s;
+}
+.mobile-menu.open { opacity: 1; visibility: visible; }
+.mobile-menu a {
+  font-family: var(--heading);
+  font-size: 1.6rem;
+  color: #F5F0EB;
+  text-decoration: none;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(20px);
+}
+.mobile-menu a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+.mobile-menu-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+  width: 100%;
+  max-width: 260px;
+}
+.mobile-menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border-radius: 30px;
+  font-family: var(--heading);
+  font-size: 0.95rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+.mobile-menu-btn:active { transform: scale(0.96); }
+.mobile-menu-cart {
+  background: transparent;
+  border: 2px solid var(--gold);
+  color: var(--gold);
+}
+.mobile-menu-cart:hover { background: rgba(197,168,120,0.15); }
+.mobile-menu-wa {
+  background: var(--gold);
+  border: 2px solid var(--gold);
+  color: var(--dark);
+}
+.mobile-menu-wa:hover { background: #b89a5a; }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-toggle { display: flex; }
+  /* Always show nav on mobile so hamburger is accessible */
+  .nav {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+  }
+  /* Transparent background on hero, solid after scroll */
+  .nav:not(.scrolled) {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  /* Hide logo on hero for cleaner look on mobile */
+  .nav:not(.nav-visible) .nav-logo { opacity: 0; pointer-events: none; }
+  /* Hide dark mode toggle on mobile - uses device setting */
+  .dark-toggle { display: none !important; }
+}
+
+/* ========== HERO CANVAS ========== */
+#heroCanvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ========== HERO SECTION ========== */
+.hero {
+  position: relative;
+  height: 100vh;
+  z-index: 2;
+}
+.hero-content {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  pointer-events: none;
+}
+.hero-title {
+  font-family: var(--heading);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  overflow: hidden;
+  position: relative; z-index: 5;
+}
+.hero-title .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(100%) rotateX(90deg);
+  transform-origin: bottom;
+}
+.hero-subtitle {
+  font-family: var(--body);
+  font-size: clamp(0.7rem, 1.5vw, 1rem);
+  color: var(--light-gold);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-top: 12px;
+  opacity: 0; transform: translateY(20px);
+  position: relative; z-index: 5;
+}
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 40px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column;
+  align-items: center; gap: 8px;
+  opacity: 0;
+}
+.hero-scroll-hint span {
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--warm-gray);
+}
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { transform: scaleY(1); opacity: 0.6; }
+  50% { transform: scaleY(1.3); opacity: 1; }
+}
+
+/* ========== SECTION DIVIDER ========== */
+.section-divider {
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  position: relative;
+  z-index: 10;
+}
+.section-divider svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.divider-dark-to-cream { background: var(--darker); }
+.divider-cream-to-dark { background: var(--cream); }
+
+/* ========== CONTENT SECTIONS ========== */
+.content-wrapper {
+  position: relative; z-index: 10;
+  background: var(--cream);
+  color: var(--dark);
+}
+.section {
+  padding: 120px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-label {
+  font-size: 0.7rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+.section-title {
+  font-family: var(--heading);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--dark);
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.section-title .word { display: inline-block; overflow: hidden; }
+.section-title .word .char { display: inline-block; transform: translateY(110%); }
+.section-text {
+  font-size: 1rem; line-height: 1.8;
+  color: var(--warm-gray);
+  max-width: 600px;
+  opacity: 0; transform: translateY(30px);
+  will-change: transform;
+}
+
+/* ========== IMAGE REVEAL ========== */
+.img-reveal {
+  position: relative;
+  overflow: hidden;
+}
+.img-reveal img {
+  transform: scale(1.15);
+  transition: transform 1.2s cubic-bezier(0.25,0.46,0.45,0.94);
+  object-fit: cover;
+  object-position: center;
+}
+.img-reveal.revealed img { transform: scale(1); }
+.img-reveal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--cream);
+  transform-origin: right;
+  transition: transform 1s cubic-bezier(0.77,0,0.175,1);
+}
+.img-reveal.revealed::after { transform: scaleX(0); }
+
+/* ========== PRODUCT GRID (showcase gallery) ========== */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+}
+.product-card {
+  background: var(--soft-cream);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(176,141,87,0.15);
+  opacity: 0; transform: translateY(60px);
+  transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.4s;
+  will-change: transform;
+  cursor: pointer;
+}
+.product-card:hover {
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+}
+.product-card:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+.product-card .img-reveal { aspect-ratio: 4/3; }
+.product-card img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center; display: block;
+  transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.product-card:hover img { transform: scale(1.05); }
+.product-card-body { padding: 20px; }
+.product-card-body h3 {
+  font-family: var(--heading);
+  font-size: 1.1rem; color: var(--dark);
+  margin-bottom: 6px;
+}
+.product-card-body p {
+  font-size: 0.8rem; color: var(--warm-gray); line-height: 1.5;
+}
+
+/* ========== ORDER CARDS (cart-enabled) ========== */
+.order-section-heading {
+  font-family: var(--heading);
+  font-size: 1.3rem;
+  color: var(--dark);
+  margin: 56px 0 8px;
+}
+.order-note {
+  font-size: 0.78rem;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+  font-style: italic;
+}
+.order-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px;
+  margin-top: 24px;
+}
+.order-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.order-card {
+  background: var(--soft-cream);
+  border: 1px solid rgba(176,141,87,0.18);
+  border-radius: 16px;
+  padding: 26px;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.3s;
+  position: relative;
+}
+.order-card.in-cart {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(176,141,87,0.25), 0 14px 34px rgba(176,141,87,0.16);
+}
+.order-card.in-cart::before {
+  content: '✓ In cart';
+  position: absolute;
+  top: -10px; right: 16px;
+  background: var(--gold);
+  color: #fff;
+  font-size: 0.62rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+  opacity: 0;
+  animation: badgeIn 0.4s ease forwards;
+}
+@keyframes badgeIn { to { opacity: 1; } }
+.order-card h3 {
+  font-family: var(--heading);
+  font-size: 1.15rem;
+  color: var(--dark);
+  margin-bottom: 6px;
+}
+.order-card-desc {
+  font-size: 0.8rem;
+  color: var(--warm-gray);
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+.flavour-pills {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin: 16px 0 4px;
+}
+.flavour-pill {
+  padding: 6px 14px;
+  border: 1px solid var(--gold);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--gold);
+  font-family: var(--body);
+  font-size: 0.66rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+.flavour-pill.active, .flavour-pill:hover {
+  background: var(--gold);
+  color: #fff;
+}
+.flavour-pill:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+.order-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 0;
+  border-top: 1px solid rgba(176,141,87,0.14);
+}
+.order-line:first-of-type { border-top: none; margin-top: 14px; }
+.order-card > .order-line:first-of-type { margin-top: 16px; }
+.order-line-info { display: flex; flex-direction: column; gap: 2px; }
+.order-line-size { font-size: 0.82rem; color: var(--dark); }
+.order-line-price { font-size: 1rem; color: var(--gold); font-weight: 600; }
+.qty-control {
+  display: flex; align-items: center; gap: 12px;
+  flex-shrink: 0;
+}
+.qty-btn {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: transparent;
+  color: var(--gold);
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, transform 0.15s;
+  font-family: var(--body);
+}
+.qty-btn:hover { background: var(--gold); color: #fff; }
+.qty-btn:active { transform: scale(0.9); }
+.qty-btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+.qty-value {
+  min-width: 24px;
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--dark);
+  font-weight: 600;
+}
+
+/* ========== CART BADGE ========== */
+.cart-badge {
+  position: fixed;
+  bottom: 100px; right: 30px;
+  z-index: 9200;
+  background: var(--darker);
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  border-radius: 30px;
+  padding: 12px 20px;
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.3);
+  opacity: 0; visibility: hidden;
+  transform: translateY(20px) scale(0.85);
+  transition: opacity 0.4s, transform 0.4s, visibility 0.4s;
+  font-family: var(--body);
+}
+.cart-badge.visible { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+.cart-badge:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 14px 36px rgba(0,0,0,0.4);
+  border-color: var(--light-gold);
+  background: var(--gold);
+  color: var(--darker);
+}
+.cart-badge:hover .cart-badge-count { background: var(--darker); color: var(--gold); }
+.cart-badge:hover svg { fill: var(--darker); }
+.cart-badge.pulse { animation: cartPulse 0.5s ease; }
+@keyframes cartPulse {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+.cart-badge-count {
+  background: var(--gold);
+  color: var(--darker);
+  border-radius: 50%;
+  width: 20px; height: 20px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.cart-badge-total { font-size: 0.78rem; letter-spacing: 0.5px; white-space: nowrap; }
+.cart-badge svg { width: 18px; height: 18px; fill: var(--gold); }
+
+/* ========== CART DRAWER ========== */
+.cart-drawer-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 10300;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.4s, visibility 0.4s;
+}
+.cart-drawer-overlay.open { opacity: 1; visibility: visible; }
+.cart-drawer {
+  position: fixed;
+  top: 0; right: -420px;
+  width: 400px; max-width: 92vw;
+  height: 100vh; height: 100dvh;
+  background: var(--soft-cream);
+  color: var(--dark);
+  z-index: 10400;
+  box-shadow: -14px 0 50px rgba(0,0,0,0.25);
+  display: flex; flex-direction: column;
+  transition: right 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+  overflow: hidden;
+}
+.cart-drawer.open { right: 0; }
+.cart-drawer-header {
+  padding: 24px 24px 18px;
+  border-bottom: 1px solid rgba(176,141,87,0.18);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cart-drawer-header h3 {
+  font-family: var(--heading);
+  font-size: 1.2rem;
+  color: var(--dark);
+  letter-spacing: 1px;
+}
+.cart-drawer-close {
+  background: none; border: 1px solid rgba(176,141,87,0.3);
+  width: 34px; height: 34px; border-radius: 50%;
+  color: var(--dark); font-size: 1.1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.cart-drawer-close:hover { border-color: var(--gold); transform: rotate(90deg); }
+.cart-drawer-close:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.cart-drawer-items {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 8px 24px;
+  touch-action: pan-y;
+}
+.cart-empty {
+  text-align: center;
+  color: var(--warm-gray);
+  font-size: 0.85rem;
+  padding: 60px 10px;
+  line-height: 1.8;
+}
+.cart-item {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(176,141,87,0.12);
+}
+.cart-item-main { flex: 1; min-width: 0; }
+.cart-item-name { font-size: 0.85rem; color: var(--dark); margin-bottom: 4px; }
+.cart-item-meta { font-size: 0.72rem; color: var(--warm-gray); }
+.cart-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.cart-item-subtotal { font-size: 0.85rem; color: var(--gold); font-weight: 600; }
+.cart-item-remove {
+  background: none; border: none;
+  color: var(--warm-gray); font-size: 0.95rem; cursor: pointer;
+  transition: color 0.3s;
+}
+.cart-item-remove:hover { color: #c0392b; }
+.cart-drawer-footer {
+  padding: 18px 24px 24px;
+  border-top: 1px solid rgba(176,141,87,0.18);
+  max-height: 50vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  flex-shrink: 0;
+}
+.cart-total-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-family: var(--heading);
+  font-size: 1.15rem; color: var(--dark);
+  margin-bottom: 16px;
+}
+.cart-total-row span:last-child { color: var(--gold); }
+.cart-details {
+  margin-bottom: 12px;
+}
+.cart-details-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.cart-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid rgba(176,141,87,0.3);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-family: var(--body);
+  font-size: 1rem;
+  background: #fff;
+  color: var(--dark);
+  transition: border-color 0.3s;
+}
+.cart-input:focus-visible, .cart-input:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+.cart-field-label {
+  font-size: 0.72rem;
+  color: var(--warm-gray);
+  margin-bottom: 4px;
+  display: block;
+}
+.cart-textarea {
+  resize: vertical;
+  min-height: 50px;
+}
+.cart-upload-btn {
+  width: 100%;
+  padding: 10px 16px;
+  background: transparent;
+  border: 1.5px dashed rgba(176,141,87,0.4);
+  border-radius: 8px;
+  color: var(--gold);
+  font-family: var(--body);
+  font-size: 0.82rem;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s;
+  margin-bottom: 10px;
+  touch-action: manipulation;
+}
+.cart-upload-btn:hover {
+  border-color: var(--gold);
+  background: rgba(176,141,87,0.06);
+}
+.cart-image-previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.cart-image-thumb {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(176,141,87,0.25);
+}
+.cart-image-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.cart-image-thumb-remove {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  border: none;
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background 0.2s;
+  touch-action: manipulation;
+}
+.cart-image-thumb-remove:hover { background: #c0392b; }
+.cart-send-btn {
+  width: 100%;
+  padding: 14px;
+  background: #25D366;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-family: var(--body);
+  font-size: 0.82rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: transform 0.2s, box-shadow 0.3s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.cart-send-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37,211,102,0.35); }
+.cart-send-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.cart-send-btn svg { width: 16px; height: 16px; fill: #fff; }
+.cart-clear-btn {
+  width: 100%;
+  padding: 10px;
+  background: none;
+  border: 1px solid rgba(176,141,87,0.3);
+  color: var(--warm-gray);
+  border-radius: 30px;
+  font-family: var(--body);
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.3s, color 0.3s;
+}
+.cart-clear-btn:hover { border-color: var(--gold); color: var(--gold); }
+.cart-clear-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* ========== CART TWO-STEP FLOW ========== */
+.cart-step { display: none; }
+.cart-step.active { display: block; }
+.cart-ready-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--gold);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-family: var(--body);
+  font-size: 0.82rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: transform 0.2s, box-shadow 0.3s, opacity 0.2s;
+}
+.cart-ready-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(176,141,87,0.35); }
+.cart-ready-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.cart-ready-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+.cart-back-btn {
+  width: 100%;
+  padding: 10px;
+  background: none;
+  border: 1px solid rgba(176,141,87,0.3);
+  color: var(--warm-gray);
+  border-radius: 30px;
+  font-family: var(--body);
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: border-color 0.3s, color 0.3s;
+}
+.cart-back-btn:hover { border-color: var(--gold); color: var(--gold); }
+.cart-back-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.cart-order-summary {
+  margin-bottom: 12px;
+  max-height: 160px;
+  overflow-y: auto;
+  border: 1px solid rgba(176,141,87,0.18);
+  border-radius: 10px;
+  padding: 4px 12px;
+}
+.cart-summary-item {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(176,141,87,0.12);
+  font-size: 0.8rem;
+}
+.cart-summary-item:last-child { border-bottom: none; }
+.cart-summary-item-name { color: var(--dark); flex: 1; }
+.cart-summary-item-price { color: var(--gold); font-weight: 600; white-space: nowrap; }
+
+/* ========== CUSTOM BOX BUILDER ========== */
+.order-card-custom { display: flex; flex-direction: column; }
+.custom-box-teaser { margin: 16px 0 18px; }
+.custom-box-teaser-price { font-size: 1rem; color: var(--gold); font-weight: 600; }
+.mini-mix-open-btn,
+.custom-box-open-btn {
+  margin-top: auto;
+  width: 100%;
+  padding: 13px;
+  background: var(--gold);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-family: var(--body);
+  font-size: 0.78rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+.mini-mix-open-btn:hover,
+.custom-box-open-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(176,141,87,0.3); }
+.mini-mix-open-btn:focus-visible,
+.custom-box-open-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.order-card-mini-mix { display: flex; flex-direction: column; }
+.mini-mix-teaser { margin: 16px 0 18px; }
+.mini-mix-teaser-price { font-size: 1rem; color: var(--gold); font-weight: 600; }
+
+.box-builder-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 10600;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.35s, visibility 0.35s;
+}
+.box-builder-overlay.show { opacity: 1; visibility: visible; }
+.box-builder-modal {
+  background: var(--soft-cream);
+  color: var(--dark);
+  border-radius: 18px;
+  width: 480px;
+  max-width: 100%;
+  max-height: 96vh;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  transform: translateY(30px) scale(0.97);
+  transition: transform 0.35s;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.35);
+}
+.box-builder-overlay.show .box-builder-modal { transform: translateY(0) scale(1); }
+.box-builder-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(176,141,87,0.18);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.box-builder-header h3 { font-family: var(--heading); font-size: 1.05rem; color: var(--dark); }
+.box-builder-close {
+  background: none; border: 1px solid rgba(176,141,87,0.3);
+  width: 30px; height: 30px; border-radius: 50%;
+  color: var(--dark); font-size: 1.1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.box-builder-close:hover { border-color: var(--gold); transform: rotate(90deg); }
+.box-builder-body {
+  padding: 14px 20px 16px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+.box-size-selector {
+  display: flex; gap: 8px;
+  margin-bottom: 12px;
+}
+.box-size-btn {
+  flex: 1;
+  padding: 7px;
+  border: 1.5px solid var(--gold);
+  border-radius: 30px;
+  background: transparent;
+  color: var(--gold);
+  font-family: var(--body);
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s;
+}
+.box-size-btn.active, .box-size-btn:hover {
+  background: var(--gold);
+  color: #fff;
+}
+.box-size-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.box-slots-grid {
+  display: grid;
+  gap: 6px;
+  margin: 0 auto 4px;
+  max-width: 220px;
+}
+.box-slots-grid.size-6 { grid-template-columns: repeat(3, 1fr); }
+.box-slots-grid.size-12 { grid-template-columns: repeat(4, 1fr); }
+.box-slots-grid.size-24 { grid-template-columns: repeat(6, 1fr); }
+.box-slots-grid.size-24 .box-slot { width: 32px; height: 32px; }
+.box-slot {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid rgba(176,141,87,0.35);
+  background: transparent;
+  transition: background 0.3s, border-color 0.3s, transform 0.2s;
+}
+.box-slot.filled {
+  border-color: transparent;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+  animation: slotPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.box-slot.filled.no-anim { animation: none; transform: scale(1); }
+@keyframes slotPop {
+  0% { transform: scale(0.4); opacity: 0.4; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.box-slots-status {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--warm-gray);
+  margin-bottom: 2px;
+}
+.box-slots-hint {
+  text-align: center;
+  font-size: 0.62rem;
+  color: rgba(176,141,87,0.5);
+  margin: 0 0 10px;
+}
+.box-slot.filled { cursor: pointer; }
+.box-slot.filled:hover { transform: scale(0.9); opacity: 0.7; }
+.box-flavour-list {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.box-flavour-card {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 12px;
+  border: 1.5px solid rgba(176,141,87,0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.25s, transform 0.15s, box-shadow 0.25s;
+  user-select: none; -webkit-user-select: none;
+  position: relative; overflow: hidden;
+}
+.box-flavour-card:hover { border-color: var(--gold); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(176,141,87,0.15); }
+.box-flavour-card:active { transform: scale(0.97); }
+.box-flavour-card.has-count { border-color: var(--gold); background: rgba(176,141,87,0.06); }
+.box-flavour-swatch {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 2px solid rgba(255,255,255,0.6);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+.box-flavour-info { flex: 1; min-width: 0; }
+.box-flavour-name { font-size: 0.72rem; color: var(--dark); display: block; line-height: 1.3; }
+.box-flavour-price { display: none; }
+.box-flavour-count {
+  position: absolute; bottom: 4px; right: 6px;
+  font-size: 0.7rem; font-weight: 700; color: #fff;
+  background: var(--gold); border-radius: 50%;
+  width: 20px; height: 20px; display: flex;
+  align-items: center; justify-content: center;
+  opacity: 0; transform: scale(0.5);
+  transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+.box-flavour-card.has-count .box-flavour-count { opacity: 1; transform: scale(1); }
+.box-builder-price-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-family: var(--heading);
+  font-size: 1rem; color: var(--dark);
+  margin: 10px 0 8px;
+}
+.box-builder-price-row span:last-child { color: var(--gold); }
+.box-builder-add-btn {
+  width: 100%;
+  padding: 10px;
+  background: var(--gold);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-family: var(--body);
+  font-size: 0.82rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s, opacity 0.2s;
+}
+.box-builder-add-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(176,141,87,0.35); }
+.box-builder-add-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.box-builder-add-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* Fly-to-cart + sparkle */
+.fly-item {
+  position: fixed;
+  width: 14px; height: 14px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10500;
+  box-shadow: 0 0 12px rgba(176,141,87,0.6);
+}
+.sparkle {
+  position: fixed;
+  width: 5px; height: 5px;
+  background: var(--light-gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10500;
+}
+
+/* ========== HORIZONTAL SCROLL ========== */
+.horizontal-section { overflow: hidden; min-height: 100vh; }
+.horizontal-track {
+  display: flex; gap: 30px;
+  padding: 0 60px 0 60px; width: max-content;
+  padding-right: calc(100vw - 350px - 60px);
+}
+.h-card {
+  width: 350px; flex-shrink: 0;
+  border-radius: 16px; overflow: hidden;
+  background: var(--soft-cream);
+  border: 1px solid rgba(176,141,87,0.15);
+  transition: transform 0.5s, box-shadow 0.4s;
+  cursor: pointer;
+}
+.h-card:hover {
+  box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+}
+.h-card .img-reveal { aspect-ratio: 3/4; }
+.h-card img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center; display: block;
+  transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.h-card:hover img { transform: scale(1.05); }
+.h-card-body { padding: 20px; }
+.h-card-body h3 {
+  font-family: var(--heading);
+  font-size: 1rem; color: var(--dark);
+  margin-bottom: 4px;
+}
+.h-card-body p { font-size: 0.78rem; color: var(--warm-gray); }
+
+/* ========== REVIEW MARQUEE ========== */
+.marquee-wrapper {
+  overflow: hidden;
+  margin-top: 40px;
+  padding: 20px 0;
+}
+.marquee-track {
+  display: flex;
+  gap: 40px;
+  width: max-content;
+  animation: marquee 18s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+.marquee-cupcakes { animation-duration: 30s; }
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.review-card {
+  flex-shrink: 0;
+  width: 380px;
+  background: var(--soft-cream);
+  border: 1px solid rgba(176,141,87,0.15);
+  border-radius: 16px;
+  padding: 32px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.review-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+}
+.review-card p {
+  font-style: italic;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--warm-gray);
+}
+.review-card .review-author {
+  font-family: var(--heading);
+  font-style: normal;
+  font-size: 0.85rem;
+  color: var(--dark);
+  margin-top: 16px;
+}
+.review-stars {
+  color: var(--gold);
+  font-size: 0.8rem;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+}
+
+/* ========== REVIEW FORM ========== */
+.review-form-wrap {
+  max-width: 520px;
+  margin: 50px auto 0;
+  padding: 0 60px;
+}
+.review-form {
+  background: var(--soft-cream);
+  border: 1px solid rgba(176,141,87,0.15);
+  border-radius: 16px;
+  padding: 36px;
+}
+.review-form h3 {
+  font-family: var(--heading);
+  font-size: 1.1rem;
+  color: var(--dark);
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+.review-form label {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--warm-gray);
+  margin-bottom: 6px;
+  font-family: var(--heading);
+}
+.review-form input,
+.review-form textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid rgba(176,141,87,0.25);
+  border-radius: 8px;
+  background: var(--cream);
+  color: var(--dark);
+  font-family: var(--body);
+  font-size: 1rem;
+  margin-bottom: 18px;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+.review-form input:focus,
+.review-form textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+.review-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+.star-rating-input {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 18px;
+  direction: rtl;
+  justify-content: flex-end;
+}
+.star-rating-input input { display: none; }
+.star-rating-input label {
+  font-size: 1.8rem;
+  color: rgba(176,141,87,0.25);
+  cursor: pointer;
+  transition: color 0.2s;
+  margin: 0;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.star-rating-input label:hover,
+.star-rating-input label:hover ~ label,
+.star-rating-input input:checked ~ label {
+  color: var(--gold);
+}
+.review-submit-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: var(--gold);
+  color: var(--dark);
+  border: none;
+  border-radius: 30px;
+  font-family: var(--heading);
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+.review-submit-btn:hover { background: #b89a5a; }
+.review-submit-btn:active { transform: scale(0.97); }
+.review-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.review-form-msg {
+  text-align: center;
+  font-size: 0.85rem;
+  margin-top: 14px;
+  color: var(--gold);
+  min-height: 20px;
+}
+html.dark-mode .review-form {
+  background: var(--soft-cream);
+}
+html.dark-mode .review-form input,
+html.dark-mode .review-form textarea {
+  background: var(--cream);
+  color: var(--dark);
+  border-color: rgba(176,141,87,0.3);
+}
+
+/* ========== STORY SECTION ========== */
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  margin-top: 40px;
+}
+.story-img {
+  border-radius: 16px;
+  overflow: hidden;
+  min-height: 400px;
+}
+.story-img img {
+  width: 100%; height: 100%;
+  min-height: 400px;
+  object-fit: cover; object-position: center; display: block;
+}
+
+/* ========== LIGHTBOX ========== */
+.lightbox {
+  position: fixed; inset: 0;
+  z-index: 99990;
+  background: rgba(0,0,0,0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.4s, visibility 0.4s;
+  cursor: zoom-out;
+}
+.lightbox.active { opacity: 1; visibility: visible; }
+.lightbox img {
+  max-width: 90vw; max-height: 85vh;
+  object-fit: contain;
+  border-radius: 12px;
+  transform: scale(0.9);
+  transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+}
+.lightbox.active img { transform: scale(1); }
+.lightbox-close {
+  position: absolute;
+  top: 24px; right: 24px;
+  width: 44px; height: 44px;
+  background: none; border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  color: var(--cream);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.lightbox-close:hover {
+  border-color: var(--gold);
+  transform: rotate(90deg);
+}
+.lightbox-close:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+.lightbox-caption {
+  position: absolute;
+  bottom: 30px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  color: var(--warm-gray);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.whatsapp-fab {
+  position: fixed;
+  bottom: 30px; right: 30px;
+  z-index: 9000;
+  width: 56px; height: 56px;
+  background: #25D366;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  text-decoration: none;
+  opacity: 0; transform: scale(0.5);
+}
+.whatsapp-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 30px rgba(37,211,102,0.5);
+}
+.whatsapp-fab:focus-visible {
+  outline: 2px solid #25D366;
+  outline-offset: 4px;
+}
+.whatsapp-fab svg { width: 28px; height: 28px; fill: #fff; }
+
+/* ========== BACK TO TOP ========== */
+.back-to-top {
+  position: fixed;
+  bottom: 30px; left: 30px;
+  z-index: 9000;
+  width: 44px; height: 44px;
+  cursor: pointer;
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.4s, transform 0.4s;
+  pointer-events: none;
+}
+.back-to-top.visible {
+  opacity: 1; transform: translateY(0);
+  pointer-events: all;
+}
+.back-to-top svg { width: 44px; height: 44px; }
+.btt-bg {
+  fill: none;
+  stroke: rgba(176,141,87,0.2);
+  stroke-width: 2;
+}
+.btt-progress {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 2;
+  stroke-dasharray: 126;
+  stroke-dashoffset: 126;
+  transition: stroke-dashoffset 0.1s;
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+.btt-arrow {
+  fill: var(--gold);
+}
+
+/* CTA Banner */
+.cta-section {
+  text-align: center;
+  padding: 100px 40px;
+  background: var(--darker);
+  position: relative; z-index: 10;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: -60%; left: -20%;
+  width: 140%; height: 140%;
+  background: radial-gradient(ellipse at center, rgba(176,141,87,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-section h2 {
+  font-family: var(--heading);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  color: var(--gold);
+  margin-bottom: 16px;
+  position: relative;
+}
+.cta-section p {
+  color: var(--warm-gray);
+  font-size: 0.9rem;
+  margin-bottom: 32px;
+  letter-spacing: 1px;
+  position: relative;
+}
+.cta-btn {
+  display: inline-block;
+  padding: 16px 48px;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: var(--body);
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 40px;
+  transition: background 0.4s, color 0.4s, transform 0.3s, box-shadow 0.4s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  background: none;
+  font-weight: 400;
+}
+.cta-btn:hover {
+  background: var(--gold);
+  color: var(--darker);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(176,141,87,0.25);
+}
+.cta-btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+.cta-btn-small {
+  padding: 12px 32px;
+  font-size: 0.72rem;
+  margin-top: 32px;
+}
+/* Magnetic pull */
+.magnetic { transition: transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94); }
+
+/* ========== FOOTER (compact, professional) ========== */
+.v3-footer {
+  background: var(--darker);
+  color: var(--cream);
+  padding: 0 40px;
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 26px 0;
+  border-bottom: 1px solid rgba(176,141,87,0.15);
+}
+.footer-brand {
+  font-family: var(--heading);
+  font-size: 1rem;
+  color: var(--gold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.footer-links {
+  display: flex;
+  gap: 26px;
+  list-style: none;
+  flex-wrap: wrap;
+}
+.footer-links a {
+  font-size: 0.74rem;
+  color: var(--warm-gray);
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: color 0.3s;
+  cursor: pointer;
+}
+.footer-links a:hover { color: var(--gold); }
+.footer-links a:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 2px;
+}
+.footer-contact {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+.footer-contact a {
+  font-size: 0.74rem;
+  color: var(--warm-gray);
+  text-decoration: none;
+  transition: color 0.3s;
+  display: flex; align-items: center; gap: 6px;
+}
+.footer-contact a:hover { color: var(--gold); }
+.footer-contact a:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 2px;
+}
+.footer-contact svg { width: 14px; height: 14px; fill: currentColor; }
+.footer-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 0 0;
+  font-family: var(--body);
+  font-size: 0.8rem;
+  color: var(--warm-gray);
+  letter-spacing: 1px;
+}
+.footer-info a {
+  color: var(--warm-gray);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.footer-info a:hover { color: var(--gold); }
+.footer-dot { color: var(--gold); }
+.footer-bottom {
+  text-align: center;
+  padding: 16px 0;
+}
+.footer-bottom p {
+  font-size: 0.66rem;
+  color: var(--warm-gray);
+  letter-spacing: 1px;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 900px) {
+  .order-grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .section { padding: 80px 24px; }
+  .horizontal-track { padding: 0 24px; }
+  .h-card { width: 280px; }
+  .story-grid { grid-template-columns: 1fr; gap: 30px; }
+  .nav { padding: 16px 20px; }
+  .nav.scrolled { padding: 12px 20px; }
+  .footer-inner { flex-direction: column; gap: 18px; text-align: center; padding: 24px 0; }
+  .footer-links { justify-content: center; }
+  .review-card { width: 300px; }
+  .back-to-top { bottom: 20px; left: 20px; }
+  .whatsapp-fab { bottom: 20px; right: 20px; }
+
+  .cart-badge { right: 20px; bottom: 82px; padding: 10px 16px; }
+  .order-grid-3 { grid-template-columns: 1fr; }
+  .cart-drawer { width: 100%; max-width: 100%; right: -100%; }
+
+  /* ===== MOBILE TOUCH TARGET FIXES (44px min) ===== */
+  .nav-toggle { padding: 10px; min-width: 44px; min-height: 44px; }
+  .cart-drawer-close { width: 44px; height: 44px; }
+  .qty-btn { width: 44px; height: 44px; }
+  .flavour-pill { padding: 10px 16px; min-height: 44px; display: inline-flex; align-items: center; }
+  .cart-item-remove { min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; }
+  .footer-links a { padding: 8px 4px; min-height: 44px; display: inline-flex; align-items: center; }
+  .footer-info a { padding: 8px 4px; min-height: 44px; display: inline-flex; align-items: center; }
+  .star-rating-input label { font-size: 2.2rem; padding: 4px; min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+  .back-to-top { width: 44px; height: 44px; }
+  .whatsapp-fab { width: 52px; height: 52px; }
+  .review-form-wrap { padding: 0 18px; }
+  .cart-drawer-footer { max-height: 40vh; }
+}
+@media (max-width: 480px) {
+  .hero-title { letter-spacing: 4px; }
+  .section { padding: 60px 18px; }
+}
+
+/* ========== REDUCED MOTION ========== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .marquee-track { animation: none; }
+  .scroll-line { animation: none; }
+  .particle { display: none; }
+}
+
+/* ========== PRINT ========== */
+@media print {
+  .nav, .grain, .cursor-dot, .cursor-ring, .loader, .whatsapp-fab,
+  .back-to-top, .scroll-progress, .particles-container, #heroCanvas,
+  .lightbox, .cart-badge, .cart-drawer, .cart-drawer-overlay { display: none !important; }
+  .hero { height: auto; }
+  .hero-content { position: static; }
+  .content-wrapper { background: #fff; }
+  .section { padding: 20px 0; }
+  body { color: #000; background: #fff; }
+}
+
+/* ========== FOCUS SKIP LINK ========== */
+.skip-link {
+  position: absolute;
+  top: -100%; left: 50%;
+  transform: translateX(-50%);
+  background: var(--gold);
+  color: var(--darker);
+  padding: 10px 20px;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  border-radius: 0 0 8px 8px;
+  z-index: 100000;
+  transition: top 0.3s;
+}
+.skip-link:focus { top: 0; }
+
+/* ========== ABOUT SECTION (V2-style) ========== */
+.about-centered {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.about-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 20px 0;
+}
+.about-divider-line {
+  width: 60px;
+  height: 1px;
+  background: var(--gold);
+}
+.about-divider-diamond {
+  color: var(--gold);
+  font-size: 0.7rem;
+}
+.about-tagline {
+  font-family: var(--heading);
+  font-style: italic;
+  color: var(--gold);
+  font-size: 1.05rem;
+  margin-bottom: 24px;
+  opacity: 0; transform: translateY(20px);
+}
+.about-text {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--warm-gray);
+  max-width: 700px;
+  margin: 0 auto 16px;
+  opacity: 0; transform: translateY(30px);
+  will-change: transform;
+}
+.about-highlights {
+  display: flex;
+  gap: 40px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.about-highlight {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  opacity: 0; transform: translateY(30px);
+}
+.about-highlight-icon {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  color: var(--gold);
+  transition: background 0.3s, color 0.3s;
+}
+.about-highlight:hover .about-highlight-icon {
+  background: var(--gold);
+  color: var(--white);
+}
+.about-highlight-label {
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--dark);
+}
+.about-highlight-sub {
+  font-family: var(--heading);
+  font-style: italic;
+  font-size: 0.7rem;
+  color: var(--warm-gray);
+  margin-top: 4px;
+}
+
+/* ========== DARK MODE TOGGLE ========== */
+.dark-toggle {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold);
+  background: transparent;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+.dark-toggle:hover { background: var(--gold); }
+.dark-toggle:hover svg { fill: var(--white); }
+.dark-toggle svg { width: 16px; height: 16px; fill: var(--gold); transition: transform 0.4s ease, fill 0.3s ease; }
+.dark-toggle.active svg { transform: rotate(180deg); }
+.dark-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* ========== DARK MODE OVERRIDES ========== */
+html.dark-mode {
+  --cream: #1A1A1A;
+  --dark: #F5F0EB;
+  --soft-cream: #252525;
+  --warm-gray: #999;
+}
+html.dark-mode body {
+  transition: background 0.4s ease, color 0.4s ease;
+}
+html.dark-mode .content-wrapper {
+  background: var(--cream);
+}
+html.dark-mode .nav.scrolled {
+  background: rgba(26,26,26,0.85);
+}
+html.dark-mode .nav-links a {
+  color: #F5F0EB;
+}
+html.dark-mode .nav.on-light.scrolled {
+  background: rgba(26,26,26,0.85);
+}
+html.dark-mode .nav.on-light .nav-links a {
+  color: #F5F0EB;
+}
+html.dark-mode .nav-logo {
+  color: var(--gold);
+}
+html.dark-mode .product-card,
+html.dark-mode .order-card,
+html.dark-mode .h-card {
+  background: var(--soft-cream);
+}
+html.dark-mode .cart-drawer {
+  background: var(--soft-cream);
+}
+html.dark-mode .img-reveal::after {
+  background: var(--cream);
+}
+html.dark-mode .review-card {
+  background: var(--soft-cream);
+}
+html.dark-mode .cart-input {
+  background: var(--cream);
+  color: var(--dark);
+  border-color: rgba(176,141,87,0.3);
+}
+html.dark-mode .section-divider.divider-dark-to-cream svg path {
+  fill: var(--cream);
+}
+/* Dark mode mobile menu + nav */
+html.dark-mode .mobile-menu {
+  background: rgba(10,10,10,0.97);
+}
+html.dark-mode .mobile-menu a {
+  color: #F5F0EB;
+}
+html.dark-mode .mobile-menu-cart {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+html.dark-mode .mobile-menu-wa {
+  color: #1A1A1A;
+}
+html.dark-mode .nav-toggle span {
+  background: var(--gold);
+}
+html.dark-mode .nav {
+  color: #F5F0EB;
+}
+/* Dark mode cart drawer */
+html.dark-mode .cart-drawer {
+  background: #1e1e1e;
+}
+html.dark-mode .cart-drawer-header h3 {
+  color: #F5F0EB;
+}
+html.dark-mode .cart-drawer-close {
+  color: #F5F0EB;
+  border-color: rgba(197,168,120,0.3);
+}
+html.dark-mode .cart-item-name {
+  color: #F5F0EB;
+}
+html.dark-mode .cart-total-row {
+  color: #F5F0EB;
+}
+html.dark-mode .cart-empty {
+  color: #999;
+}
+
+/* ========== CELEBRATION POPUP ========== */
+.celebration-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.celebration-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.celebration-popup {
+  background: var(--soft-cream);
+  border: 1px solid rgba(176,141,87,0.3);
+  border-radius: 20px;
+  padding: 48px 40px;
+  text-align: center;
+  max-width: 420px;
+  width: 90%;
+  transform: scale(0.7) translateY(30px);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+}
+.celebration-overlay.show .celebration-popup {
+  transform: scale(1) translateY(0);
+}
+.celebration-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  display: block;
+  animation: celebBounce 0.6s ease 0.3s both;
+}
+@keyframes celebBounce {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+.celebration-popup h3 {
+  font-family: var(--heading);
+  color: var(--gold);
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+.celebration-popup p {
+  color: var(--warm-gray);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+.celebration-close-btn {
+  padding: 12px 32px;
+  background: var(--gold);
+  color: var(--darker);
+  border: none;
+  border-radius: 30px;
+  font-family: var(--body);
+  font-size: 0.85rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  touch-action: manipulation;
+}
+.celebration-close-btn:hover {
+  background: #b89a5a;
+  transform: translateY(-2px);
+}
+
+/* ========== CONFETTI CANVAS ========== */
+#confettiCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  pointer-events: none;
+}
+
+/* ========== ORDER PREVIEW MODAL ========== */
+.order-preview-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 10500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.order-preview-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.order-preview {
+  background: var(--soft-cream);
+  border: 1px solid rgba(176,141,87,0.3);
+  border-radius: 16px;
+  max-width: 440px;
+  width: 92%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+.order-preview-overlay.show .order-preview {
+  transform: scale(1) translateY(0);
+}
+.order-preview-header {
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid rgba(176,141,87,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.order-preview-header h3 {
+  font-family: var(--heading);
+  color: var(--gold);
+  font-size: 1.15rem;
+  letter-spacing: 1px;
+  margin: 0;
+}
+.order-preview-close {
+  background: none;
+  border: 1px solid rgba(176,141,87,0.3);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: var(--dark);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.3s;
+  touch-action: manipulation;
+}
+.order-preview-close:hover { border-color: var(--gold); }
+.order-preview-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
+}
+.order-preview-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(176,141,87,0.1);
+  font-size: 0.9rem;
+  color: var(--dark);
+}
+.order-preview-item:last-child { border-bottom: none; }
+.order-preview-item-name {
+  flex: 1;
+  font-family: var(--heading);
+  font-size: 0.88rem;
+}
+.order-preview-item-qty {
+  color: var(--warm-gray);
+  font-size: 0.82rem;
+  margin: 0 12px;
+}
+.order-preview-item-price {
+  font-weight: 600;
+  color: var(--gold);
+  white-space: nowrap;
+}
+.order-preview-details {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(176,141,87,0.2);
+}
+.order-preview-detail {
+  font-size: 0.85rem;
+  color: var(--warm-gray);
+  margin-bottom: 6px;
+}
+.order-preview-detail strong {
+  color: var(--dark);
+}
+.order-preview-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-top: 1px solid rgba(176,141,87,0.2);
+  font-family: var(--heading);
+  font-size: 1.1rem;
+  color: var(--dark);
+}
+.order-preview-total span:last-child {
+  color: var(--gold);
+  font-weight: 600;
+}
+.order-preview-actions {
+  padding: 16px 24px 24px;
+  display: flex;
+  gap: 10px;
+}
+.order-preview-back {
+  flex: 1;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid rgba(176,141,87,0.3);
+  border-radius: 30px;
+  color: var(--dark);
+  font-family: var(--body);
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  touch-action: manipulation;
+}
+.order-preview-back:hover { border-color: var(--gold); }
+.order-preview-confirm {
+  flex: 2;
+  padding: 12px;
+  background: #25D366;
+  border: none;
+  border-radius: 30px;
+  color: #fff;
+  font-family: var(--body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  touch-action: manipulation;
+}
+.order-preview-confirm:hover { background: #20bd5a; transform: translateY(-2px); }
+.order-preview-confirm svg { width: 16px; height: 16px; fill: #fff; }
+
+/* ========== DARK MODE - NEW COMPONENTS ========== */
+html.dark-mode .celebration-popup { background: #1e1e1e; border-color: rgba(197,168,120,0.3); }
+html.dark-mode .celebration-popup p { color: #999; }
+html.dark-mode .order-preview { background: #1e1e1e; border-color: rgba(197,168,120,0.3); }
+html.dark-mode .order-preview-close { color: #F5F0EB; border-color: rgba(197,168,120,0.3); }
+html.dark-mode .order-preview-item { color: #F5F0EB; }
+html.dark-mode .order-preview-item-name { color: #F5F0EB; }
+html.dark-mode .order-preview-detail strong { color: #F5F0EB; }
+html.dark-mode .order-preview-total { color: #F5F0EB; }
+html.dark-mode .order-preview-back { color: #F5F0EB; border-color: rgba(197,168,120,0.3); }
+html.dark-mode .cart-upload-btn { border-color: rgba(197,168,120,0.3); }
+html.dark-mode .cart-upload-btn:hover { background: rgba(197,168,120,0.08); }
+html.dark-mode .cart-image-thumb { border-color: rgba(197,168,120,0.3); }
+html.dark-mode .order-preview-header h3 { color: var(--gold); }
+
+/* ========== MOBILE - NEW COMPONENTS ========== */
+@media (max-width: 768px) {
+  .celebration-popup { padding: 36px 24px; max-width: 340px; }
+  .celebration-popup h3 { font-size: 1.3rem; }
+  .order-preview { max-height: 90vh; width: 95%; }
+  .order-preview-close { width: 44px; height: 44px; }
+  .order-preview-actions { flex-direction: column; }
+  .order-preview-back, .order-preview-confirm { flex: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Skip to content -->
+<a href="#secStory" class="skip-link">Skip to content</a>
+
+<!-- Scroll Progress Bar -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Custom Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Grain Overlay -->
+<div class="grain"></div>
+
+<!-- Floating Particles -->
+<div class="particles-container" id="particles"></div>
+
+
+<!-- Loading Screen -->
+<div class="loader" id="loader">
+  <div class="loader-logo">
+    <svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="25"/></svg>
+  </div>
+  <div class="loader-text">CakeHaus</div>
+  <div class="loader-bar"><div class="loader-bar-fill" id="loaderFill"></div></div>
+</div>
+
+<!-- Navigation -->
+<nav class="nav" id="mainNav" role="navigation" aria-label="Main navigation">
+  <a class="nav-logo" data-scroll-to="hero" tabindex="0" aria-label="CakeHaus home">CakeHaus</a>
+  <ul class="nav-links">
+    <li><a data-scroll-to="secStory" class="active" tabindex="0">Story</a></li>
+    <li><a data-scroll-to="secCakes" tabindex="0">Cakes</a></li>
+    <li><a data-scroll-to="secCupcakes" tabindex="0">Cupcakes</a></li>
+    <li><a data-scroll-to="secCustom" tabindex="0">Custom</a></li>
+    <li><a data-scroll-to="secReviews" tabindex="0">Reviews</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="dark-toggle" id="darkToggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <svg id="darkToggleIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 3a1 1 0 011 1v1a1 1 0 01-2 0V4a1 1 0 011-1zm0 15a1 1 0 011 1v1a1 1 0 01-2 0v-1a1 1 0 011-1zm9-8a1 1 0 010 2h-1a1 1 0 010-2h1zM5 11a1 1 0 010 2H4a1 1 0 010-2h1zm14.07-5.66a1 1 0 010 1.41l-.71.71a1 1 0 01-1.41-1.41l.71-.71a1 1 0 011.41 0zM7.05 17.66a1 1 0 010 1.41l-.71.71a1 1 0 01-1.41-1.41l.71-.71a1 1 0 011.41 0zm12.02 0a1 1 0 01-1.41 1.41l-.71-.71a1 1 0 011.41-1.41l.71.71zM7.05 6.34a1 1 0 01-1.41 0l-.71-.71a1 1 0 011.41-1.41l.71.71a1 1 0 010 1.41zM12 8a4 4 0 100 8 4 4 0 000-8z"/>
+      </svg>
+    </button>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Mobile navigation">
+  <a data-scroll-to="secStory" tabindex="-1">Story</a>
+  <a data-scroll-to="secCakes" tabindex="-1">Cakes</a>
+  <a data-scroll-to="secCupcakes" tabindex="-1">Cupcakes</a>
+  <a data-scroll-to="secCustom" tabindex="-1">Custom</a>
+  <a data-scroll-to="secReviews" tabindex="-1">Reviews</a>
+  <div class="mobile-menu-actions">
+    <a class="mobile-menu-btn mobile-menu-cart" id="mobileCartBtn" tabindex="-1">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM7.16 14.26l.04-.12.96-1.74h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0020.07 4H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.44C4.52 15.37 5.48 17 7 17h12v-2H7.42a.25.25 0 01-.26-.24z"/></svg>
+      View Cart
+    </a>
+    <a class="mobile-menu-btn mobile-menu-wa" href="https://wa.me/27753399401" target="_blank" rel="noopener" tabindex="-1">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.612.638l4.697-1.389A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.239 0-4.308-.724-5.994-1.953l-.42-.312-2.833.838.76-2.77-.344-.546A9.935 9.935 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      Order via WhatsApp
+    </a>
+  </div>
+</div>
+
+<!-- WebGL Hero Canvas -->
+<canvas id="heroCanvas" aria-hidden="true"></canvas>
+
+<!-- Hero Section -->
+<section class="hero" id="hero" aria-label="Hero">
+  <div class="hero-content" id="heroContent">
+    <h1 class="hero-title" id="heroTitle"></h1>
+    <p class="hero-subtitle" id="heroSubtitle">Handcrafted in Pretoria</p>
+    <div class="hero-scroll-hint" id="scrollHint" aria-hidden="true">
+      <span>Scroll to explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Section Divider: Dark to Cream -->
+<div class="section-divider divider-dark-to-cream">
+  <svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,60 C360,120 720,0 1080,60 C1260,90 1380,80 1440,60 L1440,120 L0,120 Z" fill="#F5F0EB"/>
+  </svg>
+</div>
+
+<!-- Content Sections -->
+<div class="content-wrapper">
+
+  <!-- STORY SECTION (V2-style centered) -->
+  <section class="section about-centered" id="secStory" aria-label="Our Story">
+    <p class="section-label">Our Story</p>
+    <h2 class="section-title" data-split>Welcome to CakeHaus</h2>
+    <div class="about-divider">
+      <span class="about-divider-line"></span>
+      <span class="about-divider-diamond">&#9670;</span>
+      <span class="about-divider-line"></span>
+    </div>
+    <p class="about-tagline">Where every cake tells a story</p>
+    <p class="about-text">CakeHaus is a home-based bakery in Raslouw, Pretoria, specialising in handcrafted cakes and cupcakes made with love and premium ingredients. From our signature Coconut Almond Glaze cakes drizzled with Milkybar, Bar One, or Lotus, to beautifully piped buttercream cupcakes and bespoke celebration cakes &mdash; every order is made fresh, just for you.</p>
+    <p class="about-text">Founded by Farah Khan, CakeHaus brings together elegant design and irresistible flavour. Whether you're celebrating a birthday, a milestone, or simply treating yourself, we're here to make it sweeter.</p>
+    <div class="about-highlights">
+      <div class="about-highlight">
+        <div class="about-highlight-icon">&#10022;</div>
+        <span class="about-highlight-label">Handcrafted</span>
+        <span class="about-highlight-sub">Made fresh to order</span>
+      </div>
+      <div class="about-highlight">
+        <div class="about-highlight-icon">&#9829;</div>
+        <span class="about-highlight-label">Premium</span>
+        <span class="about-highlight-sub">Quality ingredients</span>
+      </div>
+      <div class="about-highlight">
+        <div class="about-highlight-icon">&#9733;</div>
+        <span class="about-highlight-label">Custom</span>
+        <span class="about-highlight-sub">Bespoke designs</span>
+      </div>
+      <div class="about-highlight">
+        <div class="about-highlight-icon">&#10148;</div>
+        <span class="about-highlight-label">Local</span>
+        <span class="about-highlight-sub">Raslouw, Pretoria</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAKES SECTION -->
+  <section class="section" id="secCakes" aria-label="Cakes">
+    <p class="section-label">Our Signature</p>
+    <h2 class="section-title" data-split>Our Cakes</h2>
+    <p class="section-text">Our signature cakes are handcrafted with layers of moist sponge. Choose our classic coconut almond glaze, or our chocolate drizzle cake available in Milkybar, Bar One, or Lotus Biscoff flavours.</p>
+
+    <div class="product-grid" id="cakesGrid">
+      <div class="product-card" data-tilt tabindex="0" data-lightbox="images/4d6554b1-0937-4e3a-82d8-643448cfac3e.JPG" data-caption="Coconut Almond Glaze">
+        <div class="img-reveal">
+          <img src="images/4d6554b1-0937-4e3a-82d8-643448cfac3e.JPG" alt="Coconut Almond Glaze Cake" loading="lazy">
+        </div>
+        <div class="product-card-body">
+          <h3>Coconut Almond Glaze</h3>
+          <p>Moist sponge finished with a coconut almond crumble</p>
+        </div>
+      </div>
+      <div class="product-card" data-tilt tabindex="0" data-lightbox="images/586a00e7-52db-4038-8cf3-a952485e2c47.JPG" data-caption="Coconut Almond Glaze with Drizzle">
+        <div class="img-reveal">
+          <img src="images/586a00e7-52db-4038-8cf3-a952485e2c47.JPG" alt="Coconut Almond Glaze with Drizzle" loading="lazy">
+        </div>
+        <div class="product-card-body">
+          <h3>Coconut Almond Glaze with Drizzle</h3>
+          <p>Rich chocolate drizzle in Milkybar, Bar One or Lotus flavour</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="order-section-heading">Order a Cake</h3>
+    <div class="order-grid order-grid-3" id="cakesOrderGrid">
+      <div class="order-card" data-tilt tabindex="0">
+        <h3>Coconut Almond Glaze</h3>
+        <p class="order-card-desc">Moist sponge finished with a coconut almond crumble.</p>
+        <div class="order-line" data-id="cake-coco-6" data-product="Coconut Almond Glaze - 6 Tray" data-price="90">
+          <div class="order-line-info">
+            <span class="order-line-size">6 Tray</span>
+            <span class="order-line-price">R90</span>
+          </div>
+          <div class="qty-control">
+            <button class="qty-btn qty-minus" type="button" aria-label="Decrease quantity">&minus;</button>
+            <span class="qty-value">0</span>
+            <button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+        <div class="order-line" data-id="cake-coco-12" data-product="Coconut Almond Glaze - 12 Tray" data-price="180">
+          <div class="order-line-info">
+            <span class="order-line-size">12 Tray</span>
+            <span class="order-line-price">R180</span>
+          </div>
+          <div class="qty-control">
+            <button class="qty-btn qty-minus" type="button" aria-label="Decrease quantity">&minus;</button>
+            <span class="qty-value">0</span>
+            <button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="order-card" data-tilt tabindex="0" data-flavour="Milkybar">
+        <h3>Chocolate Drizzle</h3>
+        <p class="order-card-desc">Choose your favourite drizzle flavour.</p>
+        <div class="flavour-pills" role="group" aria-label="Choose drizzle flavour">
+          <button class="flavour-pill active" type="button" data-flavour="Milkybar">Milkybar</button>
+          <button class="flavour-pill" type="button" data-flavour="Bar One">Bar One</button>
+          <button class="flavour-pill" type="button" data-flavour="Lotus">Lotus</button>
+        </div>
+        <div class="order-line" data-id="cake-drizzle-6" data-base="Chocolate Drizzle" data-size-label="6 Tray" data-product="Chocolate Drizzle (Milkybar) - 6 Tray" data-price="100">
+          <div class="order-line-info">
+            <span class="order-line-size">6 Tray</span>
+            <span class="order-line-price">R100</span>
+          </div>
+          <div class="qty-control">
+            <button class="qty-btn qty-minus" type="button" aria-label="Decrease quantity">&minus;</button>
+            <span class="qty-value">0</span>
+            <button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+        <div class="order-line" data-id="cake-drizzle-12" data-base="Chocolate Drizzle" data-size-label="12 Tray" data-product="Chocolate Drizzle (Milkybar) - 12 Tray" data-price="200">
+          <div class="order-line-info">
+            <span class="order-line-size">12 Tray</span>
+            <span class="order-line-price">R200</span>
+          </div>
+          <div class="qty-control">
+            <button class="qty-btn qty-minus" type="button" aria-label="Decrease quantity">&minus;</button>
+            <span class="qty-value">0</span>
+            <button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="order-card order-card-custom" data-tilt tabindex="0">
+        <h3>Custom Box</h3>
+        <p class="order-card-desc">Mix and match your favourite flavours in a 6 or 12 cake box.</p>
+        <div class="custom-box-teaser">
+          <span class="custom-box-teaser-price">From R15/cake</span>
+        </div>
+        <button class="custom-box-open-btn" type="button" id="openBoxBuilderBtn">Build Your Box</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CUPCAKES SECTION -->
+  <section class="section" id="secCupcakes" style="max-width:100%;padding-left:0;padding-right:0;" aria-label="Cupcakes">
+    <div style="max-width:1200px;margin:0 auto;padding:0 60px;">
+      <p class="section-label">Sweet Bites</p>
+      <h2 class="section-title" data-split>Buttercream Cupcakes</h2>
+      <p class="section-text" style="margin-bottom:40px;">Beautifully piped buttercream cupcakes in classic, Lotus Biscoff, and Oreo flavours. Available in regular and mini sizes.</p>
+    </div>
+    <div class="marquee-wrapper">
+      <div class="marquee-track marquee-cupcakes" id="cupcakeTrack">
+        <div class="h-card" data-tilt data-lightbox="images/366b3739-35c1-4f61-9ff1-c6e43583c905.JPG" data-caption="Mini Cupcakes">
+          <div class="img-reveal"><img src="images/366b3739-35c1-4f61-9ff1-c6e43583c905.JPG" alt="Mini Cupcakes" loading="lazy"></div>
+          <div class="h-card-body"><h3>Mini Cupcakes</h3></div>
+        </div>
+        <div class="h-card" data-tilt data-lightbox="images/e974c24d-cf85-47e3-8437-758060830c86.JPG" data-caption="Rose Cupcakes">
+          <div class="img-reveal"><img src="images/e974c24d-cf85-47e3-8437-758060830c86.JPG" alt="Rose Cupcakes" loading="lazy"></div>
+          <div class="h-card-body"><h3>Buttercream</h3></div>
+        </div>
+        <div class="h-card" data-tilt data-lightbox="images/c49d3ade-fd26-4889-8199-0499b4f342ec.JPG" data-caption="Cupcake Assortment">
+          <div class="img-reveal"><img src="images/c49d3ade-fd26-4889-8199-0499b4f342ec.JPG" alt="Cupcake Assortment" loading="lazy"></div>
+          <div class="h-card-body"><h3>Cupcake Assortment</h3></div>
+        </div>
+        <div class="h-card" data-tilt data-lightbox="images/b6f0a6cc-a9c4-4785-9a80-e66472db240c.JPG" data-caption="Oreo Cupcakes">
+          <div class="img-reveal"><img src="images/b6f0a6cc-a9c4-4785-9a80-e66472db240c.JPG" alt="Oreo Cupcakes" loading="lazy"></div>
+          <div class="h-card-body"><h3>Oreo</h3></div>
+        </div>
+        <!-- Duplicates for seamless loop -->
+        <div class="h-card" data-lightbox="images/366b3739-35c1-4f61-9ff1-c6e43583c905.JPG" data-caption="Mini Cupcakes">
+          <div class="img-reveal"><img src="images/366b3739-35c1-4f61-9ff1-c6e43583c905.JPG" alt="Mini Cupcakes" loading="lazy"></div>
+          <div class="h-card-body"><h3>Mini Cupcakes</h3></div>
+        </div>
+        <div class="h-card" data-lightbox="images/e974c24d-cf85-47e3-8437-758060830c86.JPG" data-caption="Rose Cupcakes">
+          <div class="img-reveal"><img src="images/e974c24d-cf85-47e3-8437-758060830c86.JPG" alt="Rose Cupcakes" loading="lazy"></div>
+          <div class="h-card-body"><h3>Buttercream</h3></div>
+        </div>
+        <div class="h-card" data-lightbox="images/c49d3ade-fd26-4889-8199-0499b4f342ec.JPG" data-caption="Cupcake Assortment">
+          <div class="img-reveal"><img src="images/c49d3ade-fd26-4889-8199-0499b4f342ec.JPG" alt="Cupcake Assortment" loading="lazy"></div>
+          <div class="h-card-body"><h3>Cupcake Assortment</h3></div>
+        </div>
+        <div class="h-card" data-lightbox="images/b6f0a6cc-a9c4-4785-9a80-e66472db240c.JPG" data-caption="Oreo Cupcakes">
+          <div class="img-reveal"><img src="images/b6f0a6cc-a9c4-4785-9a80-e66472db240c.JPG" alt="Oreo Cupcakes" loading="lazy"></div>
+          <div class="h-card-body"><h3>Oreo</h3></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="max-width:1200px;margin:0 auto;padding:0 60px;">
+    <h3 class="order-section-heading">Order Cupcakes &mdash; Regular (per dozen)</h3>
+    <div class="order-grid order-grid-3" id="cupcakesOrderGridRegular">
+      <div class="order-card" data-tilt tabindex="0">
+        <h3>Buttercream</h3>
+        <p class="order-card-desc">Classic vanilla buttercream, piped high.</p>
+        <div class="order-line" data-id="cup-butter-reg" data-product="Buttercream Cupcakes - 1 Dozen" data-price="240">
+          <div class="order-line-info">
+            <span class="order-line-size">1 Dozen</span>
+            <span class="order-line-price">R240</span>
+          </div>
+          <div class="qty-control">
+            <button class="qty-btn qty-minus" type="button" aria-label="Decrease quantity">&minus;</button>
+            <span class="qty-value">0</span>
+            <button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="order-card" data-tilt tabindex="0">
+        <h3>Lotus Biscoff</h3>
+        <p class="order-card-desc">Spiced Biscoff buttercream and crumble.</p>
+        <div class="order-line" data-id="cup-lotus-reg" data-product="Lotus Biscoff Cupcakes - 1 Dozen" data-price="350">
+          <div class="order-line-info">
+            <span class="order-line-size">1 Dozen</span>
+            <span class="order-line-price">R350</span>
+          </div>
+          <div class="qty-control">
+            <button class="qty-btn qty-minus" type="button" aria-label="Decrease quantity">&minus;</button>
+            <span class="qty-value">0</span>
+            <button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="order-card" data-tilt tabindex="0">
+        <h3>Oreo</h3>
+        <p class="order-card-desc">Cookies and cream buttercream with Oreo crumb.</p>
+        <div class="order-line" data-id="cup-oreo-reg" data-product="Oreo Cupcakes - 1 Dozen" data-price="340">
+          <div class="order-line-info">
+            <span class="order-line-size">1 Dozen</span>
+            <span class="order-line-price">R340</span>
+          </div>
+          <div class="qty-control">
+            <button class="qty-btn qty-minus" type="button" aria-label="Decrease quantity">&minus;</button>
+            <span class="qty-value">0</span>
+            <button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="order-section-heading">Order Cupcakes &mdash; Mini (per 2 dozen)</h3>
+    <p class="order-note">Mini cupcakes must be ordered in 2 dozen.</p>
+    <div class="order-grid" id="cupcakesOrderGridMini">
+      <div class="order-card" data-tilt tabindex="0">
+        <h3>Mini Buttercream</h3>
+        <p class="order-card-desc">Bite-sized classic buttercream.</p>
+        <div class="order-line" data-id="cup-butter-mini" data-product="Mini Buttercream Cupcakes - 2 Dozen" data-price="300">
+          <div class="order-line-info">
+            <span class="order-line-size">2 Dozen</span>
+            <span class="order-line-price">R300</span>
+          </div>
+          <div class="qty-control">
+            <button class="qty-btn qty-minus" type="button" aria-label="Decrease quantity">&minus;</button>
+            <span class="qty-value">0</span>
+            <button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="order-card" data-tilt tabindex="0">
+        <h3>Mini Lotus Biscoff</h3>
+        <p class="order-card-desc">Bite-sized Lotus Biscoff buttercream.</p>
+        <div class="order-line" data-id="cup-lotus-mini" data-product="Mini Lotus Biscoff Cupcakes - 2 Dozen" data-price="410">
+          <div class="order-line-info">
+            <span class="order-line-size">2 Dozen</span>
+            <span class="order-line-price">R410</span>
+          </div>
+          <div class="qty-control">
+            <button class="qty-btn qty-minus" type="button" aria-label="Decrease quantity">&minus;</button>
+            <span class="qty-value">0</span>
+            <button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="order-card" data-tilt tabindex="0">
+        <h3>Mini Oreo</h3>
+        <p class="order-card-desc">Bite-sized cookies and cream buttercream.</p>
+        <div class="order-line" data-id="cup-oreo-mini" data-product="Mini Oreo Cupcakes - 2 Dozen" data-price="400">
+          <div class="order-line-info">
+            <span class="order-line-size">2 Dozen</span>
+            <span class="order-line-price">R400</span>
+          </div>
+          <div class="qty-control">
+            <button class="qty-btn qty-minus" type="button" aria-label="Decrease quantity">&minus;</button>
+            <span class="qty-value">0</span>
+            <button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- HIDDEN: Mini Cupcake Mix & Match card (uncomment to enable)
+      <div class="order-card order-card-mini-mix" data-tilt tabindex="0">
+        <h3>Mix &amp; Match</h3>
+        <p class="order-card-desc">Pick any 2 flavours in any ratio - 2 dozen total.</p>
+        <div class="mini-mix-teaser">
+          <span class="mini-mix-teaser-price">From R12.50/cupcake</span>
+        </div>
+        <button class="mini-mix-open-btn" type="button" id="openMiniMixBtn">Build Your Mix</button>
+      </div>
+      -->
+    </div>
+    </div>
+  </section>
+
+  <!-- CUSTOM SECTION -->
+  <section class="section" id="secCustom" aria-label="Custom Cakes">
+    <p class="section-label">Made For You</p>
+    <h2 class="section-title" data-split>Custom Celebration Cakes</h2>
+    <p class="section-text">From birthdays to weddings, we design bespoke celebration cakes tailored to your vision. Share your idea with us on WhatsApp and we will bring it to life &mdash; pricing is quoted per design.</p>
+    <div class="product-grid" id="customGrid">
+      <div class="product-card" data-tilt tabindex="0" data-lightbox="images/a9ac80fb-e4cc-49d8-b88e-a14dc7dbe564.JPG" data-caption="Orchid Celebration">
+        <div class="img-reveal"><img src="images/a9ac80fb-e4cc-49d8-b88e-a14dc7dbe564.JPG" alt="Orchid Celebration Cake" loading="lazy" style="object-position: center 60%;"></div>
+        <div class="product-card-body"><h3>Orchid Celebration</h3><p>Elegant floral celebration cake</p></div>
+      </div>
+      <div class="product-card" data-tilt tabindex="0" data-lightbox="images/bf924751-6e2a-4098-9d48-68184e3648b4.JPG" data-caption="Birthday Elegance">
+        <div class="img-reveal"><img src="images/bf924751-6e2a-4098-9d48-68184e3648b4.JPG" alt="Birthday Elegance Cake" loading="lazy"></div>
+        <div class="product-card-body"><h3>Birthday Elegance</h3><p>Sophisticated birthday designs</p></div>
+      </div>
+      <div class="product-card" data-tilt tabindex="0" data-lightbox="images/61ba9438-124a-48e2-b97b-48864e5b4940.JPG" data-caption="Valentine's Heart">
+        <div class="img-reveal"><img src="images/61ba9438-124a-48e2-b97b-48864e5b4940.JPG" alt="Valentine's Heart Cake" loading="lazy"></div>
+        <div class="product-card-body"><h3>Valentine's Heart</h3><p>Romantic heart-shaped designs</p></div>
+      </div>
+      <div class="product-card" data-tilt tabindex="0" data-lightbox="images/cb211200-0280-469c-9be6-ec61b17d63af.JPG" data-caption="Half Birthday">
+        <div class="img-reveal"><img src="images/cb211200-0280-469c-9be6-ec61b17d63af.JPG" alt="Half Birthday Cake" loading="lazy"></div>
+        <div class="product-card-body"><h3>Half Birthday</h3><p>Fun half-cake milestone designs</p></div>
+      </div>
+    </div>
+    <a class="cta-btn magnetic cta-btn-small" id="customEnquireBtn" href="#" target="_blank" rel="noopener">Enquire on WhatsApp</a>
+  </section>
+
+  <!-- REVIEWS SECTION -->
+  <section class="section" id="secReviews" style="max-width:100%;padding-left:0;padding-right:0;" aria-label="Reviews">
+    <div style="max-width:1200px;margin:0 auto;padding:0 60px;">
+      <p class="section-label">Love Notes</p>
+      <h2 class="section-title" data-split>What Our Customers Say</h2>
+    </div>
+    <div class="marquee-wrapper">
+      <div class="marquee-track" id="marqueeTrack">
+        <!-- Reviews loaded dynamically from Google Sheets -->
+        <div class="review-card" style="opacity:0.5;">
+          <p style="color:var(--warm-gray);font-style:italic;">Loading reviews...</p>
+        </div>
+      </div>
+    </div>
+    <div class="review-form-wrap">
+      <form class="review-form" id="reviewForm" autocomplete="off">
+        <h3>Leave a Review</h3>
+        <label for="reviewName">Your Name</label>
+        <input type="text" id="reviewName" name="name" placeholder="e.g. Sarah M." required maxlength="50">
+        <label>Rating</label>
+        <div class="star-rating-input">
+          <input type="radio" id="star5" name="rating" value="5" checked><label for="star5">&#9733;</label>
+          <input type="radio" id="star4" name="rating" value="4"><label for="star4">&#9733;</label>
+          <input type="radio" id="star3" name="rating" value="3"><label for="star3">&#9733;</label>
+          <input type="radio" id="star2" name="rating" value="2"><label for="star2">&#9733;</label>
+          <input type="radio" id="star1" name="rating" value="1"><label for="star1">&#9733;</label>
+        </div>
+        <label for="reviewMsg">Your Review</label>
+        <textarea id="reviewMsg" name="message" placeholder="Tell us about your experience..." required maxlength="1000"></textarea>
+        <button type="submit" class="review-submit-btn">Submit Review</button>
+        <p class="review-form-msg" id="reviewFormMsg"></p>
+      </form>
+    </div>
+  </section>
+
+</div>
+
+<!-- Section Divider: Cream to Dark -->
+<div class="section-divider divider-cream-to-dark">
+  <svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,40 C240,100 480,0 720,60 C960,120 1200,20 1440,60 L1440,120 L0,120 Z" fill="#111111"/>
+  </svg>
+</div>
+
+<!-- CTA Section -->
+<section class="cta-section" id="secCTA" aria-label="Order">
+  <h2>Ready to Order?</h2>
+  <p>Send us a message on WhatsApp and let us sweeten your day</p>
+  <a class="cta-btn magnetic" href="https://wa.me/27753399401" target="_blank" rel="noopener">Order on WhatsApp</a>
+</section>
+
+<!-- Footer -->
+<footer class="v3-footer" role="contentinfo">
+  <div class="footer-inner">
+    <a class="footer-brand" data-scroll-to="hero">CakeHaus</a>
+    <ul class="footer-links">
+      <li><a data-scroll-to="secStory" tabindex="0">Story</a></li>
+      <li><a data-scroll-to="secCakes" tabindex="0">Cakes</a></li>
+      <li><a data-scroll-to="secCupcakes" tabindex="0">Cupcakes</a></li>
+      <li><a data-scroll-to="secCustom" tabindex="0">Custom</a></li>
+      <li><a data-scroll-to="secReviews" tabindex="0">Reviews</a></li>
+    </ul>
+    <div class="footer-contact">
+      <a href="https://wa.me/27753399401" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp
+      </a>
+      <a href="https://www.instagram.com/cakehaus_sa" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg>
+        Instagram
+      </a>
+    </div>
+  </div>
+  <div class="footer-info">
+    <span>Raslouw, Pretoria</span>
+    <span class="footer-dot">&middot;</span>
+    <a href="tel:0753399401">075 339 9401</a>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 CakeHaus. Handcrafted in Pretoria.</p>
+  </div>
+</footer>
+
+<!-- WhatsApp FAB -->
+
+<a class="whatsapp-fab" id="whatsappFab" href="https://wa.me/27753399401" target="_blank" rel="noopener" aria-label="Order on WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- Back to Top -->
+<div class="back-to-top" id="backToTop" role="button" tabindex="0" aria-label="Back to top">
+  <svg viewBox="0 0 44 44">
+    <circle class="btt-bg" cx="22" cy="22" r="20"/>
+    <circle class="btt-progress" id="bttProgress" cx="22" cy="22" r="20"/>
+    <path class="btt-arrow" d="M22 15 L17 22 L20 22 L20 28 L24 28 L24 22 L27 22 Z"/>
+  </svg>
+</div>
+
+<!-- Cart Badge -->
+<button class="cart-badge" id="cartBadge" type="button" aria-label="Open cart">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42a.25.25 0 01-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A.996.996 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+  <span class="cart-badge-count" id="cartBadgeCount">0</span>
+  <span class="cart-badge-total" id="cartBadgeTotal">R0</span>
+</button>
+
+<!-- Cart Drawer -->
+<div class="cart-drawer-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" role="dialog" aria-label="Your cart">
+  <div class="cart-drawer-header">
+    <h3>Your Order</h3>
+    <button class="cart-drawer-close" id="cartCloseBtn" aria-label="Close cart">&times;</button>
+  </div>
+  <div class="cart-drawer-items" id="cartItemsList">
+    <p class="cart-empty">Your cart is empty.<br>Add a cake, cupcake, or treat to get started.</p>
+  </div>
+  <div class="cart-drawer-footer">
+    <div class="cart-step cart-step-1 active" id="cartStep1">
+      <div class="cart-total-row"><span>Total</span><span id="cartTotalAmount">R0</span></div>
+      <button class="cart-ready-btn" id="cartReadyBtn" type="button">Ready to Order</button>
+      <button class="cart-clear-btn" id="cartClearBtn" type="button">Clear all</button>
+    </div>
+    <div class="cart-step cart-step-2" id="cartStep2">
+      <div class="cart-total-row"><span>Total</span><span id="cartTotalAmount2">R0</span></div>
+      <div class="cart-details">
+        <p class="cart-details-label">Your Details</p>
+        <input type="text" class="cart-input" id="cartCustomerName" placeholder="Your name" aria-label="Your name" maxlength="60">
+        <input type="tel" class="cart-input" id="cartCustomerPhone" placeholder="Phone number" aria-label="Phone number" maxlength="20" pattern="[\d\s\+\-\(\)]{7,20}">
+        <label class="cart-field-label" for="cartCustomerDate">Collection / delivery date</label>
+      <input type="date" class="cart-input" id="cartCustomerDate" aria-label="Collection or delivery date">
+        <textarea class="cart-input cart-textarea" id="cartCustomerNote" placeholder="Special requests or message on cake..." aria-label="Special requests" rows="2" maxlength="500"></textarea>
+        <label class="cart-field-label">Reference images (optional)</label>
+        <input type="file" id="cartImageInput" accept="image/*" multiple hidden>
+        <button type="button" class="cart-upload-btn" id="cartUploadBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          Add Design Images
+        </button>
+        <div class="cart-image-previews" id="cartImagePreviews"></div>
+      </div>
+      <button class="cart-send-btn" id="cartSendBtn" type="button">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Send Order via WhatsApp
+      </button>
+      <button class="cart-back-btn" id="cartBackBtn" type="button">Back</button>
+    </div>
+  </div>
+</aside>
+
+<!-- Box Builder Modal -->
+<div class="box-builder-overlay" id="boxBuilderOverlay">
+  <div class="box-builder-modal" role="dialog" aria-label="Build your box">
+    <div class="box-builder-header">
+      <h3>Build Your Box</h3>
+      <button class="box-builder-close" id="boxBuilderClose" aria-label="Close">&times;</button>
+    </div>
+    <div class="box-builder-body">
+      <div class="box-size-selector" role="group" aria-label="Choose box size">
+        <button class="box-size-btn active" type="button" data-size="6">Box of 6</button>
+        <button class="box-size-btn" type="button" data-size="12">Box of 12</button>
+      </div>
+      <div class="box-slots-grid size-6" id="boxSlotsGrid"></div>
+      <p class="box-slots-status" id="boxSlotsStatus">0 / 6 cakes selected</p>
+      <p class="box-slots-hint">Tap a flavour to add &bull; Tap a slot to remove</p>
+      <div class="box-flavour-list" id="boxFlavourList"></div>
+      <div class="box-builder-price-row">
+        <span>Total</span>
+        <span id="boxBuilderPrice">R0</span>
+      </div>
+      <button class="box-builder-add-btn" id="boxBuilderAddBtn" type="button" disabled>Add to Cart</button>
+    </div>
+  </div>
+</div>
+
+<!-- HIDDEN: Mini Cupcake Mix Builder Modal (uncomment to enable)
+<div class="box-builder-overlay" id="miniMixOverlay">
+  <div class="box-builder-modal" role="dialog" aria-label="Build your mini cupcake mix">
+    <div class="box-builder-header">
+      <h3>Mix &amp; Match Minis</h3>
+      <button class="box-builder-close" id="miniMixClose" aria-label="Close">&times;</button>
+    </div>
+    <div class="box-builder-body">
+      <p style="font-size:0.8rem;color:var(--warm-gray);margin-bottom:14px;line-height:1.5;">Pick any combination of flavours to fill your 2 dozen (24) mini cupcakes.</p>
+      <div class="box-slots-grid size-24" id="miniMixSlotsGrid"></div>
+      <p class="box-slots-status" id="miniMixSlotsStatus">0 / 24 cupcakes selected</p>
+      <div class="box-flavour-list" id="miniMixFlavourList"></div>
+      <div class="box-builder-price-row">
+        <span>Total</span>
+        <span id="miniMixPrice">R0</span>
+      </div>
+      <button class="box-builder-add-btn" id="miniMixAddBtn" type="button" disabled>Add to Cart</button>
+    </div>
+  </div>
+</div>
+-->
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-label="Image preview">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close image preview">&times;</button>
+  <img id="lightboxImg" src="" alt="">
+  <p class="lightbox-caption" id="lightboxCaption"></p>
+</div>
+
+<!-- Celebration Popup -->
+<div class="celebration-overlay" id="celebrationOverlay">
+  <div class="celebration-popup">
+    <span class="celebration-icon" id="celebrationIcon"></span>
+    <h3 id="celebrationTitle"></h3>
+    <p id="celebrationMsg"></p>
+    <button class="celebration-close-btn" id="celebrationCloseBtn">Got it</button>
+  </div>
+</div>
+<canvas id="confettiCanvas"></canvas>
+
+<!-- Order Preview Modal -->
+<div class="order-preview-overlay" id="orderPreviewOverlay">
+  <div class="order-preview">
+    <div class="order-preview-header">
+      <h3>Order Summary</h3>
+      <button class="order-preview-close" id="orderPreviewClose" aria-label="Close">&times;</button>
+    </div>
+    <div class="order-preview-body" id="orderPreviewBody"></div>
+    <div class="order-preview-total" id="orderPreviewTotal">
+      <span>Total</span>
+      <span></span>
+    </div>
+    <div class="order-preview-actions">
+      <button class="order-preview-back" id="orderPreviewBack">Go Back</button>
+      <button class="order-preview-confirm" id="orderPreviewConfirm">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2.546 20.2A1.884 1.884 0 003.8 21.454l3.032-.892A9.96 9.96 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.468-1.363l-.32-.192-1.8.529.492-1.836-.21-.334A7.963 7.963 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></svg>
+        Confirm & Send
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// 0. SECURITY UTILITIES
+// ============================================================
+var BLOCKED_WORDS = [
+  'fuck','shit','damn','bitch','ass','dick','cock','pussy','cunt',
+  'bastard','whore','slut','piss','crap','bollocks','wanker','twat',
+  'nigger','nigga','faggot','retard','kak','poes','naaier','doos',
+  'moer','fok','msunery','sleg'
+];
+
+function containsProfanity(text) {
+  var clean = text.toLowerCase().replace(/[^a-z\s]/g, ' ');
+  return BLOCKED_WORDS.some(function(w) { return clean.indexOf(w) !== -1; });
+}
+
+function sanitizeHTML(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+var INPUT_LIMITS = {
+  name: 60,
+  phone: 20,
+  note: 500,
+  reviewName: 50,
+  reviewMsg: 1000
+};
+
+function enforceMaxLength(input, max) {
+  input.setAttribute('maxlength', max);
+  input.addEventListener('input', function() {
+    if (this.value.length > max) this.value = this.value.slice(0, max);
+  });
+}
+
+var ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+var MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB per image
+var MAX_IMAGES = 5;
+
+function validateImageFile(file) {
+  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+    return { valid: false, reason: 'Only JPG, PNG, WebP and GIF images are allowed.' };
+  }
+  if (file.size > MAX_IMAGE_SIZE) {
+    return { valid: false, reason: 'Image must be under 5MB. "' + file.name + '" is too large.' };
+  }
+  // Check file extension matches type (prevent renamed executables)
+  var ext = file.name.split('.').pop().toLowerCase();
+  var validExts = ['jpg','jpeg','png','webp','gif'];
+  if (validExts.indexOf(ext) === -1) {
+    return { valid: false, reason: 'Invalid file extension. Only .jpg, .png, .webp, .gif allowed.' };
+  }
+  return { valid: true };
+}
+
+// Validate phone: digits, spaces, +, -, () only
+function isValidPhone(phone) {
+  return /^[\d\s\+\-\(\)]{7,20}$/.test(phone);
+}
+
+// ============================================================
+// SAFE LOCALSTORAGE (file:// protocol blocks localStorage)
+// ============================================================
+var _lsFallback = {};
+function lsGet(key) {
+  try { return localStorage.getItem(key); } catch(e) { return _lsFallback[key] || null; }
+}
+function lsSet(key, val) {
+  try { localStorage.setItem(key, val); } catch(e) { _lsFallback[key] = val; }
+}
+function lsRemove(key) {
+  try { localStorage.removeItem(key); } catch(e) { delete _lsFallback[key]; }
+}
+
+// ============================================================
+// 1. LENIS SMOOTH SCROLL + GSAP
+// ============================================================
+var isMobileDevice = window.innerWidth <= 768;
+var lenis = new Lenis({
+  duration: 1.2,
+  easing: function(t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+  smoothWheel: true,
+  wheelMultiplier: 0.8,
+  touchMultiplier: isMobileDevice ? 1 : 1.5
+});
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(function(time) { lenis.raf(time * 1000); });
+gsap.ticker.lagSmoothing(0);
+ScrollTrigger.config({ ignoreMobileResize: true });
+
+// ============================================================
+// 2. SCROLL PROGRESS BAR
+// ============================================================
+var scrollProgressEl = document.getElementById('scrollProgress');
+var bttProgress = document.getElementById('bttProgress');
+var backToTop = document.getElementById('backToTop');
+var bttCircumference = 2 * Math.PI * 20; // r=20
+
+function updateScrollProgress() {
+  var scrollTop = window.scrollY || window.pageYOffset;
+  var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  var progress = docHeight > 0 ? scrollTop / docHeight : 0;
+  scrollProgressEl.style.width = (progress * 100) + '%';
+
+  // Back to top visibility + progress ring
+  backToTop.classList.toggle('visible', scrollTop > 600);
+  bttProgress.style.strokeDashoffset = bttCircumference - (progress * bttCircumference);
+}
+window.addEventListener('scroll', updateScrollProgress, { passive: true });
+
+backToTop.addEventListener('click', function() { lenis.scrollTo(0); });
+backToTop.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); lenis.scrollTo(0); }
+});
+
+// ============================================================
+// 3. CUSTOM CURSOR
+// ============================================================
+var cursorDot = document.getElementById('cursorDot');
+var cursorRing = document.getElementById('cursorRing');
+var cDotX = 0, cDotY = 0, cRingX = 0, cRingY = 0, cTargetX = 0, cTargetY = 0;
+var hasFinePointer = window.matchMedia('(pointer: fine)').matches;
+
+if (hasFinePointer) {
+  document.addEventListener('mousemove', function(e) {
+    cTargetX = e.clientX; cTargetY = e.clientY;
+  });
+  (function cursorLoop() {
+    cDotX += (cTargetX - cDotX) * 0.25;
+    cDotY += (cTargetY - cDotY) * 0.25;
+    cRingX += (cTargetX - cRingX) * 0.12;
+    cRingY += (cTargetY - cRingY) * 0.12;
+    cursorDot.style.left = cDotX + 'px';
+    cursorDot.style.top = cDotY + 'px';
+    cursorRing.style.left = cRingX + 'px';
+    cursorRing.style.top = cRingY + 'px';
+    requestAnimationFrame(cursorLoop);
+  })();
+  document.addEventListener('mouseover', function(e) {
+    if (e.target.closest('a, button, .product-card, .h-card, .cta-btn, [data-tilt], .back-to-top, .qty-btn, .cart-badge, .flavour-pill')) {
+      cursorDot.classList.add('hovering'); cursorRing.classList.add('hovering');
+    }
+  });
+  document.addEventListener('mouseout', function(e) {
+    if (e.target.closest('a, button, .product-card, .h-card, .cta-btn, [data-tilt], .back-to-top, .qty-btn, .cart-badge, .flavour-pill')) {
+      cursorDot.classList.remove('hovering'); cursorRing.classList.remove('hovering');
+    }
+  });
+  // System cursor - no custom cursor overrides
+}
+
+// ============================================================
+// 4. FLOATING PARTICLES
+// ============================================================
+(function initParticles() {
+  var container = document.getElementById('particles');
+  var count = 25;
+  for (var i = 0; i < count; i++) {
+    var p = document.createElement('div');
+    p.className = 'particle';
+    var size = Math.random() * 3 + 1;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    container.appendChild(p);
+
+    gsap.to(p, {
+      opacity: Math.random() * 0.3 + 0.1,
+      duration: Math.random() * 2 + 1,
+      delay: Math.random() * 3,
+      repeat: -1, yoyo: true,
+      ease: 'sine.inOut'
+    });
+    gsap.to(p, {
+      y: -window.innerHeight * (Math.random() * 0.5 + 0.5),
+      x: (Math.random() - 0.5) * 200,
+      duration: Math.random() * 20 + 15,
+      repeat: -1,
+      ease: 'none'
+    });
+  }
+
+  // Hide particles when on cream background
+  ScrollTrigger.create({
+    trigger: '.content-wrapper', start: 'top 80%', end: 'bottom 20%',
+    onEnter: function() { gsap.to(container, { opacity: 0, duration: 0.8 }); },
+    onLeaveBack: function() { gsap.to(container, { opacity: 1, duration: 0.8 }); },
+    onLeave: function() { gsap.to(container, { opacity: 1, duration: 0.8 }); },
+    onEnterBack: function() { gsap.to(container, { opacity: 0, duration: 0.8 }); }
+  });
+})();
+
+// ============================================================
+// 5. MAGNETIC BUTTONS
+// ============================================================
+if (hasFinePointer) {
+  document.querySelectorAll('.magnetic').forEach(function(el) {
+    el.addEventListener('mousemove', function(e) {
+      var rect = el.getBoundingClientRect();
+      var cx = rect.left + rect.width / 2;
+      var cy = rect.top + rect.height / 2;
+      var dx = (e.clientX - cx) * 0.3;
+      var dy = (e.clientY - cy) * 0.3;
+      el.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+    });
+    el.addEventListener('mouseleave', function() {
+      el.style.transform = 'translate(0,0)';
+    });
+  });
+}
+
+// ============================================================
+// 6. NAVIGATION
+// ============================================================
+var nav = document.getElementById('mainNav');
+var navToggle = document.getElementById('navToggle');
+var mobileMenu = document.getElementById('mobileMenu');
+
+document.querySelectorAll('[data-scroll-to]').forEach(function(el) {
+  el.addEventListener('click', function(e) {
+    e.preventDefault();
+    var targetId = el.getAttribute('data-scroll-to');
+    var target = document.getElementById(targetId);
+    if (mobileMenu.classList.contains('open')) {
+      closeMobileMenu();
+      setTimeout(function() {
+        if (target) lenis.scrollTo(target, { offset: -60 });
+      }, 350);
+    } else {
+      if (target) lenis.scrollTo(target, { offset: -60 });
+    }
+  });
+  el.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') el.click();
+  });
+});
+
+navToggle.addEventListener('click', function() {
+  if (mobileMenu.classList.contains('open')) {
+    closeMobileMenu();
+  } else {
+    openMobileMenu();
+  }
+});
+
+function openMobileMenu() {
+  mobileMenu.classList.add('open');
+  navToggle.classList.add('open');
+  navToggle.setAttribute('aria-expanded', 'true');
+  lenis.stop();
+  // Make mobile links focusable
+  mobileMenu.querySelectorAll('a').forEach(function(a) { a.tabIndex = 0; });
+  gsap.to(mobileMenu.querySelectorAll('a'), {
+    opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out', delay: 0.2
+  });
+  // Trap focus
+  mobileMenu.querySelector('a').focus();
+}
+function closeMobileMenu() {
+  mobileMenu.classList.remove('open');
+  navToggle.classList.remove('open');
+  navToggle.setAttribute('aria-expanded', 'false');
+  lenis.start();
+  mobileMenu.querySelectorAll('a').forEach(function(a) {
+    a.style.opacity = '0'; a.style.transform = 'translateY(20px)';
+    a.tabIndex = -1;
+  });
+}
+
+// Mobile cart button opens cart drawer
+document.getElementById('mobileCartBtn').addEventListener('click', function() {
+  closeMobileMenu();
+  setTimeout(function() { openCartDrawer(); }, 300);
+});
+
+// Escape to close mobile menu / lightbox / cart
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && mobileMenu.classList.contains('open')) closeMobileMenu();
+  if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
+  if (e.key === 'Escape' && cartDrawer.classList.contains('open')) closeCartDrawer();
+});
+
+function updateNav() {
+  var scrollY = window.scrollY || window.pageYOffset;
+  var heroEl = document.getElementById('hero');
+  var heroBottom = heroEl ? heroEl.offsetTop + heroEl.offsetHeight : 0;
+  // Hide nav while in hero section
+  nav.classList.toggle('nav-visible', scrollY > heroBottom * 0.4);
+  nav.classList.toggle('scrolled', scrollY > heroBottom * 0.4 + 60);
+  var wrapper = document.querySelector('.content-wrapper');
+  if (wrapper) {
+    var wTop = wrapper.getBoundingClientRect().top;
+    nav.classList.toggle('on-light', wTop < 60);
+  }
+}
+window.addEventListener('scroll', updateNav, { passive: true });
+
+var navSections = ['secStory','secCakes','secCupcakes','secCustom','secReviews'];
+function updateActiveLink() {
+  var current = '';
+  var threshold = window.innerHeight * 0.35;
+  for (var i = navSections.length - 1; i >= 0; i--) {
+    var sec = document.getElementById(navSections[i]);
+    if (sec) {
+      var rect = sec.getBoundingClientRect();
+      if (rect.top <= threshold) {
+        current = navSections[i];
+        break;
+      }
+    }
+  }
+  document.querySelectorAll('.nav-links a').forEach(function(a) {
+    a.classList.toggle('active', a.getAttribute('data-scroll-to') === current);
+  });
+}
+window.addEventListener('scroll', updateActiveLink, { passive: true });
+updateActiveLink();
+
+// ============================================================
+// 7. LIGHTBOX
+// ============================================================
+var lightbox = document.getElementById('lightbox');
+var lightboxImg = document.getElementById('lightboxImg');
+var lightboxCaption = document.getElementById('lightboxCaption');
+var lightboxClose = document.getElementById('lightboxClose');
+
+document.querySelectorAll('[data-lightbox]').forEach(function(el) {
+  el.addEventListener('click', function() {
+    lightboxImg.src = el.getAttribute('data-lightbox');
+    lightboxImg.alt = el.getAttribute('data-caption') || '';
+    lightboxCaption.textContent = el.getAttribute('data-caption') || '';
+    lightbox.classList.add('active');
+    lenis.stop();
+    lightboxClose.focus();
+  });
+  el.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') el.click();
+  });
+});
+
+function closeLightbox() {
+  lightbox.classList.remove('active');
+  lenis.start();
+}
+lightboxClose.addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', function(e) {
+  if (e.target === lightbox) closeLightbox();
+});
+
+// ============================================================
+// 8. CANVAS PARTICLE HERO (replaces photo planes)
+// ============================================================
+var heroPlanes = []; // kept for compatibility with scroll animations
+var heroParticles = [];
+var heroCtx, heroCanvasEl;
+
+function initThree() {
+  heroCanvasEl = document.getElementById('heroCanvas');
+  heroCtx = heroCanvasEl.getContext('2d');
+  heroCanvasEl.width = window.innerWidth * Math.min(window.devicePixelRatio, 2);
+  heroCanvasEl.height = window.innerHeight * Math.min(window.devicePixelRatio, 2);
+  heroCanvasEl.style.width = window.innerWidth + 'px';
+  heroCanvasEl.style.height = window.innerHeight + 'px';
+
+  // Create gold shimmer particles
+  for (var i = 0; i < 60; i++) {
+    heroParticles.push({
+      x: Math.random() * heroCanvasEl.width,
+      y: Math.random() * heroCanvasEl.height,
+      r: Math.random() * 2 + 0.5,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      alpha: Math.random() * 0.4 + 0.1,
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+
+  window.addEventListener('resize', function() {
+    heroCanvasEl.width = window.innerWidth * Math.min(window.devicePixelRatio, 2);
+    heroCanvasEl.height = window.innerHeight * Math.min(window.devicePixelRatio, 2);
+    heroCanvasEl.style.width = window.innerWidth + 'px';
+    heroCanvasEl.style.height = window.innerHeight + 'px';
+  });
+
+  animateParticles();
+  // Trigger loader completion immediately (no images to load)
+  updateLoaderProgress(1);
+}
+
+var heroParticleOpacity = 0;
+function animateParticles() {
+  requestAnimationFrame(animateParticles);
+  if (!heroCtx) return;
+  var w = heroCanvasEl.width, h = heroCanvasEl.height;
+  heroCtx.clearRect(0, 0, w, h);
+  var t = performance.now() * 0.001;
+
+  heroParticles.forEach(function(p) {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.x < 0) p.x = w;
+    if (p.x > w) p.x = 0;
+    if (p.y < 0) p.y = h;
+    if (p.y > h) p.y = 0;
+    var flicker = 0.5 + 0.5 * Math.sin(t * 1.5 + p.phase);
+    var a = p.alpha * flicker * heroParticleOpacity;
+    heroCtx.beginPath();
+    heroCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    heroCtx.fillStyle = 'rgba(197,168,120,' + a + ')';
+    heroCtx.fill();
+    // Glow
+    heroCtx.beginPath();
+    heroCtx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+    heroCtx.fillStyle = 'rgba(197,168,120,' + (a * 0.15) + ')';
+    heroCtx.fill();
+  });
+}
+
+// ============================================================
+// 9. LOADING
+// ============================================================
+var loaderReady = false;
+function updateLoaderProgress(p) {
+  document.getElementById('loaderFill').style.width = (p * 100) + '%';
+  if (p >= 1 && !loaderReady) {
+    loaderReady = true;
+    setTimeout(function() {
+      document.getElementById('loader').classList.add('hidden');
+      revealHero();
+    }, 500);
+  }
+}
+
+function revealHero() {
+  // Fade in particles
+  gsap.to({ v: 0 }, {
+    v: 1, duration: 2, ease: 'power2.out',
+    onUpdate: function() { heroParticleOpacity = this.targets()[0].v; }
+  });
+  animateHeroTitle();
+  gsap.to('#whatsappFab', { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)', delay: 2.5 });
+}
+
+// ============================================================
+// 10. SCROLL-DRIVEN ANIMATIONS
+// ============================================================
+function setupScrollAnimations() {
+
+  gsap.timeline({
+    scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1.5 }
+  }).to('#heroContent', { opacity: 0, y: -80, ease: 'none' }, 0);
+
+  ScrollTrigger.create({
+    trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1.5,
+    onUpdate: function(self) {
+      heroParticleOpacity = 1 - self.progress;
+    }
+  });
+
+  ScrollTrigger.create({
+    trigger: '#hero', start: 'top top', end: 'bottom top',
+    pin: '#heroContent', pinSpacing: false
+  });
+
+  ScrollTrigger.create({
+    trigger: '.section-divider', start: 'top 80%', end: 'bottom top',
+    onEnter: function() { gsap.to('#heroCanvas', { opacity: 0, duration: 0.8 }); },
+    onLeaveBack: function() { gsap.to('#heroCanvas', { opacity: 1, duration: 0.8 }); }
+  });
+
+  // Animate SVG wave dividers
+  document.querySelectorAll('.section-divider path').forEach(function(path) {
+    gsap.from(path, {
+      scaleY: 0, transformOrigin: 'bottom',
+      duration: 1.2, ease: 'power2.out',
+      scrollTrigger: { trigger: path.closest('.section-divider'), start: 'top 90%', once: true }
+    });
+  });
+
+  // Split text into characters
+  document.querySelectorAll('[data-split]').forEach(function(el) {
+    var text = el.textContent;
+    el.innerHTML = '';
+    text.split(' ').forEach(function(word, wi) {
+      if (wi > 0) el.appendChild(document.createTextNode(' '));
+      var wordSpan = document.createElement('span');
+      wordSpan.className = 'word';
+      word.split('').forEach(function(char) {
+        var charSpan = document.createElement('span');
+        charSpan.className = 'char';
+        charSpan.textContent = char;
+        wordSpan.appendChild(charSpan);
+      });
+      el.appendChild(wordSpan);
+    });
+  });
+
+  document.querySelectorAll('.section-title').forEach(function(title) {
+    gsap.to(title.querySelectorAll('.char'), {
+      y: 0, duration: 0.8, stagger: 0.03, ease: 'power3.out',
+      scrollTrigger: { trigger: title, start: 'top 85%', toggleActions: 'play none none reverse' }
+    });
+  });
+
+  document.querySelectorAll('.section-text').forEach(function(text) {
+    gsap.to(text, {
+      opacity: 1, y: 0, duration: 1, ease: 'power2.out',
+      scrollTrigger: { trigger: text, start: 'top 85%', toggleActions: 'play none none reverse' }
+    });
+  });
+
+  // About section animations
+  document.querySelectorAll('.about-tagline').forEach(function(el) {
+    gsap.to(el, {
+      opacity: 1, y: 0, duration: 0.8, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none reverse' }
+    });
+  });
+  document.querySelectorAll('.about-text').forEach(function(el) {
+    gsap.to(el, {
+      opacity: 1, y: 0, duration: 1, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none reverse' }
+    });
+  });
+  document.querySelectorAll('.about-highlight').forEach(function(el, i) {
+    gsap.to(el, {
+      opacity: 1, y: 0, duration: 0.6, delay: i * 0.1, ease: 'power2.out',
+      scrollTrigger: { trigger: el.parentElement, start: 'top 85%', toggleActions: 'play none none reverse' }
+    });
+  });
+
+  document.querySelectorAll('.section-label').forEach(function(label) {
+    gsap.from(label, {
+      opacity: 0, x: -30, duration: 0.8, ease: 'power2.out',
+      scrollTrigger: { trigger: label, start: 'top 88%', toggleActions: 'play none none reverse' }
+    });
+  });
+
+  document.querySelectorAll('.product-grid').forEach(function(grid) {
+    gsap.to(grid.querySelectorAll('.product-card'), {
+      opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out',
+      scrollTrigger: { trigger: grid, start: 'top 80%', toggleActions: 'play none none reverse' }
+    });
+  });
+
+  document.querySelectorAll('.order-grid').forEach(function(grid) {
+    gsap.from(grid.querySelectorAll('.order-card'), {
+      opacity: 0, duration: 0.7, stagger: 0.1, ease: 'power2.out',
+      scrollTrigger: { trigger: grid, start: 'top 85%', toggleActions: 'play none none none' }
+    });
+  });
+
+  document.querySelectorAll('.img-reveal').forEach(function(el) {
+    ScrollTrigger.create({
+      trigger: el, start: 'top 85%',
+      onEnter: function() { el.classList.add('revealed'); },
+      once: true
+    });
+  });
+
+  // Cupcake section now uses marquee (same as reviews) - no ScrollTrigger pin needed
+
+  // CTA reveal
+  gsap.from('#secCTA h2', {
+    opacity: 0, y: 40, duration: 1, ease: 'power2.out',
+    scrollTrigger: { trigger: '#secCTA', start: 'top 80%' }
+  });
+  gsap.from('#secCTA p', {
+    opacity: 0, y: 30, duration: 1, delay: 0.2, ease: 'power2.out',
+    scrollTrigger: { trigger: '#secCTA', start: 'top 80%' }
+  });
+  gsap.from('#secCTA .cta-btn', {
+    opacity: 0, y: 20, duration: 1, delay: 0.4, ease: 'power2.out',
+    scrollTrigger: { trigger: '#secCTA', start: 'top 80%' }
+  });
+}
+
+// ============================================================
+// 11. CARD TILT EFFECT
+// ============================================================
+function initTilt() {
+  if (!hasFinePointer) return;
+  document.querySelectorAll('[data-tilt]').forEach(function(card) {
+    card.addEventListener('mousemove', function(e) {
+      var rect = card.getBoundingClientRect();
+      var x = (e.clientX - rect.left) / rect.width;
+      var y = (e.clientY - rect.top) / rect.height;
+      var rotX = (y - 0.5) * -8;
+      var rotY = (x - 0.5) * 8;
+      card.style.transform = 'perspective(800px) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
+    });
+    card.addEventListener('mouseleave', function() {
+      card.style.transform = 'perspective(800px) rotateX(0) rotateY(0)';
+    });
+  });
+}
+
+// ============================================================
+// 12. HERO TITLE ANIMATION
+// ============================================================
+function animateHeroTitle() {
+  var titleEl = document.getElementById('heroTitle');
+  var text = 'CakeHaus';
+  titleEl.innerHTML = '';
+  text.split('').forEach(function(char) {
+    var span = document.createElement('span');
+    span.className = 'char';
+    span.textContent = char;
+    titleEl.appendChild(span);
+  });
+  gsap.to(titleEl.querySelectorAll('.char'), {
+    opacity: 1, y: 0, rotateX: 0,
+    duration: 0.8, stagger: 0.04, ease: 'power3.out', delay: 0.3
+  });
+  gsap.to('#heroSubtitle', { opacity: 1, y: 0, duration: 1, ease: 'power2.out', delay: 1.2 });
+  gsap.to('#scrollHint', { opacity: 1, duration: 1, ease: 'power2.out', delay: 2 });
+}
+
+// ============================================================
+// 13. CHOCOLATE DRIZZLE FLAVOUR PILL TOGGLE
+// ============================================================
+function initFlavourPills() {
+  document.querySelectorAll('.flavour-pills').forEach(function(group) {
+    var card = group.closest('.order-card');
+    group.querySelectorAll('.flavour-pill').forEach(function(pill) {
+      pill.addEventListener('click', function() {
+        group.querySelectorAll('.flavour-pill').forEach(function(p) { p.classList.remove('active'); });
+        pill.classList.add('active');
+        var flavour = pill.getAttribute('data-flavour');
+        card.setAttribute('data-flavour', flavour);
+        // Update product name on the order lines
+        card.querySelectorAll('.order-line[data-base]').forEach(function(line) {
+          var base = line.getAttribute('data-base');
+          var size = line.getAttribute('data-size-label');
+          line.setAttribute('data-product', base + ' (' + flavour + ') - ' + size);
+          // Show qty for this flavour's cart entry
+          var effId = getEffectiveId(line);
+          var valEl = line.querySelector('.qty-value');
+          if (valEl) valEl.textContent = cart[effId] ? cart[effId].qty : 0;
+        });
+      });
+      pill.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pill.click(); }
+      });
+    });
+  });
+}
+
+// ============================================================
+// 14. REVIEW SYSTEM (Google Sheets)
+// ============================================================
+var REVIEWS_API = 'https://script.google.com/macros/s/AKfycbyX0kQtG7g2vxHQ5D-JfbYSLZOcmaYDikjpAk-DBQrddAvvUq-_6bl5OIaRT_VF6LGeJA/exec';
+
+// Render reviews data into marquee
+function renderReviews(data) {
+  var track = document.getElementById('marqueeTrack');
+  if (!data.reviews || data.reviews.length === 0) {
+    track.innerHTML = '<div class="review-card"><p style="color:var(--warm-gray);font-style:italic;">No reviews yet - be the first!</p></div>';
+    return;
+  }
+  var html = '';
+  data.reviews.forEach(function(rev) {
+    var stars = '';
+    var rating = parseInt(rev.rating) || 5;
+    for (var s = 0; s < rating; s++) stars += '&#9733;';
+    var msg = rev.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    var name = rev.name.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    html += '<div class="review-card">'
+      + '<div class="review-stars">' + stars + '</div>'
+      + '<p>"' + msg + '"</p>'
+      + '<p class="review-author">' + name + '</p>'
+      + '</div>';
+  });
+  track.innerHTML = html + html;
+}
+
+// JSONP loader - bypasses CORS entirely
+function fetchReviewsJSONP() {
+  var callbackName = '_ckReviews' + Date.now();
+  window[callbackName] = function(data) {
+    renderReviews(data);
+    delete window[callbackName];
+    var s = document.getElementById('reviewScript');
+    if (s) s.remove();
+  };
+  var script = document.createElement('script');
+  script.id = 'reviewScript';
+  script.src = REVIEWS_API + '?callback=' + callbackName;
+  script.onerror = function() {
+    document.getElementById('marqueeTrack').innerHTML =
+      '<div class="review-card"><p style="color:var(--warm-gray);font-style:italic;">Reviews temporarily unavailable</p></div>';
+    delete window[callbackName];
+    script.remove();
+  };
+  document.body.appendChild(script);
+}
+
+// Fetch reviews - try fetch first, fall back to JSONP
+function fetchReviews() {
+  if (REVIEWS_API.indexOf('PASTE_YOUR') !== -1) return;
+
+  fetch(REVIEWS_API, { redirect: 'follow' })
+    .then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.text();
+    })
+    .then(function(text) {
+      var data;
+      try { data = JSON.parse(text); } catch (e) { throw new Error('Bad JSON'); }
+      renderReviews(data);
+    })
+    .catch(function() {
+      console.warn('Fetch failed, falling back to JSONP');
+      fetchReviewsJSONP();
+    });
+}
+fetchReviews();
+
+// Submit review form
+document.getElementById('reviewForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var msg = document.getElementById('reviewFormMsg');
+  var btn = this.querySelector('.review-submit-btn');
+
+  if (REVIEWS_API.indexOf('PASTE_YOUR') !== -1) {
+    msg.textContent = 'Review system not configured yet - see google-apps-script.js';
+    msg.style.color = '#c0392b';
+    return;
+  }
+
+  var name = document.getElementById('reviewName').value.trim();
+  var message = document.getElementById('reviewMsg').value.trim();
+  var rating = document.querySelector('.star-rating-input input:checked');
+  rating = rating ? parseInt(rating.value) : 5;
+
+  if (!name || !message) return;
+
+  // Client-side profanity filter
+  if (containsProfanity(name + ' ' + message)) {
+    msg.textContent = 'Please keep your review respectful and appropriate.';
+    msg.style.color = '#c0392b';
+    return;
+  }
+
+  var submitUrl = REVIEWS_API
+    + '?name=' + encodeURIComponent(name)
+    + '&rating=' + rating
+    + '&message=' + encodeURIComponent(message);
+
+  // Optimistic: show success immediately, send request in background
+  document.getElementById('reviewForm').reset();
+  showCelebration('review');
+
+  // Background fetch - doGet on Google Apps Script (regular GET)
+  fetch(submitUrl).catch(function() {});
+});
+
+// ============================================================
+// 15. CART SYSTEM
+// ============================================================
+var CART_KEY = 'cakehaus_cart';
+var WHATSAPP_NUMBER = '27753399401';
+var cart = {};
+
+function loadCart() {
+  try {
+    var raw = lsGet(CART_KEY);
+    cart = raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    cart = {};
+  }
+}
+function saveCart() {
+  try { lsSet(CART_KEY, JSON.stringify(cart)); } catch (e) {}
+}
+
+function getUnitMeta(id) {
+  var el = document.querySelector('.order-line[data-id="' + id + '"], [data-id="' + id + '"].order-line');
+  if (!el) return null;
+  return {
+    product: el.getAttribute('data-product'),
+    price: Number(el.getAttribute('data-price'))
+  };
+}
+
+function cartCount() {
+  var count = 0;
+  Object.keys(cart).forEach(function(id) { count += cart[id].qty; });
+  return count;
+}
+function cartTotal() {
+  var total = 0;
+  Object.keys(cart).forEach(function(id) { total += cart[id].qty * cart[id].price; });
+  return total;
+}
+
+function updateBadge() {
+  var count = cartCount();
+  var total = cartTotal();
+  var badge = document.getElementById('cartBadge');
+  document.getElementById('cartBadgeCount').textContent = count;
+  document.getElementById('cartBadgeTotal').textContent = 'R' + total;
+  badge.classList.toggle('visible', count > 0);
+}
+
+function syncUnitUI(id) {
+  var qty = cart[id] ? cart[id].qty : 0;
+  document.querySelectorAll('.order-line[data-id="' + id + '"]').forEach(function(line) {
+    var valEl = line.querySelector('.qty-value');
+    if (valEl) valEl.textContent = qty;
+    syncCardInCart(line.closest('.order-card'));
+  });
+}
+
+// Check if any item from this card is in the cart (handles flavour-aware IDs)
+function syncCardInCart(card) {
+  if (!card) return;
+  var hasFlavour = card.hasAttribute('data-flavour');
+  var anyInCart = false;
+  card.querySelectorAll('.order-line[data-id]').forEach(function(l) {
+    var baseId = l.getAttribute('data-id');
+    if (hasFlavour) {
+      // Check all flavour variants of this base ID
+      Object.keys(cart).forEach(function(cartId) {
+        if (cartId.indexOf(baseId) === 0 && cart[cartId].qty > 0) anyInCart = true;
+      });
+    } else {
+      if (cart[baseId] && cart[baseId].qty > 0) anyInCart = true;
+    }
+  });
+  card.classList.toggle('in-cart', anyInCart);
+}
+
+function syncAllUnits() {
+  document.querySelectorAll('.order-line[data-id]').forEach(function(line) {
+    var card = line.closest('.order-card');
+    if (card && card.hasAttribute('data-flavour')) {
+      // For drizzle cards, show qty for currently selected flavour
+      var effId = getEffectiveId(line);
+      var valEl = line.querySelector('.qty-value');
+      if (valEl) valEl.textContent = cart[effId] ? cart[effId].qty : 0;
+      syncCardInCart(card);
+    } else {
+      syncUnitUI(line.getAttribute('data-id'));
+    }
+  });
+}
+
+function addQty(id, delta, sourceEl, lineEl) {
+  var meta;
+  if (lineEl) {
+    meta = {
+      product: lineEl.getAttribute('data-product'),
+      price: Number(lineEl.getAttribute('data-price'))
+    };
+  } else if (cart[id]) {
+    meta = { product: cart[id].name, price: cart[id].price };
+  } else {
+    meta = getUnitMeta(id);
+  }
+  if (!meta) return;
+  if (!cart[id]) cart[id] = { name: meta.product, price: meta.price, qty: 0 };
+  cart[id].qty += delta;
+  if (cart[id].qty <= 0) delete cart[id];
+  saveCart();
+  // Update the qty display on the line element
+  if (lineEl) {
+    var valEl = lineEl.querySelector('.qty-value');
+    if (valEl) valEl.textContent = cart[id] ? cart[id].qty : 0;
+    syncCardInCart(lineEl.closest('.order-card'));
+  } else {
+    syncUnitUI(id);
+  }
+  updateBadge();
+  renderCartDrawer();
+  if (delta > 0 && sourceEl) {
+    flyToCart(sourceEl);
+    spawnSparkles(sourceEl);
+    var badge = document.getElementById('cartBadge');
+    badge.classList.remove('pulse');
+    void badge.offsetWidth;
+    badge.classList.add('pulse');
+  }
+}
+
+function removeFromCart(id) {
+  delete cart[id];
+  saveCart();
+  syncAllUnits();
+  updateBadge();
+  renderCartDrawer();
+}
+
+function clearCart() {
+  Object.keys(cart).forEach(function(id) { syncUnitUIAfterClear(id); });
+  cart = {};
+  saveCart();
+  syncAllUnits();
+  updateBadge();
+  renderCartDrawer();
+}
+function syncUnitUIAfterClear(id) { /* placeholder for symmetry, actual sync happens after cart reset */ }
+
+// Get effective cart ID - for drizzle items, append the selected flavour
+function getEffectiveId(line) {
+  var id = line.getAttribute('data-id');
+  var card = line.closest('.order-card');
+  if (card && card.hasAttribute('data-flavour')) {
+    var flavour = card.getAttribute('data-flavour').toLowerCase().replace(/\s+/g, '-');
+    id = id + '-' + flavour;
+  }
+  return id;
+}
+
+// Delegated click handling for qty buttons on the page (not inside cart drawer)
+document.addEventListener('click', function(e) {
+  var plus = e.target.closest('.order-line .qty-plus');
+  var minus = e.target.closest('.order-line .qty-minus');
+  if (plus) {
+    var line = plus.closest('.order-line');
+    var effId = getEffectiveId(line);
+    addQty(effId, 1, plus, line);
+  } else if (minus) {
+    var line2 = minus.closest('.order-line');
+    var effId2 = getEffectiveId(line2);
+    addQty(effId2, -1, null, line2);
+  }
+});
+
+// ============================================================
+// 15. FLY-TO-CART + SPARKLE ANIMATION
+// ============================================================
+function flyToCart(sourceEl) {
+  var badge = document.getElementById('cartBadge');
+  var startRect = sourceEl.getBoundingClientRect();
+  var endRect = badge.getBoundingClientRect();
+  var fly = document.createElement('div');
+  fly.className = 'fly-item';
+  fly.style.left = (startRect.left + startRect.width / 2) + 'px';
+  fly.style.top = (startRect.top + startRect.height / 2) + 'px';
+  document.body.appendChild(fly);
+  gsap.to(fly, {
+    left: endRect.left + endRect.width / 2,
+    top: endRect.top + endRect.height / 2,
+    scale: 0.3,
+    opacity: 0.6,
+    duration: 0.7,
+    ease: 'power2.in',
+    onComplete: function() { fly.remove(); }
+  });
+  gsap.to(fly, {
+    y: '-=40', duration: 0.35, ease: 'power2.out', yoyo: true, repeat: 1
+  });
+}
+
+function spawnSparkles(sourceEl) {
+  var rect = sourceEl.getBoundingClientRect();
+  var cx = rect.left + rect.width / 2;
+  var cy = rect.top + rect.height / 2;
+  var sparkleCount = 8;
+  for (var i = 0; i < sparkleCount; i++) {
+    var s = document.createElement('div');
+    s.className = 'sparkle';
+    s.style.left = cx + 'px';
+    s.style.top = cy + 'px';
+    document.body.appendChild(s);
+    var angle = (Math.PI * 2 * i) / sparkleCount;
+    var dist = 30 + Math.random() * 20;
+    (function(el) {
+      gsap.to(el, {
+        x: Math.cos(angle) * dist,
+        y: Math.sin(angle) * dist,
+        opacity: 0,
+        scale: 0.2,
+        duration: 0.6,
+        ease: 'power2.out',
+        onComplete: function() { el.remove(); }
+      });
+    })(s);
+  }
+}
+
+// ============================================================
+// 16. CART DRAWER
+// ============================================================
+var cartBadgeBtn = document.getElementById('cartBadge');
+var cartDrawer = document.getElementById('cartDrawer');
+var cartOverlay = document.getElementById('cartOverlay');
+var cartCloseBtn = document.getElementById('cartCloseBtn');
+var cartItemsList = document.getElementById('cartItemsList');
+var cartTotalAmount = document.getElementById('cartTotalAmount');
+var cartClearBtn = document.getElementById('cartClearBtn');
+var cartSendBtn = document.getElementById('cartSendBtn');
+var cartCustomerName = document.getElementById('cartCustomerName');
+var cartCustomerPhone = document.getElementById('cartCustomerPhone');
+var cartCustomerDate = document.getElementById('cartCustomerDate');
+var cartCustomerNote = document.getElementById('cartCustomerNote');
+var cartImageInput = document.getElementById('cartImageInput');
+var cartUploadBtn = document.getElementById('cartUploadBtn');
+var cartImagePreviews = document.getElementById('cartImagePreviews');
+var cartDesignImages = []; // { file, dataUrl }
+
+// Set min date to today
+var today = new Date();
+cartCustomerDate.min = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+
+// Image upload handling
+cartUploadBtn.addEventListener('click', function() {
+  cartImageInput.click();
+});
+cartImageInput.addEventListener('change', function() {
+  var files = Array.from(this.files);
+  var errors = [];
+  files.forEach(function(file) {
+    if (cartDesignImages.length >= MAX_IMAGES) {
+      errors.push('Maximum ' + MAX_IMAGES + ' images allowed.');
+      return;
+    }
+    var check = validateImageFile(file);
+    if (!check.valid) {
+      errors.push(check.reason);
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      // Verify the data URL starts with a valid image MIME
+      var dataUrl = e.target.result;
+      if (!dataUrl.match(/^data:image\/(jpeg|png|webp|gif);base64,/)) {
+        alert('File "' + file.name + '" is not a valid image.');
+        return;
+      }
+      cartDesignImages.push({ file: file, dataUrl: dataUrl });
+      renderImagePreviews();
+    };
+    reader.readAsDataURL(file);
+  });
+  if (errors.length > 0) {
+    alert(errors[0]); // show first error
+  }
+  this.value = '';
+});
+
+function renderImagePreviews() {
+  if (cartDesignImages.length === 0) {
+    cartImagePreviews.innerHTML = '';
+    cartUploadBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg> Add Design Images';
+    return;
+  }
+  var html = '';
+  cartDesignImages.forEach(function(img, idx) {
+    html += '<div class="cart-image-thumb">'
+      + '<img src="' + img.dataUrl + '" alt="Design ' + (idx + 1) + '">'
+      + '<button class="cart-image-thumb-remove" data-img-idx="' + idx + '" aria-label="Remove image">&times;</button>'
+      + '</div>';
+  });
+  cartImagePreviews.innerHTML = html;
+  cartUploadBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg> Add More (' + cartDesignImages.length + '/5)';
+  if (cartDesignImages.length >= 5) {
+    cartUploadBtn.style.display = 'none';
+  } else {
+    cartUploadBtn.style.display = 'flex';
+  }
+}
+
+cartImagePreviews.addEventListener('click', function(e) {
+  var removeBtn = e.target.closest('.cart-image-thumb-remove');
+  if (!removeBtn) return;
+  var idx = parseInt(removeBtn.getAttribute('data-img-idx'));
+  cartDesignImages.splice(idx, 1);
+  renderImagePreviews();
+});
+
+var cartScrollY = 0;
+function openCartDrawer() {
+  cartScrollY = window.scrollY;
+  cartDrawer.classList.add('open');
+  cartOverlay.classList.add('open');
+  goToCartStep(1);
+  // Simple scroll lock that doesn't break inner scrolling on iOS
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
+  lenis.stop();
+}
+function closeCartDrawer() {
+  cartDrawer.classList.remove('open');
+  cartOverlay.classList.remove('open');
+  document.documentElement.style.overflow = '';
+  document.body.style.overflow = '';
+  window.scrollTo(0, cartScrollY);
+  lenis.start();
+}
+
+// Prevent touch/wheel events on cart from reaching Lenis
+var cartFooter = cartDrawer.querySelector('.cart-drawer-footer');
+function stopLenisPropagation(e) {
+  e.stopPropagation();
+}
+cartItemsList.addEventListener('touchstart', stopLenisPropagation, { passive: true });
+cartItemsList.addEventListener('touchmove', stopLenisPropagation, { passive: true });
+cartFooter.addEventListener('touchstart', stopLenisPropagation, { passive: true });
+cartFooter.addEventListener('touchmove', stopLenisPropagation, { passive: true });
+// Desktop: stop Lenis from stealing wheel events inside the cart
+cartDrawer.addEventListener('wheel', function(e) {
+  e.stopPropagation();
+}, { passive: true });
+
+cartBadgeBtn.addEventListener('click', openCartDrawer);
+cartCloseBtn.addEventListener('click', closeCartDrawer);
+cartOverlay.addEventListener('click', closeCartDrawer);
+
+function renderCartDrawer() {
+  var ids = Object.keys(cart);
+  if (ids.length === 0) {
+    cartItemsList.innerHTML = '<p class="cart-empty">Your cart is empty.<br>Add a cake, cupcake, or treat to get started.</p>';
+  } else {
+    var html = '';
+    ids.forEach(function(id) {
+      var item = cart[id];
+      var subtotal = item.qty * item.price;
+      html += '<div class="cart-item" data-id="' + id + '">' +
+        '<div class="cart-item-main">' +
+          '<div class="cart-item-name">' + item.name + '</div>' +
+          '<div class="cart-item-meta">R' + item.price + ' each</div>' +
+          '<div class="qty-control" style="margin-top:8px;">' +
+            '<button class="qty-btn cart-qty-minus" type="button" aria-label="Decrease quantity">&minus;</button>' +
+            '<span class="qty-value">' + item.qty + '</span>' +
+            '<button class="qty-btn cart-qty-plus" type="button" aria-label="Increase quantity">+</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="cart-item-right">' +
+          '<span class="cart-item-subtotal">R' + subtotal + '</span>' +
+          '<button class="cart-item-remove" type="button" aria-label="Remove item">&times;</button>' +
+        '</div>' +
+      '</div>';
+    });
+    cartItemsList.innerHTML = html;
+  }
+  cartTotalAmount.textContent = 'R' + cartTotal();
+  var t2 = document.getElementById('cartTotalAmount2');
+  if (t2) t2.textContent = 'R' + cartTotal();
+  if (cartStep2 && cartStep2.classList.contains('active')) renderCartOrderSummary();
+  if (Object.keys(cart).length === 0 && cartStep2 && cartStep2.classList.contains('active')) {
+    goToCartStep(1);
+  }
+}
+
+cartItemsList.addEventListener('click', function(e) {
+  var itemEl = e.target.closest('.cart-item');
+  if (!itemEl) return;
+  var id = itemEl.getAttribute('data-id');
+  if (e.target.closest('.cart-qty-plus')) {
+    addQty(id, 1, null);
+  } else if (e.target.closest('.cart-qty-minus')) {
+    addQty(id, -1, null);
+  } else if (e.target.closest('.cart-item-remove')) {
+    removeFromCart(id);
+  }
+});
+
+cartClearBtn.addEventListener('click', function() {
+  if (Object.keys(cart).length === 0) return;
+  clearCart();
+});
+
+// ============================================================
+// 16b. CART TWO-STEP FLOW
+// ============================================================
+var cartStep1 = document.getElementById('cartStep1');
+var cartStep2 = document.getElementById('cartStep2');
+var cartReadyBtn = document.getElementById('cartReadyBtn');
+var cartBackBtn = document.getElementById('cartBackBtn');
+function goToCartStep(step) {
+  if (step === 2) {
+    renderCartOrderSummary();
+    cartStep1.classList.remove('active');
+    cartStep2.classList.add('active');
+  } else {
+    cartStep2.classList.remove('active');
+    cartStep1.classList.add('active');
+  }
+}
+
+function renderCartOrderSummary() {
+  var t2 = document.getElementById('cartTotalAmount2');
+  if (t2) t2.textContent = 'R' + cartTotal();
+}
+
+cartReadyBtn.addEventListener('click', function() {
+  if (Object.keys(cart).length === 0) {
+    alert('Your cart is empty. Add some items before continuing.');
+    return;
+  }
+  goToCartStep(2);
+});
+cartBackBtn.addEventListener('click', function() {
+  goToCartStep(1);
+});
+
+// ============================================================
+// 16c. CUSTOM BOX BUILDER
+// ============================================================
+var BOX_TRAY_PRICES = { original: { 6: 90, 12: 180 }, drizzle: { 6: 100, 12: 200 } };
+var BOX_FLAVOURS = [
+  { key: 'original', name: 'Original (Coconut Almond Glaze)', type: 'original', color: '#D4A574' },
+  { key: 'milkybar', name: 'Milkybar Drizzle', type: 'drizzle', color: '#F5E6C8' },
+  { key: 'barone', name: 'Bar One Drizzle', type: 'drizzle', color: '#8B4513' },
+  { key: 'biscoff', name: 'Biscoff Drizzle', type: 'drizzle', color: '#C68E5B' }
+];
+var boxState = {
+  size: 6,
+  counts: { original: 0, milkybar: 0, barone: 0, biscoff: 0 }
+};
+
+var boxBuilderOverlay = document.getElementById('boxBuilderOverlay');
+var boxBuilderClose = document.getElementById('boxBuilderClose');
+var openBoxBuilderBtn = document.getElementById('openBoxBuilderBtn');
+var boxSlotsGrid = document.getElementById('boxSlotsGrid');
+var boxSlotsStatus = document.getElementById('boxSlotsStatus');
+var boxFlavourList = document.getElementById('boxFlavourList');
+var boxBuilderPrice = document.getElementById('boxBuilderPrice');
+var boxBuilderAddBtn = document.getElementById('boxBuilderAddBtn');
+
+function boxTotalCount() {
+  var total = 0;
+  BOX_FLAVOURS.forEach(function(f) { total += boxState.counts[f.key]; });
+  return total;
+}
+function boxTotalPrice() {
+  var total = 0;
+  var size = boxState.size;
+  BOX_FLAVOURS.forEach(function(f) {
+    var c = boxState.counts[f.key];
+    if (c > 0) {
+      var trayPrice = BOX_TRAY_PRICES[f.type][size];
+      total += c * (trayPrice / size);
+    }
+  });
+  return Math.round(total);
+}
+
+function resetBoxState() {
+  boxState.size = 6;
+  boxState.counts = { original: 0, milkybar: 0, barone: 0, biscoff: 0 };
+}
+
+function renderBoxFlavourList() {
+  var html = '';
+  BOX_FLAVOURS.forEach(function(f) {
+    var c = boxState.counts[f.key];
+    html += '<div class="box-flavour-card' + (c > 0 ? ' has-count' : '') + '" data-key="' + f.key + '">' +
+      '<span class="box-flavour-swatch" style="background:' + f.color + '"></span>' +
+      '<div class="box-flavour-info">' +
+        '<span class="box-flavour-name">' + f.name + '</span>' +
+        '<span class="box-flavour-price"></span>' +
+      '</div>' +
+      '<span class="box-flavour-count">' + c + '</span>' +
+    '</div>';
+  });
+  boxFlavourList.innerHTML = html;
+}
+
+function renderBoxSlotsGrid() {
+  boxSlotsGrid.className = 'box-slots-grid size-' + boxState.size;
+  var filledColors = [];
+  BOX_FLAVOURS.forEach(function(f) {
+    for (var i = 0; i < boxState.counts[f.key]; i++) filledColors.push(f.color);
+  });
+  var slots = boxSlotsGrid.children;
+  // Rebuild if slot count changed
+  if (slots.length !== boxState.size) {
+    var html = '';
+    for (var s = 0; s < boxState.size; s++) {
+      if (s < filledColors.length) {
+        html += '<div class="box-slot filled no-anim" style="background:' + filledColors[s] + '"></div>';
+      } else {
+        html += '<div class="box-slot"></div>';
+      }
+    }
+    boxSlotsGrid.innerHTML = html;
+    return;
+  }
+  // Diff update - only animate newly filled slots
+  for (var s = 0; s < boxState.size; s++) {
+    var slot = slots[s];
+    var wasFilled = slot.classList.contains('filled');
+    var shouldFill = s < filledColors.length;
+    if (shouldFill) {
+      slot.style.background = filledColors[s];
+      if (!wasFilled) {
+        slot.classList.remove('no-anim');
+        slot.classList.add('filled');
+      }
+    } else {
+      slot.style.background = '';
+      slot.classList.remove('filled', 'no-anim');
+    }
+  }
+}
+
+function renderBoxBuilder() {
+  renderBoxSlotsGrid();
+  var count = boxTotalCount();
+  boxSlotsStatus.textContent = count + ' / ' + boxState.size + ' cakes selected';
+  BOX_FLAVOURS.forEach(function(f) {
+    var card = boxFlavourList.querySelector('.box-flavour-card[data-key="' + f.key + '"]');
+    if (!card) return;
+    var countEl = card.querySelector('.box-flavour-count');
+    var c = boxState.counts[f.key];
+    if (countEl) countEl.textContent = c;
+    card.classList.toggle('has-count', c > 0);
+  });
+  boxBuilderPrice.textContent = 'R' + boxTotalPrice();
+  boxBuilderAddBtn.disabled = count !== boxState.size;
+  document.querySelectorAll('.box-size-btn').forEach(function(btn) {
+    btn.classList.toggle('active', Number(btn.getAttribute('data-size')) === boxState.size);
+  });
+}
+
+function lockPageScroll() {
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
+  if (typeof lenis !== 'undefined') lenis.stop();
+}
+function unlockPageScroll() {
+  document.documentElement.style.overflow = '';
+  document.body.style.overflow = '';
+  if (typeof lenis !== 'undefined') lenis.start();
+}
+
+function openBoxBuilder() {
+  resetBoxState();
+  renderBoxFlavourList();
+  renderBoxBuilder();
+  boxBuilderOverlay.classList.add('show');
+  lockPageScroll();
+}
+function closeBoxBuilder() {
+  boxBuilderOverlay.classList.remove('show');
+  unlockPageScroll();
+}
+
+if (openBoxBuilderBtn) openBoxBuilderBtn.addEventListener('click', openBoxBuilder);
+boxBuilderClose.addEventListener('click', closeBoxBuilder);
+boxBuilderOverlay.addEventListener('click', function(e) {
+  if (e.target === boxBuilderOverlay) closeBoxBuilder();
+});
+boxBuilderOverlay.addEventListener('wheel', function(e) { e.stopPropagation(); }, { passive: true });
+boxBuilderOverlay.addEventListener('touchstart', function(e) { e.stopPropagation(); }, { passive: true });
+boxBuilderOverlay.addEventListener('touchmove', function(e) { e.stopPropagation(); }, { passive: true });
+
+document.querySelectorAll('.box-size-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var newSize = Number(btn.getAttribute('data-size'));
+    if (newSize === boxState.size) return;
+    boxState.size = newSize;
+    if (boxTotalCount() > newSize) {
+      boxState.counts = { original: 0, milkybar: 0, barone: 0, biscoff: 0 };
+    }
+    renderBoxBuilder();
+  });
+});
+
+// Tap flavour card to fill next empty slot
+boxFlavourList.addEventListener('click', function(e) {
+  var card = e.target.closest('.box-flavour-card');
+  if (!card) return;
+  var key = card.getAttribute('data-key');
+  if (boxTotalCount() >= boxState.size) return; // box full
+  boxState.counts[key]++;
+  renderBoxBuilder();
+});
+
+// Tap a filled slot to remove - determine which flavour by slot index
+boxSlotsGrid.addEventListener('click', function(e) {
+  var slot = e.target.closest('.box-slot.filled');
+  if (!slot) return;
+  var idx = Array.prototype.indexOf.call(boxSlotsGrid.children, slot);
+  // Rebuild the fill order to find which flavour occupies this slot
+  var pos = 0;
+  var foundKey = null;
+  BOX_FLAVOURS.forEach(function(f) {
+    for (var i = 0; i < boxState.counts[f.key]; i++) {
+      if (pos === idx) foundKey = f.key;
+      pos++;
+    }
+  });
+  if (foundKey) {
+    boxState.counts[foundKey]--;
+    renderBoxBuilder();
+  }
+});
+
+boxBuilderAddBtn.addEventListener('click', function() {
+  if (boxTotalCount() !== boxState.size) return;
+  var breakdownParts = [];
+  var idParts = [];
+  BOX_FLAVOURS.forEach(function(f) {
+    var c = boxState.counts[f.key];
+    idParts.push(f.key + c);
+    if (c > 0) breakdownParts.push(c + 'x ' + f.name);
+  });
+  var id = 'custom-box-' + boxState.size + '-' + idParts.join('-');
+  var name = 'Custom Box of ' + boxState.size + ' - ' + breakdownParts.join(', ');
+  var total = boxTotalPrice();
+  if (!cart[id]) cart[id] = { name: name, price: total, qty: 0 };
+  cart[id].qty += 1;
+  saveCart();
+  updateBadge();
+  renderCartDrawer();
+  closeBoxBuilder();
+  openCartDrawer();
+});
+
+// ============================================================
+// MINI CUPCAKE MIX & MATCH BUILDER (HIDDEN - uncomment to enable)
+// ============================================================
+if (false) { // START HIDDEN MINI MIX
+var MINI_FLAVOURS = [
+  { key: 'buttercream', name: 'Buttercream', price: 12.50, color: '#F5E6C8' },
+  { key: 'biscoff', name: 'Lotus Biscoff', price: 17, color: '#C68E5B' },
+  { key: 'oreo', name: 'Oreo', price: 17, color: '#4A4A4A' }
+];
+
+var miniMixState = {
+  counts: { buttercream: 0, biscoff: 0, oreo: 0 }
+};
+
+var miniMixOverlay = document.getElementById('miniMixOverlay');
+var miniMixClose = document.getElementById('miniMixClose');
+var openMiniMixBtn = document.getElementById('openMiniMixBtn');
+var miniMixSlotsGrid = document.getElementById('miniMixSlotsGrid');
+var miniMixSlotsStatus = document.getElementById('miniMixSlotsStatus');
+var miniMixFlavourList = document.getElementById('miniMixFlavourList');
+var miniMixPrice = document.getElementById('miniMixPrice');
+var miniMixAddBtn = document.getElementById('miniMixAddBtn');
+
+function miniMixTotalCount() {
+  var total = 0;
+  MINI_FLAVOURS.forEach(function(f) { total += miniMixState.counts[f.key]; });
+  return total;
+}
+function miniMixTotalPrice() {
+  var total = 0;
+  MINI_FLAVOURS.forEach(function(f) { total += miniMixState.counts[f.key] * f.price; });
+  return total;
+}
+
+function resetMiniMixState() {
+  miniMixState.counts = { buttercream: 0, biscoff: 0, oreo: 0 };
+}
+
+function renderMiniMixFlavourList() {
+  var html = '';
+  MINI_FLAVOURS.forEach(function(f) {
+    var remaining = 24 - miniMixTotalCount() + miniMixState.counts[f.key];
+    html += '<div class="box-flavour-row" data-key="' + f.key + '">' +
+      '<div class="box-flavour-top">' +
+        '<span class="box-flavour-swatch" style="background:' + f.color + '"></span>' +
+        '<div class="box-flavour-info">' +
+          '<span class="box-flavour-name">' + f.name + '</span>' +
+          '<span class="box-flavour-price">R' + f.price + '/each</span>' +
+        '</div>' +
+        '<span class="box-flavour-qty">' + miniMixState.counts[f.key] + '</span>' +
+      '</div>' +
+      '<input type="range" class="box-flavour-slider" min="0" max="' + remaining + '" value="' + miniMixState.counts[f.key] + '" data-key="' + f.key + '" aria-label="' + f.name + ' quantity">' +
+    '</div>';
+  });
+  miniMixFlavourList.innerHTML = html;
+}
+
+function renderMiniMixSlotsGrid() {
+  var filledColors = [];
+  MINI_FLAVOURS.forEach(function(f) {
+    for (var i = 0; i < miniMixState.counts[f.key]; i++) filledColors.push(f.color);
+  });
+  var slots = miniMixSlotsGrid.children;
+  if (slots.length !== 24) {
+    var html = '';
+    for (var s = 0; s < 24; s++) {
+      if (s < filledColors.length) {
+        html += '<div class="box-slot filled no-anim" style="background:' + filledColors[s] + '"></div>';
+      } else {
+        html += '<div class="box-slot"></div>';
+      }
+    }
+    miniMixSlotsGrid.innerHTML = html;
+    return;
+  }
+  for (var s = 0; s < 24; s++) {
+    var slot = slots[s];
+    var wasFilled = slot.classList.contains('filled');
+    var shouldFill = s < filledColors.length;
+    if (shouldFill) {
+      slot.style.background = filledColors[s];
+      if (!wasFilled) {
+        slot.classList.remove('no-anim');
+        slot.classList.add('filled');
+      }
+    } else {
+      slot.style.background = '';
+      slot.classList.remove('filled', 'no-anim');
+    }
+  }
+}
+
+function renderMiniMixBuilder(syncSliders) {
+  renderMiniMixSlotsGrid();
+  var count = miniMixTotalCount();
+  miniMixSlotsStatus.textContent = count + ' / 24 cupcakes selected';
+  MINI_FLAVOURS.forEach(function(f) {
+    var row = miniMixFlavourList.querySelector('.box-flavour-row[data-key="' + f.key + '"]');
+    if (!row) return;
+    var qtyEl = row.querySelector('.box-flavour-qty');
+    if (qtyEl) qtyEl.textContent = miniMixState.counts[f.key];
+    if (syncSliders) {
+      var slider = row.querySelector('.box-flavour-slider');
+      if (slider) {
+        var remaining = 24 - count + miniMixState.counts[f.key];
+        slider.max = remaining;
+        slider.value = miniMixState.counts[f.key];
+      }
+    }
+  });
+  miniMixPrice.textContent = 'R' + miniMixTotalPrice();
+  miniMixAddBtn.disabled = count !== 24;
+}
+
+function openMiniMixBuilder() {
+  resetMiniMixState();
+  renderMiniMixFlavourList();
+  renderMiniMixBuilder(true);
+  miniMixOverlay.classList.add('show');
+  lockPageScroll();
+}
+function closeMiniMixBuilder() {
+  miniMixOverlay.classList.remove('show');
+  unlockPageScroll();
+}
+
+if (openMiniMixBtn) openMiniMixBtn.addEventListener('click', openMiniMixBuilder);
+miniMixClose.addEventListener('click', closeMiniMixBuilder);
+miniMixOverlay.addEventListener('click', function(e) {
+  if (e.target === miniMixOverlay) closeMiniMixBuilder();
+});
+miniMixOverlay.addEventListener('wheel', function(e) { e.stopPropagation(); }, { passive: true });
+miniMixOverlay.addEventListener('touchstart', function(e) { e.stopPropagation(); }, { passive: true });
+miniMixOverlay.addEventListener('touchmove', function(e) { e.stopPropagation(); }, { passive: true });
+
+miniMixFlavourList.addEventListener('input', function(e) {
+  var slider = e.target.closest('.box-flavour-slider');
+  if (!slider) return;
+  var key = slider.getAttribute('data-key');
+  miniMixState.counts[key] = Number(slider.value);
+  renderMiniMixBuilder(false);
+});
+miniMixFlavourList.addEventListener('change', function() { renderMiniMixBuilder(true); });
+
+miniMixAddBtn.addEventListener('click', function() {
+  if (miniMixTotalCount() !== 24) return;
+  var breakdownParts = [];
+  var idParts = [];
+  MINI_FLAVOURS.forEach(function(f) {
+    var c = miniMixState.counts[f.key];
+    idParts.push(f.key + c);
+    if (c > 0) breakdownParts.push(c + 'x ' + f.name);
+  });
+  var id = 'mini-mix-24-' + idParts.join('-');
+  var displayName = 'Mini Cupcake Mix (24) - ' + breakdownParts.join(', ');
+  var total = miniMixTotalPrice();
+  if (!cart[id]) cart[id] = { name: displayName, price: total, qty: 0 };
+  cart[id].qty += 1;
+  saveCart();
+  updateBadge();
+  renderCartDrawer();
+  closeMiniMixBuilder();
+  openCartDrawer();
+});
+} // END HIDDEN MINI MIX
+
+function buildWhatsAppMessage() {
+  var name = cartCustomerName.value.trim();
+  var phone = cartCustomerPhone.value.trim();
+  var dateRaw = cartCustomerDate.value;
+  var date = '';
+  if (dateRaw) {
+    var d = new Date(dateRaw + 'T00:00:00');
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    date = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  var note = cartCustomerNote.value.trim();
+  var lines = [];
+  lines.push('Hi CakeHaus! I would like to place an order.');
+  lines.push('');
+  if (name) lines.push('Name: ' + name);
+  if (phone) lines.push('Phone: ' + phone);
+  if (date) lines.push('Collection/Delivery: ' + date);
+  lines.push('');
+  lines.push('*Order:*');
+  Object.keys(cart).forEach(function(id) {
+    var item = cart[id];
+    var subtotal = item.qty * item.price;
+    lines.push('- ' + item.name + ' x' + item.qty + ' - R' + subtotal);
+  });
+  lines.push('');
+  lines.push('*Total: R' + cartTotal() + '*');
+  if (note) {
+    lines.push('');
+    lines.push('Note: ' + note);
+  }
+  if (cartDesignImages.length > 0) {
+    lines.push('');
+    lines.push('📎 I have ' + cartDesignImages.length + ' reference image' + (cartDesignImages.length > 1 ? 's' : '') + ' of the design I want - I will send ' + (cartDesignImages.length > 1 ? 'them' : 'it') + ' in this chat.');
+  }
+  return lines.join('\n');
+}
+
+cartSendBtn.addEventListener('click', function() {
+  if (Object.keys(cart).length === 0) {
+    alert('Your cart is empty. Add some items before sending your order.');
+    return;
+  }
+  // Validate inputs before showing preview
+  var name = cartCustomerName.value.trim();
+  var phone = cartCustomerPhone.value.trim();
+  var note = cartCustomerNote.value.trim();
+
+  if (containsProfanity(name + ' ' + note)) {
+    alert('Please keep your order details respectful and appropriate.');
+    return;
+  }
+  if (phone && !isValidPhone(phone)) {
+    alert('Please enter a valid phone number.');
+    cartCustomerPhone.focus();
+    return;
+  }
+  showOrderPreview();
+});
+
+// ============================================================
+// 17. CUSTOM CAKE ENQUIRY BUTTON
+// ============================================================
+(function initCustomEnquiry() {
+  var btn = document.getElementById('customEnquireBtn');
+  if (!btn) return;
+  var msg = 'Hi CakeHaus! I would like to enquire about a custom celebration cake.';
+  btn.href = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(msg);
+})();
+
+// ============================================================
+// DARK MODE TOGGLE
+// ============================================================
+(function initDarkMode() {
+  var toggle = document.getElementById('darkToggle');
+  var icon = document.getElementById('darkToggleIcon');
+  var isDark = false;
+  var sunPath = 'M12 3a1 1 0 011 1v1a1 1 0 01-2 0V4a1 1 0 011-1zm0 15a1 1 0 011 1v1a1 1 0 01-2 0v-1a1 1 0 011-1zm9-8a1 1 0 010 2h-1a1 1 0 010-2h1zM5 11a1 1 0 010 2H4a1 1 0 010-2h1zm14.07-5.66a1 1 0 010 1.41l-.71.71a1 1 0 01-1.41-1.41l.71-.71a1 1 0 011.41 0zM7.05 17.66a1 1 0 010 1.41l-.71.71a1 1 0 01-1.41-1.41l.71-.71a1 1 0 011.41 0zm12.02 0a1 1 0 01-1.41 1.41l-.71-.71a1 1 0 011.41-1.41l.71.71zM7.05 6.34a1 1 0 01-1.41 0l-.71-.71a1 1 0 011.41-1.41l.71.71a1 1 0 010 1.41zM12 8a4 4 0 100 8 4 4 0 000-8z';
+  var moonPath = 'M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z';
+
+  var isMobile = window.innerWidth <= 768;
+  if (isMobile) {
+    // On mobile, follow device setting
+    isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (isDark) {
+      document.documentElement.classList.add('dark-mode');
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+      isDark = e.matches;
+      document.documentElement.classList.toggle('dark-mode', isDark);
+    });
+  } else if (lsGet('cakehaus_darkmode') === 'true') {
+    isDark = true;
+    document.documentElement.classList.add('dark-mode');
+    toggle.classList.add('active');
+  }
+  icon.querySelector('path').setAttribute('d', isDark ? moonPath : sunPath);
+
+  toggle.addEventListener('click', function() {
+    isDark = !isDark;
+    document.documentElement.classList.toggle('dark-mode', isDark);
+    toggle.classList.toggle('active', isDark);
+    icon.querySelector('path').setAttribute('d', isDark ? moonPath : sunPath);
+    lsSet('cakehaus_darkmode', isDark ? 'true' : 'false');
+  });
+})();
+
+// ============================================================
+// CONFETTI ENGINE
+// ============================================================
+function launchConfetti(duration) {
+  duration = duration || 3000;
+  var canvas = document.getElementById('confettiCanvas');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var colors = ['#C5A878','#b89a5a','#D4AF37','#F5F0EB','#25D366','#FF6B6B','#FFD93D','#6BCB77'];
+
+  for (var i = 0; i < 120; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height * -1 - 20,
+      w: Math.random() * 8 + 4,
+      h: Math.random() * 4 + 2,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vx: (Math.random() - 0.5) * 3,
+      vy: Math.random() * 3 + 2,
+      rot: Math.random() * 360,
+      rotV: (Math.random() - 0.5) * 10,
+      opacity: 1
+    });
+  }
+
+  var start = Date.now();
+  function frame() {
+    var elapsed = Date.now() - start;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var fadeStart = duration * 0.7;
+    particles.forEach(function(p) {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.05;
+      p.rot += p.rotV;
+      if (elapsed > fadeStart) p.opacity = Math.max(0, 1 - (elapsed - fadeStart) / (duration - fadeStart));
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI / 180);
+      ctx.globalAlpha = p.opacity;
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
+    if (elapsed < duration) {
+      requestAnimationFrame(frame);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+// ============================================================
+// CELEBRATION POPUP
+// ============================================================
+function showCelebration(type) {
+  var overlay = document.getElementById('celebrationOverlay');
+  var icon = document.getElementById('celebrationIcon');
+  var title = document.getElementById('celebrationTitle');
+  var msg = document.getElementById('celebrationMsg');
+
+  if (type === 'review') {
+    icon.textContent = '✨';
+    title.textContent = 'Thank You!';
+    msg.textContent = 'We truly appreciate your feedback. Your review will appear once approved.';
+  } else if (type === 'order') {
+    icon.textContent = '🎂';
+    title.textContent = 'Thank You for Your Support!';
+    msg.textContent = 'Your order means the world to us. We can\'t wait to make something special for you!';
+  }
+
+  overlay.classList.add('show');
+  lockPageScroll();
+  launchConfetti(3500);
+
+  document.getElementById('celebrationCloseBtn').onclick = function() {
+    overlay.classList.remove('show');
+    unlockPageScroll();
+  };
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) {
+      overlay.classList.remove('show');
+      unlockPageScroll();
+    }
+  });
+}
+
+// ============================================================
+// ORDER PREVIEW
+// ============================================================
+function showOrderPreview() {
+  var body = document.getElementById('orderPreviewBody');
+  var totalEl = document.getElementById('orderPreviewTotal');
+  var overlay = document.getElementById('orderPreviewOverlay');
+
+  // Build items list
+  var html = '';
+  Object.keys(cart).forEach(function(id) {
+    var item = cart[id];
+    var subtotal = item.qty * item.price;
+    html += '<div class="order-preview-item">'
+      + '<span class="order-preview-item-name">' + item.name + '</span>'
+      + '<span class="order-preview-item-qty">x' + item.qty + '</span>'
+      + '<span class="order-preview-item-price">R' + subtotal + '</span>'
+      + '</div>';
+  });
+
+  // Customer details
+  var name = document.getElementById('cartCustomerName').value.trim();
+  var phone = document.getElementById('cartCustomerPhone').value.trim();
+  var dateRaw = document.getElementById('cartCustomerDate').value;
+  var note = document.getElementById('cartCustomerNote').value.trim();
+
+  if (name || phone || dateRaw || note) {
+    html += '<div class="order-preview-details">';
+    if (name) html += '<div class="order-preview-detail"><strong>Name:</strong> ' + sanitizeHTML(name) + '</div>';
+    if (phone) html += '<div class="order-preview-detail"><strong>Phone:</strong> ' + sanitizeHTML(phone) + '</div>';
+    if (dateRaw) {
+      var d = new Date(dateRaw + 'T00:00:00');
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      html += '<div class="order-preview-detail"><strong>Collection/Delivery:</strong> ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + '</div>';
+    }
+    if (note) html += '<div class="order-preview-detail"><strong>Note:</strong> ' + sanitizeHTML(note) + '</div>';
+    html += '</div>';
+  }
+
+  if (cartDesignImages.length > 0) {
+    html += '<div class="order-preview-details">';
+    html += '<div class="order-preview-detail"><strong>Reference Images:</strong> ' + cartDesignImages.length + ' attached</div>';
+    html += '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">';
+    cartDesignImages.forEach(function(img, idx) {
+      html += '<img src="' + img.dataUrl + '" alt="Design ' + (idx+1) + '" style="width:52px;height:52px;object-fit:cover;border-radius:6px;border:1px solid rgba(176,141,87,0.25);">';
+    });
+    html += '</div></div>';
+  }
+
+  body.innerHTML = html;
+  totalEl.querySelector('span:last-child').textContent = 'R' + cartTotal();
+  overlay.classList.add('show');
+  lockPageScroll();
+}
+
+document.getElementById('orderPreviewClose').addEventListener('click', function() {
+  document.getElementById('orderPreviewOverlay').classList.remove('show');
+  unlockPageScroll();
+});
+document.getElementById('orderPreviewBack').addEventListener('click', function() {
+  document.getElementById('orderPreviewOverlay').classList.remove('show');
+  unlockPageScroll();
+});
+document.getElementById('orderPreviewOverlay').addEventListener('click', function(e) {
+  if (e.target === this) {
+    this.classList.remove('show');
+    unlockPageScroll();
+  }
+});
+document.getElementById('orderPreviewConfirm').addEventListener('click', function() {
+  document.getElementById('orderPreviewOverlay').classList.remove('show');
+  unlockPageScroll();
+  var message = buildWhatsAppMessage();
+  // Flag that user is going to WhatsApp to order
+  sessionStorage.setItem('cakehaus_ordering', 'true');
+  window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message), '_blank');
+});
+
+// ============================================================
+// WHATSAPP RETURN DETECTION
+// ============================================================
+document.addEventListener('visibilitychange', function() {
+  if (!document.hidden && sessionStorage.getItem('cakehaus_ordering') === 'true') {
+    sessionStorage.removeItem('cakehaus_ordering');
+    // Small delay so user sees the page first
+    setTimeout(function() {
+      showCelebration('order');
+    }, 800);
+  }
+});
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', function() {
+  initThree();
+  setupScrollAnimations();
+  initTilt();
+  initFlavourPills();
+  updateScrollProgress();
+
+  loadCart();
+  syncAllUnits();
+  updateBadge();
+  renderCartDrawer();
+
+  setTimeout(function() {
+    if (!loaderReady) {
+      loaderReady = true;
+      document.getElementById('loader').classList.add('hidden');
+      revealHero();
+    }
+  }, 5000);
+});
+</script>
+</body>
+</html>
