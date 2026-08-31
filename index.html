@@ -3285,7 +3285,10 @@ function initThree() {
 }
 
 var heroParticleOpacity = 0;
+var heroVisible = true;
+var pageVisible = true;
 function animateParticles() {
+  if (!pageVisible || !heroVisible) return;
   requestAnimationFrame(animateParticles);
   if (!heroCtx) return;
   var w = heroCanvasEl.width, h = heroCanvasEl.height;
@@ -4752,14 +4755,32 @@ document.getElementById('orderPreviewConfirm').addEventListener('click', functio
 // WHATSAPP RETURN DETECTION
 // ============================================================
 document.addEventListener('visibilitychange', function() {
+  pageVisible = !document.hidden;
+  // Resume particle animation when tab becomes visible again
+  if (pageVisible && heroVisible) requestAnimationFrame(animateParticles);
+  // Pause/resume Lenis and GSAP when tab visibility changes
+  if (document.hidden) {
+    lenis.stop();
+    gsap.ticker.sleep();
+  } else {
+    lenis.start();
+    gsap.ticker.wake();
+  }
   if (!document.hidden && sessionStorage.getItem('cakehaus_ordering') === 'true') {
     sessionStorage.removeItem('cakehaus_ordering');
-    // Small delay so user sees the page first
     setTimeout(function() {
       showCelebration('order');
     }, 800);
   }
 });
+
+// Pause hero particles when hero section is not visible
+var heroObserver = new IntersectionObserver(function(entries) {
+  heroVisible = entries[0].isIntersecting;
+  if (heroVisible && pageVisible) requestAnimationFrame(animateParticles);
+}, { threshold: 0 });
+var heroEl = document.getElementById('hero');
+if (heroEl) heroObserver.observe(heroEl);
 
 // ============================================================
 // INIT
