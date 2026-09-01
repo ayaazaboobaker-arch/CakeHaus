@@ -1794,8 +1794,26 @@ html.dark-mode .review-form textarea {
   .cart-drawer { width: 100%; max-width: 100%; right: -100%; }
 
   /* ===== REVIEWS ===== */
-  .review-card { width: 300px; }
+  .review-card { width: 280px; padding: 24px; }
+  .review-card p { font-size: 0.9rem; line-height: 1.6; }
+  .review-card .review-name { font-size: 0.85rem; }
+  .marquee-track { animation-duration: 12s !important; gap: 20px; }
+  .marquee-cupcakes { animation-duration: 20s !important; }
+  .marquee-wrapper { margin-top: 24px; padding: 12px 0; }
   .review-form-wrap { padding: 0 18px; }
+  .review-form h3 { font-size: 1.1rem; }
+
+  /* ===== CTA SECTION ===== */
+  .cta-section { padding: 60px 24px; }
+  .cta-section h2 { font-size: clamp(1.4rem, 5vw, 2rem); }
+  .cta-section p { font-size: 0.9rem; }
+
+  /* ===== ORDER SECTION HEADINGS ===== */
+  .order-section-heading { font-size: 1.1rem; margin: 40px 0 6px; }
+
+  /* ===== CUPCAKE CAROUSEL CARDS ===== */
+  .h-card-body { padding: 14px; }
+  .h-card-body h3 { font-size: 0.9rem; }
 
   /* ===== FOOTER ===== */
   .footer-inner { flex-direction: column; gap: 18px; text-align: center; padding: 24px 0; }
@@ -2341,53 +2359,97 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
   .bottom-nav {
     display: flex;
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
     z-index: 9500;
-    background: rgba(26,26,26,0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-top: 1px solid rgba(176,141,87,0.2);
-    padding: 6px 0;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 22px;
+    padding: 6px 4px;
     padding-bottom: max(6px, env(safe-area-inset-bottom));
     justify-content: space-around;
     align-items: center;
     transform: translateY(0);
-    transition: transform 0.35s ease;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25),
+                inset 0 1px 0 rgba(255,255,255,0.15),
+                inset 0 -1px 0 rgba(0,0,0,0.1);
   }
   .bottom-nav.hidden {
-    transform: translateY(100%);
+    transform: translateY(calc(100% + 20px));
   }
+
+  /* Liquid glass active pill indicator */
+  .bottom-nav-pill {
+    position: absolute;
+    height: 40px;
+    border-radius: 14px;
+    background: rgba(176,141,87,0.18);
+    border: 1px solid rgba(176,141,87,0.25);
+    box-shadow: 0 0 12px rgba(176,141,87,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .bottom-nav a {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2px;
     text-decoration: none;
-    color: var(--warm-gray);
+    color: rgba(255,255,255,0.5);
     font-family: var(--body);
-    font-size: 10px;
-    padding: 4px 8px;
-    transition: color 0.3s;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    padding: 6px 10px;
+    transition: color 0.35s ease, transform 0.25s ease;
     -webkit-tap-highlight-color: transparent;
+    position: relative;
+    z-index: 1;
   }
   .bottom-nav a.active {
     color: var(--gold);
+    transform: scale(1.05);
+  }
+  .bottom-nav a:active {
+    transform: scale(0.92);
   }
   .bottom-nav a svg {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     stroke: currentColor;
     fill: none;
     stroke-width: 1.8;
     stroke-linecap: round;
     stroke-linejoin: round;
+    transition: stroke-width 0.3s;
   }
-  .whatsapp-fab { bottom: 76px !important; }
-  .v3-footer { padding-bottom: 72px !important; }
+  .bottom-nav a.active svg {
+    stroke-width: 2.2;
+  }
+
+  .whatsapp-fab { bottom: 80px !important; }
+  .v3-footer { padding-bottom: 80px !important; }
+
   html.dark-mode .bottom-nav {
-    background: rgba(17,17,17,0.95);
+    background: rgba(0,0,0,0.35);
+    border-color: rgba(255,255,255,0.1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.08),
+                inset 0 -1px 0 rgba(0,0,0,0.2);
+  }
+  html.dark-mode .bottom-nav a {
+    color: rgba(255,255,255,0.4);
+  }
+  html.dark-mode .bottom-nav a.active {
+    color: var(--gold);
   }
 }
 </style>
@@ -2894,6 +2956,7 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
 
 <!-- Mobile Bottom Nav -->
 <nav class="bottom-nav" id="bottomNav" aria-label="Mobile navigation">
+  <div class="bottom-nav-pill" id="bottomNavPill"></div>
   <a data-scroll-to="hero">
     <svg viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/></svg>
     Home
@@ -5001,9 +5064,19 @@ if (heroEl) heroObserver.observe(heroEl);
     }
   }, { passive: true });
 
-  // Active state based on scroll position
+  // Active state + liquid glass pill
   var bnLinks = bottomNav.querySelectorAll('a[data-scroll-to]');
   var bnSections = ['hero','secCakes','secCupcakes','secCustom','secReviews'];
+  var pill = document.getElementById('bottomNavPill');
+
+  function movePill(link) {
+    if (!pill || !link) return;
+    var navRect = bottomNav.getBoundingClientRect();
+    var linkRect = link.getBoundingClientRect();
+    pill.style.left = (linkRect.left - navRect.left - 4) + 'px';
+    pill.style.width = (linkRect.width + 8) + 'px';
+    pill.style.top = ((navRect.height - 40) / 2) + 'px';
+  }
 
   function updateBottomActive() {
     var scrollY = window.scrollY + window.innerHeight / 3;
@@ -5015,15 +5088,24 @@ if (heroEl) heroObserver.observe(heroEl);
     bnLinks.forEach(function(a) {
       if (a.getAttribute('data-scroll-to') === active) {
         a.classList.add('active');
+        movePill(a);
       } else {
         a.classList.remove('active');
       }
     });
   }
 
+  // Initial pill position
+  setTimeout(function() { updateBottomActive(); }, 300);
+
   window.addEventListener('scroll', function() {
     requestAnimationFrame(updateBottomActive);
   }, { passive: true });
+
+  window.addEventListener('resize', function() {
+    var activeLink = bottomNav.querySelector('a.active');
+    if (activeLink) movePill(activeLink);
+  });
 
   // Click handlers
   bnLinks.forEach(function(a) {
