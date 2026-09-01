@@ -744,10 +744,20 @@ a, button, [tabindex], .product-card, .h-card { cursor: pointer; }
   background: var(--gold);
   border-color: var(--gold);
 }
+.flip-hint {
+  display: none;
+  font-family: var(--body);
+  font-size: 0.75rem;
+  color: var(--warm-gray);
+  text-align: center;
+  margin-top: 10px;
+  opacity: 0.7;
+}
 @media (max-width: 768px) {
   .flip-btn { display: none; }
   .flip-card-wrapper { min-height: 280px; }
   .flip-card-wrapper .order-card { min-height: 260px; }
+  .flip-hint { display: block; }
 }
 
 .flavour-pills {
@@ -2981,6 +2991,7 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
                   <button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button>
                 </div>
               </div>
+              <p class="flip-hint">Swipe to see</p>
             </div>
           </div>
           <div class="flip-card-back">
@@ -3009,6 +3020,7 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
                   <button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button>
                 </div>
               </div>
+              <p class="flip-hint">Swipe to see</p>
             </div>
           </div>
           <div class="flip-card-back">
