@@ -640,6 +640,116 @@ a, button, [tabindex], .product-card, .h-card { cursor: pointer; }
   line-height: 1.5;
   margin-bottom: 4px;
 }
+/* Flippable order card */
+/* Flippable order card */
+.flip-card-wrapper {
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+  min-height: 320px;
+}
+.flip-card-wrapper .order-card {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+.flip-card-wrapper.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+.flip-card-front {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+}
+.flip-card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateY(180deg) translateZ(0);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--darker);
+}
+.flip-card-back img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.flip-card-back-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 50%, rgba(0,0,0,0.6));
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 16px;
+}
+/* Flip button (desktop) */
+.flip-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 5;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(176,141,87,0.3);
+  background: rgba(245,240,235,0.95);
+  color: var(--gold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.flip-btn:hover {
+  background: var(--gold);
+  color: #fff;
+}
+.flip-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.flip-card-back .flip-btn {
+  position: static;
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.3);
+  color: #fff;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.flip-card-back .flip-btn:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+@media (max-width: 768px) {
+  .flip-btn { display: none; }
+  .flip-card-wrapper { min-height: 280px; }
+  .flip-card-wrapper .order-card { min-height: 260px; }
+}
+
 .flavour-pills {
   display: flex; flex-wrap: wrap; gap: 8px;
   margin: 16px 0 4px;
@@ -1971,6 +2081,129 @@ html.dark-mode .review-form textarea {
   margin-top: 4px;
 }
 
+/* ========== PROMO SECTION ========== */
+.promo-section { text-align: center; }
+.promo-card {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  max-width: 960px;
+  margin: 40px auto 0;
+  background: var(--soft-cream);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid var(--gold);
+  box-shadow: 0 8px 40px rgba(176,141,87,0.15);
+}
+.promo-card-img {
+  flex: 0 0 45%;
+  overflow: hidden;
+}
+.promo-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  max-height: 680px;
+}
+.promo-card-content {
+  flex: 1;
+  padding: 40px 40px 40px 0;
+  text-align: left;
+}
+.promo-badge {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--white);
+  font-family: var(--body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+.promo-card-content h3 {
+  font-family: var(--heading);
+  font-size: 1.8rem;
+  color: var(--dark);
+  margin: 0 0 12px;
+}
+.promo-card-content p {
+  font-family: var(--body);
+  font-size: 1rem;
+  color: var(--warm-gray);
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+.promo-prices {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.promo-price-item {
+  background: rgba(176,141,87,0.08);
+  border: 1px solid rgba(176,141,87,0.2);
+  border-radius: 12px;
+  padding: 14px 20px;
+  text-align: center;
+  flex: 1;
+}
+.promo-price-label {
+  display: block;
+  font-family: var(--body);
+  font-size: 0.8rem;
+  color: var(--warm-gray);
+  margin-bottom: 4px;
+}
+.promo-price-value {
+  display: block;
+  font-family: var(--heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+.promo-countdown {
+  font-family: var(--body);
+  font-size: 0.85rem;
+  color: var(--warm-gray);
+  margin-bottom: 20px;
+}
+.promo-cta {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--white);
+  font-family: var(--body);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 14px 32px;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+.promo-cta:hover {
+  background: var(--light-gold);
+  transform: translateY(-2px);
+}
+@media (max-width: 768px) {
+  .promo-card {
+    flex-direction: column;
+    gap: 0;
+  }
+  .promo-card-img {
+    flex: none;
+    width: 100%;
+  }
+  .promo-card-content {
+    padding: 28px 24px;
+    text-align: center;
+  }
+  .promo-card-content h3 { font-size: 1.4rem; }
+  .promo-prices { flex-direction: column; gap: 10px; }
+}
+
 /* ========== DARK MODE TOGGLE ========== */
 .dark-toggle {
   width: 36px; height: 36px;
@@ -1989,6 +2222,18 @@ html.dark-mode .review-form textarea {
 .dark-toggle.active svg { transform: rotate(180deg); }
 .dark-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 
+/* ========== DARK MODE TRANSITION ========== */
+.theme-shifting,
+.theme-shifting *,
+.theme-shifting *::before,
+.theme-shifting *::after {
+  transition: background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              fill 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
 /* ========== DARK MODE OVERRIDES ========== */
 html.dark-mode {
   --cream: #1A1A1A;
@@ -1997,7 +2242,6 @@ html.dark-mode {
   --warm-gray: #999;
 }
 html.dark-mode body {
-  transition: background 0.4s ease, color 0.4s ease;
 }
 html.dark-mode .content-wrapper {
   background: var(--cream);
@@ -2035,6 +2279,16 @@ html.dark-mode .cart-input {
   background: var(--cream);
   color: var(--dark);
   border-color: rgba(176,141,87,0.3);
+}
+html.dark-mode .promo-card {
+  background: var(--soft-cream);
+}
+html.dark-mode .promo-card-content h3 {
+  color: var(--dark);
+}
+html.dark-mode .promo-price-item {
+  background: rgba(176,141,87,0.12);
+  border-color: rgba(176,141,87,0.25);
 }
 html.dark-mode .section-divider.divider-dark-to-cream svg path {
   fill: var(--cream);
@@ -2455,6 +2709,34 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
 <!-- Content Sections -->
 <div class="content-wrapper">
 
+  <!-- PROMO SECTION (date-gated) -->
+  <section class="section promo-section" id="secPromo" aria-label="Limited Time Promo" style="display:none;">
+    <p class="section-label">Limited Time</p>
+    <h2 class="section-title" data-split>Goodluck Matric Cakes</h2>
+    <div class="promo-card">
+      <div class="promo-card-img">
+        <img src="images/e5d0149c-0809-4a94-b294-e82b991ccf9f.JPG" alt="Goodluck Matric Cakes - Bento Cakes R350, Big Cupcakes R240 per dozen" loading="eager">
+      </div>
+      <div class="promo-card-content">
+        <span class="promo-badge">Limited Time Offer</span>
+        <h3>Celebrate Your Matrics</h3>
+        <p>Show them you are proud with a custom Goodluck Matric cake or cupcakes. Perfect for finals season!</p>
+        <div class="promo-prices">
+          <div class="promo-price-item">
+            <span class="promo-price-label">Bento Cakes</span>
+            <span class="promo-price-value">R350</span>
+          </div>
+          <div class="promo-price-item">
+            <span class="promo-price-label">Big Cupcakes (dozen)</span>
+            <span class="promo-price-value">R240</span>
+          </div>
+        </div>
+        <div class="promo-countdown" id="promoCountdown"></div>
+        <a href="https://wa.me/27753399401?text=Hi%20CakeHaus!%20I%27d%20like%20to%20order%20a%20Matric%20Goodluck%20cake%20please" class="promo-cta" target="_blank" rel="noopener">Order via WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
   <!-- STORY SECTION (V2-style centered) -->
   <section class="section about-centered" id="secStory" aria-label="Our Story">
     <p class="section-label">Our Story</p>
@@ -2611,9 +2893,21 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
           <div class="img-reveal"><img src="images/c49d3ade-fd26-4889-8199-0499b4f342ec.JPG" alt="Cupcake Assortment" loading="lazy"></div>
           <div class="h-card-body"><h3>Cupcake Assortment</h3></div>
         </div>
-        <div class="h-card" data-tilt data-lightbox="images/b6f0a6cc-a9c4-4785-9a80-e66472db240c.JPG" data-caption="Oreo Cupcakes">
-          <div class="img-reveal"><img src="images/b6f0a6cc-a9c4-4785-9a80-e66472db240c.JPG" alt="Oreo Cupcakes" loading="lazy"></div>
-          <div class="h-card-body"><h3>Oreo</h3></div>
+        <div class="h-card" data-tilt data-lightbox="images/8BEF5609-BB30-4FCC-973C-A1E0872910A0.JPG" data-caption="Mother's Day Special">
+          <div class="img-reveal"><img src="images/8BEF5609-BB30-4FCC-973C-A1E0872910A0.JPG" alt="Mother's Day Special" loading="lazy"></div>
+          <div class="h-card-body"><h3>Mother's Day Special</h3></div>
+        </div>
+        <div class="h-card" data-tilt data-lightbox="images/13985329-F822-4CFC-B66C-6607FCBFAFD3.JPG" data-caption="Bespoke Designs">
+          <div class="img-reveal"><img src="images/13985329-F822-4CFC-B66C-6607FCBFAFD3.JPG" alt="Bespoke Designs" loading="lazy"></div>
+          <div class="h-card-body"><h3>Bespoke Designs</h3></div>
+        </div>
+        <div class="h-card" data-tilt data-lightbox="images/CAE7C7F8-3AA7-42F9-A24D-0B2EC82ACBDF.JPG" data-caption="Baby Girl Cupcakes">
+          <div class="img-reveal"><img src="images/CAE7C7F8-3AA7-42F9-A24D-0B2EC82ACBDF.JPG" alt="Baby Girl Cupcakes" loading="lazy"></div>
+          <div class="h-card-body"><h3>Baby Girl Cupcakes</h3></div>
+        </div>
+        <div class="h-card" data-tilt data-lightbox="images/IMG_6639.JPG" data-caption="Eid Special">
+          <div class="img-reveal"><img src="images/IMG_6639.JPG" alt="Eid Special" loading="lazy"></div>
+          <div class="h-card-body"><h3>Eid Special</h3></div>
         </div>
         <!-- Duplicates for seamless loop -->
         <div class="h-card" data-lightbox="images/366b3739-35c1-4f61-9ff1-c6e43583c905.JPG" data-caption="Mini Cupcakes">
@@ -2628,9 +2922,21 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
           <div class="img-reveal"><img src="images/c49d3ade-fd26-4889-8199-0499b4f342ec.JPG" alt="Cupcake Assortment" loading="lazy"></div>
           <div class="h-card-body"><h3>Cupcake Assortment</h3></div>
         </div>
-        <div class="h-card" data-lightbox="images/b6f0a6cc-a9c4-4785-9a80-e66472db240c.JPG" data-caption="Oreo Cupcakes">
-          <div class="img-reveal"><img src="images/b6f0a6cc-a9c4-4785-9a80-e66472db240c.JPG" alt="Oreo Cupcakes" loading="lazy"></div>
-          <div class="h-card-body"><h3>Oreo</h3></div>
+        <div class="h-card" data-lightbox="images/8BEF5609-BB30-4FCC-973C-A1E0872910A0.JPG" data-caption="Mother's Day Special">
+          <div class="img-reveal"><img src="images/8BEF5609-BB30-4FCC-973C-A1E0872910A0.JPG" alt="Mother's Day Special" loading="lazy"></div>
+          <div class="h-card-body"><h3>Mother's Day Special</h3></div>
+        </div>
+        <div class="h-card" data-lightbox="images/13985329-F822-4CFC-B66C-6607FCBFAFD3.JPG" data-caption="Bespoke Designs">
+          <div class="img-reveal"><img src="images/13985329-F822-4CFC-B66C-6607FCBFAFD3.JPG" alt="Bespoke Designs" loading="lazy"></div>
+          <div class="h-card-body"><h3>Bespoke Designs</h3></div>
+        </div>
+        <div class="h-card" data-lightbox="images/CAE7C7F8-3AA7-42F9-A24D-0B2EC82ACBDF.JPG" data-caption="Baby Girl Cupcakes">
+          <div class="img-reveal"><img src="images/CAE7C7F8-3AA7-42F9-A24D-0B2EC82ACBDF.JPG" alt="Baby Girl Cupcakes" loading="lazy"></div>
+          <div class="h-card-body"><h3>Baby Girl Cupcakes</h3></div>
+        </div>
+        <div class="h-card" data-lightbox="images/IMG_6639.JPG" data-caption="Eid Special">
+          <div class="img-reveal"><img src="images/IMG_6639.JPG" alt="Eid Special" loading="lazy"></div>
+          <div class="h-card-body"><h3>Eid Special</h3></div>
         </div>
         <div class="h-card" data-lightbox="images/e0874193-e876-49c9-bb7a-d052d4ff768e.JPG" data-caption="Rose Collection">
           <div class="img-reveal"><img src="images/e0874193-e876-49c9-bb7a-d052d4ff768e.JPG" alt="Rose Cupcake Collection" loading="lazy"></div>
@@ -2657,33 +2963,59 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
           </div>
         </div>
       </div>
-      <div class="order-card" data-tilt tabindex="0">
-        <h3>Lotus Biscoff</h3>
-        <p class="order-card-desc">Spiced Biscoff buttercream and crumble.</p>
-        <div class="order-line" data-id="cup-lotus-reg" data-product="Lotus Biscoff Cupcakes - 1 Dozen" data-price="350">
-          <div class="order-line-info">
-            <span class="order-line-size">1 Dozen</span>
-            <span class="order-line-price">R350</span>
+      <div class="flip-card-wrapper" data-flip>
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="order-card" tabindex="0">
+              <button class="flip-btn" type="button" aria-label="See image"><svg viewBox="0 0 24 24"><path d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg></button>
+              <h3>Lotus Biscoff</h3>
+              <p class="order-card-desc">Spiced Biscoff buttercream and crumble.</p>
+              <div class="order-line" data-id="cup-lotus-reg" data-product="Lotus Biscoff Cupcakes - 1 Dozen" data-price="350">
+                <div class="order-line-info">
+                  <span class="order-line-size">1 Dozen</span>
+                  <span class="order-line-price">R350</span>
+                </div>
+                <div class="qty-control">
+                  <button class="qty-btn qty-minus" type="button" aria-label="Decrease quantity">&minus;</button>
+                  <span class="qty-value">0</span>
+                  <button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="qty-control">
-            <button class="qty-btn qty-minus" type="button" aria-label="Decrease quantity">&minus;</button>
-            <span class="qty-value">0</span>
-            <button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button>
+          <div class="flip-card-back">
+            <img src="images/IMG_6648.JPG" alt="Lotus Biscoff Cupcakes" loading="lazy">
+            <div class="flip-card-back-overlay">
+              <button class="flip-btn" type="button" aria-label="Back to details"><svg viewBox="0 0 24 24"><path d="M9 15l6-6M9 9h6v6"/></svg></button>
+            </div>
           </div>
         </div>
       </div>
-      <div class="order-card" data-tilt tabindex="0">
-        <h3>Oreo</h3>
-        <p class="order-card-desc">Cookies and cream buttercream with Oreo crumb.</p>
-        <div class="order-line" data-id="cup-oreo-reg" data-product="Oreo Cupcakes - 1 Dozen" data-price="340">
-          <div class="order-line-info">
-            <span class="order-line-size">1 Dozen</span>
-            <span class="order-line-price">R340</span>
+      <div class="flip-card-wrapper" data-flip>
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="order-card" tabindex="0">
+              <button class="flip-btn" type="button" aria-label="See image"><svg viewBox="0 0 24 24"><path d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg></button>
+              <h3>Oreo</h3>
+              <p class="order-card-desc">Cookies and cream buttercream with Oreo crumb.</p>
+              <div class="order-line" data-id="cup-oreo-reg" data-product="Oreo Cupcakes - 1 Dozen" data-price="340">
+                <div class="order-line-info">
+                  <span class="order-line-size">1 Dozen</span>
+                  <span class="order-line-price">R340</span>
+                </div>
+                <div class="qty-control">
+                  <button class="qty-btn qty-minus" type="button" aria-label="Decrease quantity">&minus;</button>
+                  <span class="qty-value">0</span>
+                  <button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="qty-control">
-            <button class="qty-btn qty-minus" type="button" aria-label="Decrease quantity">&minus;</button>
-            <span class="qty-value">0</span>
-            <button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button>
+          <div class="flip-card-back">
+            <img src="images/b6f0a6cc-a9c4-4785-9a80-e66472db240c.JPG" alt="Oreo Cupcakes" loading="lazy">
+            <div class="flip-card-back-overlay">
+              <button class="flip-btn" type="button" aria-label="Back to details"><svg viewBox="0 0 24 24"><path d="M9 15l6-6M9 9h6v6"/></svg></button>
+            </div>
           </div>
         </div>
       </div>
@@ -2758,8 +3090,8 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
     <h2 class="section-title" data-split>Custom Celebration Cakes</h2>
     <p class="section-text">From birthdays to weddings, we design bespoke celebration cakes tailored to your vision. Share your idea with us on WhatsApp and we will bring it to life  - pricing is quoted per design.</p>
     <div class="product-grid" id="customGrid">
-      <div class="product-card" data-tilt tabindex="0" data-lightbox="images/a9ac80fb-e4cc-49d8-b88e-a14dc7dbe564.JPG" data-caption="Orchid Celebration">
-        <div class="img-reveal"><img src="images/a9ac80fb-e4cc-49d8-b88e-a14dc7dbe564.JPG" alt="Orchid Celebration Cake" loading="lazy" style="object-position: center 60%;"></div>
+      <div class="product-card" data-tilt tabindex="0" data-lightbox="images/IMG_6641.JPG" data-caption="Orchid Celebration">
+        <div class="img-reveal"><img src="images/IMG_6641.JPG" alt="Orchid Celebration Cake" loading="lazy" style="object-position: center 60%;"></div>
         <div class="product-card-body"><h3>Orchid Celebration</h3><p>Elegant floral celebration cake</p></div>
       </div>
       <div class="product-card" data-tilt tabindex="0" data-lightbox="images/bf924751-6e2a-4098-9d48-68184e3648b4.JPG" data-caption="Birthday Elegance">
@@ -2773,6 +3105,10 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
       <div class="product-card" data-tilt tabindex="0" data-lightbox="images/cb211200-0280-469c-9be6-ec61b17d63af.JPG" data-caption="Half Birthday">
         <div class="img-reveal"><img src="images/cb211200-0280-469c-9be6-ec61b17d63af.JPG" alt="Half Birthday Cake" loading="lazy"></div>
         <div class="product-card-body"><h3>Half Birthday</h3><p>Fun half-cake milestone designs</p></div>
+      </div>
+      <div class="product-card" data-tilt tabindex="0" data-lightbox="images/0903D8A4-5A15-4229-AF7F-13A87D3121CA.JPG" data-caption="Custom Design">
+        <div class="img-reveal"><img src="images/0903D8A4-5A15-4229-AF7F-13A87D3121CA.JPG" alt="Custom Design Cake" loading="lazy"></div>
+        <div class="product-card-body"><h3>Custom Design</h3><p>Unique bespoke creations</p></div>
       </div>
     </div>
     <a class="cta-btn magnetic cta-btn-small" id="customEnquireBtn" href="#" target="_blank" rel="noopener">Enquire on WhatsApp</a>
@@ -4707,13 +5043,40 @@ cartSendBtn.addEventListener('click', function() {
   }
   icon.querySelector('path').setAttribute('d', isDark ? moonPath : sunPath);
 
-  toggle.addEventListener('click', function() {
+  toggle.addEventListener('click', function(e) {
     isDark = !isDark;
+
+    // Enable color transitions on everything
+    document.documentElement.classList.add('theme-shifting');
+
+    // Swap theme — colors flow smoothly via CSS transitions
     document.documentElement.classList.toggle('dark-mode', isDark);
     toggle.classList.toggle('active', isDark);
     icon.querySelector('path').setAttribute('d', isDark ? moonPath : sunPath);
     lsSet('cakehaus_darkmode', isDark ? 'true' : 'false');
+
+    // Remove transition class after animation completes
+    setTimeout(function() {
+      document.documentElement.classList.remove('theme-shifting');
+    }, 900);
   });
+})();
+
+// ============================================================
+// PROMO DATE GATE
+// ============================================================
+(function() {
+  var PROMO_START = new Date('2026-09-01T00:00:00');
+  var PROMO_END = new Date('2026-11-20T23:59:59');
+  var now = new Date();
+  var promoEl = document.getElementById('secPromo');
+  if (!promoEl) return;
+
+  if (now >= PROMO_START && now <= PROMO_END) {
+    promoEl.style.display = '';
+    var countdownEl = document.getElementById('promoCountdown');
+    countdownEl.textContent = 'Offer ends November 20th';
+  }
 })();
 
 // ============================================================
@@ -4915,6 +5278,51 @@ var heroObserver = new IntersectionObserver(function(entries) {
 var heroEl = document.getElementById('hero');
 if (heroEl) heroObserver.observe(heroEl);
 
+
+// ============================================================
+// FLIPPABLE ORDER CARDS
+// ============================================================
+(function() {
+  var wrappers = document.querySelectorAll('.flip-card-wrapper[data-flip]');
+  if (!wrappers.length) return;
+
+  function flipCard(wrapper) {
+    wrapper.classList.toggle('flipped');
+  }
+
+  // Desktop: flip button click
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.flip-btn');
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    var wrapper = btn.closest('.flip-card-wrapper');
+    if (wrapper) flipCard(wrapper);
+  });
+
+  // Mobile: horizontal swipe to flip
+  wrappers.forEach(function(wrapper) {
+    var sx = 0, sy = 0, locked = false;
+
+    wrapper.addEventListener('touchstart', function(e) {
+      if (e.target.closest('.qty-btn, .qty-control')) return;
+      sx = e.touches[0].clientX;
+      sy = e.touches[0].clientY;
+      locked = false;
+    }, { passive: true });
+
+    wrapper.addEventListener('touchend', function(e) {
+      if (locked) return;
+      if (e.target.closest('.qty-btn, .qty-control')) return;
+      var dx = e.changedTouches[0].clientX - sx;
+      var dy = e.changedTouches[0].clientY - sy;
+      // Only flip on clear horizontal swipe (not vertical scroll)
+      if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        flipCard(wrapper);
+      }
+    }, { passive: true });
+  });
+})();
 
 // ============================================================
 // INIT
