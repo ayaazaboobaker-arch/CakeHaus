@@ -1750,26 +1750,64 @@ html.dark-mode .review-form textarea {
   .order-grid-3 { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 768px) {
+  /* ===== LAYOUT & SPACING ===== */
   .section { padding: 80px 24px; }
   .horizontal-track { padding: 0 24px; }
-  .h-card { width: 280px; }
-  .story-grid { grid-template-columns: 1fr; gap: 30px; }
   .nav { padding: 16px 20px; }
   .nav.scrolled { padding: 12px 20px; }
+
+  /* ===== TEXT READABILITY ===== */
+  .section-title { font-size: clamp(1.6rem, 6vw, 2.2rem); margin-bottom: 16px; }
+  .section-text { font-size: 0.95rem; line-height: 1.7; }
+  .section-label { font-size: 0.65rem; letter-spacing: 3px; margin-bottom: 8px; }
+  .about-text { font-size: 0.95rem; line-height: 1.7; }
+
+  /* ===== STORY SECTION - tighter on mobile ===== */
+  .story-grid { grid-template-columns: 1fr; gap: 24px; }
+  .story-img { min-height: 250px; max-height: 280px; }
+  .story-img img { min-height: 250px; max-height: 280px; }
+
+  /* ===== CUPCAKE CAROUSEL ===== */
+  .h-card { width: 300px; }
+
+  /* ===== PRODUCT GRID - 2 columns on mobile ===== */
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 24px; }
+  .product-card .img-reveal { aspect-ratio: 3/4; }
+  .product-card-body { padding: 10px 12px; }
+  .product-card-body h3 { font-size: 0.85rem; }
+  .product-card-body p { font-size: 0.75rem; }
+
+  /* ===== ORDER CARDS - more breathing room ===== */
+  .order-grid-3 { grid-template-columns: 1fr; gap: 16px; }
+  .order-card { padding: 20px 22px; }
+  .order-card h3 { font-size: 1.1rem; margin-bottom: 4px; }
+  .order-card-desc { font-size: 0.85rem; line-height: 1.5; }
+  .order-line { padding: 12px 0; }
+  .order-line-price { font-size: 1.1rem; font-weight: 600; }
+  .order-line-size { font-size: 0.85rem; }
+  .qty-control { gap: 12px; }
+  .qty-btn { width: 44px; height: 44px; font-size: 1.2rem; }
+  .qty-value { font-size: 1.1rem; min-width: 28px; }
+
+  /* ===== CART BADGE - above bottom nav ===== */
+  .cart-badge { right: 20px; bottom: 72px; padding: 10px 16px; }
+  .cart-drawer { width: 100%; max-width: 100%; right: -100%; }
+
+  /* ===== REVIEWS ===== */
+  .review-card { width: 300px; }
+  .review-form-wrap { padding: 0 18px; }
+
+  /* ===== FOOTER ===== */
   .footer-inner { flex-direction: column; gap: 18px; text-align: center; padding: 24px 0; }
   .footer-links { justify-content: center; }
-  .review-card { width: 300px; }
+
+  /* ===== FIXED ELEMENTS ===== */
   .back-to-top { bottom: 20px; left: 20px; }
   .whatsapp-fab { bottom: 20px; right: 20px; }
 
-  .cart-badge { right: 20px; bottom: 82px; padding: 10px 16px; }
-  .order-grid-3 { grid-template-columns: 1fr; }
-  .cart-drawer { width: 100%; max-width: 100%; right: -100%; }
-
-  /* ===== MOBILE TOUCH TARGET FIXES (44px min) ===== */
+  /* ===== TOUCH TARGET FIXES (44px min) ===== */
   .nav-toggle { padding: 10px; min-width: 44px; min-height: 44px; }
   .cart-drawer-close { width: 44px; height: 44px; }
-  .qty-btn { width: 44px; height: 44px; }
   .flavour-pill { padding: 10px 16px; min-height: 44px; display: inline-flex; align-items: center; }
   .cart-item-remove { min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; }
   .footer-links a { padding: 8px 4px; min-height: 44px; display: inline-flex; align-items: center; }
@@ -1777,12 +1815,15 @@ html.dark-mode .review-form textarea {
   .star-rating-input label { font-size: 2.2rem; padding: 4px; min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
   .back-to-top { width: 44px; height: 44px; }
   .whatsapp-fab { width: 52px; height: 52px; }
-  .review-form-wrap { padding: 0 18px; }
   .cart-drawer-footer { max-height: 40vh; }
 }
 @media (max-width: 480px) {
   .hero-title { letter-spacing: 4px; }
   .section { padding: 60px 18px; }
+  .product-grid { gap: 10px; }
+  .product-card-body { padding: 8px 10px; }
+  .product-card-body h3 { font-size: 0.8rem; }
+  .order-card { padding: 18px; }
 }
 
 /* ========== REDUCED MOTION ========== */
