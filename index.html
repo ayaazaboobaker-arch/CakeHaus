@@ -1761,6 +1761,9 @@ html.dark-mode .review-form textarea {
   .nav { padding: 16px 20px; }
   .nav.scrolled { padding: 12px 20px; }
 
+  /* ===== HIDE ABOUT HIGHLIGHTS ON MOBILE ===== */
+  .about-highlights { display: none; }
+
   /* ===== TEXT READABILITY ===== */
   .section-title { font-size: clamp(1.6rem, 6vw, 2.2rem); margin-bottom: 16px; }
   .section-text { font-size: 0.95rem; line-height: 1.7; }
@@ -2356,118 +2359,6 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
   .order-preview-back, .order-preview-confirm { flex: none; }
 }
 
-/* ========== MOBILE BOTTOM NAV ========== */
-.bottom-nav {
-  display: none;
-}
-@media (max-width: 768px) {
-  .bottom-nav {
-    display: flex;
-    position: fixed;
-    bottom: 12px;
-    left: 12px;
-    right: 12px;
-    z-index: 9500;
-    background: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 100%);
-    backdrop-filter: blur(40px) saturate(200%) brightness(1.1);
-    -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.1);
-    border: 1px solid rgba(255,255,255,0.22);
-    border-radius: 24px;
-    padding: 6px 4px;
-    padding-bottom: max(6px, env(safe-area-inset-bottom));
-    justify-content: space-around;
-    align-items: center;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.18),
-                inset 0 1px 0 rgba(255,255,255,0.18);
-  }
-  /* Top light refraction edge */
-  .bottom-nav::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 10%; right: 10%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
-    pointer-events: none;
-    z-index: 2;
-  }
-
-  /* Liquid glass pill - draggable */
-  .bottom-nav-pill {
-    position: absolute;
-    height: 42px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, rgba(176,141,87,0.22) 0%, rgba(176,141,87,0.08) 100%);
-    border: 1px solid rgba(176,141,87,0.28);
-    box-shadow: 0 0 12px rgba(176,141,87,0.1),
-                inset 0 1px 0 rgba(255,255,255,0.12);
-    z-index: 0;
-    will-change: transform;
-    transform: translateZ(0);
-    transition: left 0.35s cubic-bezier(0.25, 1, 0.5, 1),
-                width 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-  }
-  .bottom-nav-pill.dragging {
-    transition: none;
-  }
-
-  .bottom-nav a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    text-decoration: none;
-    color: rgba(255,255,255,0.45);
-    font-family: var(--body);
-    font-size: 9px;
-    font-weight: 400;
-    letter-spacing: 0.3px;
-    padding: 8px 10px;
-    transition: color 0.35s ease, transform 0.25s ease;
-    -webkit-tap-highlight-color: transparent;
-    position: relative;
-    z-index: 1;
-    user-select: none;
-    -webkit-user-select: none;
-  }
-  .bottom-nav a.active {
-    color: var(--gold);
-    transform: scale(1.06);
-  }
-  .bottom-nav a:active {
-    transform: scale(0.93);
-  }
-  .bottom-nav a svg {
-    width: 20px;
-    height: 20px;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    transition: stroke-width 0.3s;
-  }
-  .bottom-nav a.active svg {
-    stroke-width: 2.2;
-  }
-
-  .whatsapp-fab { bottom: 80px !important; }
-  .v3-footer { padding-bottom: 80px !important; }
-
-  html.dark-mode .bottom-nav {
-    background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.25) 100%);
-    border-color: rgba(255,255,255,0.1);
-    box-shadow: 0 8px 40px rgba(0,0,0,0.4),
-                0 2px 8px rgba(0,0,0,0.2),
-                inset 0 1px 0 rgba(255,255,255,0.08),
-                inset 0 -0.5px 0 rgba(0,0,0,0.15);
-  }
-  html.dark-mode .bottom-nav a {
-    color: rgba(255,255,255,0.35);
-  }
-  html.dark-mode .bottom-nav a.active {
-    color: var(--gold);
-  }
-}
 </style>
 </head>
 <body>
@@ -2603,7 +2494,7 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
   <!-- CAKES SECTION -->
   <section class="section" id="secCakes" aria-label="Cakes">
     <p class="section-label">Our Signature</p>
-    <h2 class="section-title" data-split>Our Cakes</h2>
+    <h2 class="section-title" data-split>Signature Coconut Glazed Cakes</h2>
     <p class="section-text">Our signature cakes are handcrafted with layers of moist sponge. Choose our classic coconut almond glaze, or our chocolate drizzle cake available in Milkybar, Bar One, or Lotus Biscoff flavours.</p>
 
     <div class="product-grid" id="cakesGrid">
@@ -2970,30 +2861,6 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
   </div>
 </footer>
 
-<!-- Mobile Bottom Nav -->
-<nav class="bottom-nav" id="bottomNav" aria-label="Mobile navigation">
-  <div class="bottom-nav-pill" id="bottomNavPill"></div>
-  <a data-scroll-to="hero">
-    <svg viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/></svg>
-    Home
-  </a>
-  <a data-scroll-to="secCakes">
-    <svg viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8v2m0 8v2M4 20h16M4 20V10a8 8 0 0116 0v10"/></svg>
-    Cakes
-  </a>
-  <a data-scroll-to="secCupcakes">
-    <svg viewBox="0 0 24 24"><path d="M8 14s1.5 2 4 2 4-2 4-2M6 18h12M5 22h14M12 2C9 2 7 5 7 8h10c0-3-2-6-5-6z"/></svg>
-    Cupcakes
-  </a>
-  <a data-scroll-to="secCustom">
-    <svg viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.163c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L3.063 9.384c-.783-.57-.38-1.81.588-1.81h4.163a1 1 0 00.95-.69l1.286-3.957z"/></svg>
-    Custom
-  </a>
-  <a data-scroll-to="secReviews">
-    <svg viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-    Reviews
-  </a>
-</nav>
 
 <!-- WhatsApp FAB -->
 
@@ -5053,165 +4920,6 @@ var heroObserver = new IntersectionObserver(function(entries) {
 var heroEl = document.getElementById('hero');
 if (heroEl) heroObserver.observe(heroEl);
 
-// ============================================================
-// MOBILE BOTTOM NAV - permanent with liquid glass drag pill
-// ============================================================
-(function() {
-  var bottomNav = document.getElementById('bottomNav');
-  if (!bottomNav) return;
-  var bnLinks = bottomNav.querySelectorAll('a[data-scroll-to]');
-  var linksArr = Array.prototype.slice.call(bnLinks);
-  var bnSections = ['hero','secCakes','secCupcakes','secCustom','secReviews'];
-  var pill = document.getElementById('bottomNavPill');
-  var scrollLocked = false;
-  var dragActive = false;
-  var dragStartX = 0;
-  var pillStartLeft = 0;
-  var dragThreshold = 10;
-  var touchStarted = false;
-  var cachedNavLeft = 0;
-  var cachedNavWidth = 0;
-  var cachedLinkCenters = [];
-
-  // Cache link positions — recalculate on resize
-  function cacheLinkPositions() {
-    var navRect = bottomNav.getBoundingClientRect();
-    cachedNavLeft = navRect.left;
-    cachedNavWidth = navRect.width;
-    cachedLinkCenters = linksArr.map(function(a) {
-      var r = a.getBoundingClientRect();
-      return { left: r.left - navRect.left, width: r.width, center: r.left + r.width / 2 };
-    });
-  }
-
-  function movePill(link) {
-    if (!pill || !link) return;
-    var idx = linksArr.indexOf(link);
-    if (idx < 0 || !cachedLinkCenters[idx]) { cacheLinkPositions(); idx = linksArr.indexOf(link); }
-    var c = cachedLinkCenters[idx];
-    if (!c) return;
-    pill.style.left = (c.left - 6) + 'px';
-    pill.style.width = (c.width + 12) + 'px';
-    pill.style.top = '50%';
-    pill.style.marginTop = '-21px';
-  }
-
-  function setActive(link) {
-    linksArr.forEach(function(a) { a.classList.remove('active'); });
-    link.classList.add('active');
-    pill.classList.remove('dragging');
-    movePill(link);
-  }
-
-  function scrollToSection(link) {
-    var target = document.getElementById(link.getAttribute('data-scroll-to'));
-    if (target) {
-      scrollLocked = true;
-      lenis.scrollTo(target, { offset: -80 });
-      setTimeout(function() { scrollLocked = false; }, 1000);
-    }
-  }
-
-  function updateBottomActive() {
-    if (dragActive || scrollLocked) return;
-    var scrollY = window.scrollY + window.innerHeight / 3;
-    var active = 'hero';
-    for (var i = 0; i < bnSections.length; i++) {
-      var sec = document.getElementById(bnSections[i]);
-      if (sec && sec.offsetTop <= scrollY) active = bnSections[i];
-    }
-    linksArr.forEach(function(a) {
-      if (a.getAttribute('data-scroll-to') === active) {
-        if (!a.classList.contains('active')) {
-          a.classList.add('active');
-          movePill(a);
-        }
-      } else {
-        a.classList.remove('active');
-      }
-    });
-  }
-
-  function getNearestLinkByX(clientX) {
-    var closest = null;
-    var closestDist = Infinity;
-    for (var i = 0; i < cachedLinkCenters.length; i++) {
-      var dist = Math.abs(clientX - (cachedLinkCenters[i].center));
-      if (dist < closestDist) { closestDist = dist; closest = linksArr[i]; }
-    }
-    return closest;
-  }
-
-  // Init
-  setTimeout(function() { cacheLinkPositions(); updateBottomActive(); }, 300);
-
-  var scrollTick = false;
-  window.addEventListener('scroll', function() {
-    if (!scrollTick) { scrollTick = true; requestAnimationFrame(function() { updateBottomActive(); scrollTick = false; }); }
-  }, { passive: true });
-
-  window.addEventListener('resize', function() {
-    cacheLinkPositions();
-    var a = bottomNav.querySelector('a.active');
-    if (a) movePill(a);
-  });
-
-  // Click handlers
-  linksArr.forEach(function(a) {
-    a.addEventListener('click', function(e) {
-      e.preventDefault();
-      if (dragActive) return;
-      setActive(a);
-      scrollToSection(a);
-    });
-  });
-
-  // Touch drag — only activates after moving past threshold
-  bottomNav.addEventListener('touchstart', function(e) {
-    if (e.touches.length !== 1) return;
-    touchStarted = true;
-    dragActive = false;
-    dragStartX = e.touches[0].clientX;
-    pillStartLeft = parseFloat(pill.style.left) || 0;
-    cacheLinkPositions();
-  }, { passive: true });
-
-  bottomNav.addEventListener('touchmove', function(e) {
-    if (!touchStarted) return;
-    var dx = e.touches[0].clientX - dragStartX;
-
-    // Activate drag only after threshold
-    if (!dragActive) {
-      if (Math.abs(dx) < dragThreshold) return;
-      dragActive = true;
-      pill.classList.add('dragging');
-    }
-
-    var newLeft = pillStartLeft + dx;
-    var pillW = parseFloat(pill.style.width) || 60;
-    newLeft = Math.max(4, Math.min(newLeft, cachedNavWidth - pillW - 4));
-    pill.style.left = newLeft + 'px';
-
-    // Highlight nearest
-    var nearest = getNearestLinkByX(e.touches[0].clientX);
-    if (nearest) {
-      linksArr.forEach(function(a) { a.classList.remove('active'); });
-      nearest.classList.add('active');
-    }
-  }, { passive: true });
-
-  bottomNav.addEventListener('touchend', function() {
-    touchStarted = false;
-    if (!dragActive) return;
-    dragActive = false;
-    pill.classList.remove('dragging');
-    var activeLink = bottomNav.querySelector('a.active');
-    if (activeLink) {
-      movePill(activeLink);
-      scrollToSection(activeLink);
-    }
-  }, { passive: true });
-})();
 
 // ============================================================
 // INIT
