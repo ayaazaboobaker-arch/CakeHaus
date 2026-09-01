@@ -2363,38 +2363,56 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
     left: 12px;
     right: 12px;
     z-index: 9500;
-    background: rgba(255,255,255,0.12);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border: 1px solid rgba(255,255,255,0.18);
-    border-radius: 22px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 100%);
+    backdrop-filter: blur(40px) saturate(200%) brightness(1.1);
+    -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.1);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 24px;
     padding: 6px 4px;
     padding-bottom: max(6px, env(safe-area-inset-bottom));
     justify-content: space-around;
     align-items: center;
-    transform: translateY(0);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.25),
-                inset 0 1px 0 rgba(255,255,255,0.15),
-                inset 0 -1px 0 rgba(0,0,0,0.1);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.2),
+                0 2px 8px rgba(0,0,0,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.2),
+                inset 0 -0.5px 0 rgba(0,0,0,0.05);
+    overflow: hidden;
   }
-  .bottom-nav.hidden {
-    transform: translateY(calc(100% + 20px));
+  /* Top light refraction edge */
+  .bottom-nav::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+    pointer-events: none;
+    z-index: 2;
   }
 
-  /* Liquid glass active pill indicator */
+  /* Liquid glass pill - draggable */
   .bottom-nav-pill {
     position: absolute;
-    height: 40px;
-    border-radius: 14px;
-    background: rgba(176,141,87,0.18);
-    border: 1px solid rgba(176,141,87,0.25);
-    box-shadow: 0 0 12px rgba(176,141,87,0.1),
-                inset 0 1px 0 rgba(255,255,255,0.1);
-    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    pointer-events: none;
+    height: 42px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(176,141,87,0.22) 0%, rgba(176,141,87,0.10) 100%);
+    border: 1px solid rgba(176,141,87,0.3);
+    box-shadow: 0 0 16px rgba(176,141,87,0.12),
+                0 4px 12px rgba(0,0,0,0.08),
+                inset 0 1px 0 rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     z-index: 0;
+    will-change: left, width;
+  }
+  .bottom-nav-pill.animating {
+    transition: left 0.45s cubic-bezier(0.4, 0, 0.15, 1),
+                width 0.45s cubic-bezier(0.4, 0, 0.15, 1);
+  }
+  .bottom-nav-pill.dragging {
+    transition: none;
+    box-shadow: 0 0 24px rgba(176,141,87,0.2),
+                0 4px 16px rgba(0,0,0,0.12),
+                inset 0 1px 0 rgba(255,255,255,0.2);
   }
 
   .bottom-nav a {
@@ -2403,23 +2421,25 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
     align-items: center;
     gap: 2px;
     text-decoration: none;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.45);
     font-family: var(--body);
     font-size: 9px;
     font-weight: 400;
     letter-spacing: 0.3px;
-    padding: 6px 10px;
+    padding: 8px 10px;
     transition: color 0.35s ease, transform 0.25s ease;
     -webkit-tap-highlight-color: transparent;
     position: relative;
     z-index: 1;
+    user-select: none;
+    -webkit-user-select: none;
   }
   .bottom-nav a.active {
     color: var(--gold);
-    transform: scale(1.05);
+    transform: scale(1.06);
   }
   .bottom-nav a:active {
-    transform: scale(0.92);
+    transform: scale(0.93);
   }
   .bottom-nav a svg {
     width: 20px;
@@ -2439,14 +2459,15 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
   .v3-footer { padding-bottom: 80px !important; }
 
   html.dark-mode .bottom-nav {
-    background: rgba(0,0,0,0.35);
+    background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.25) 100%);
     border-color: rgba(255,255,255,0.1);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4),
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4),
+                0 2px 8px rgba(0,0,0,0.2),
                 inset 0 1px 0 rgba(255,255,255,0.08),
-                inset 0 -1px 0 rgba(0,0,0,0.2);
+                inset 0 -0.5px 0 rgba(0,0,0,0.15);
   }
   html.dark-mode .bottom-nav a {
-    color: rgba(255,255,255,0.4);
+    color: rgba(255,255,255,0.35);
   }
   html.dark-mode .bottom-nav a.active {
     color: var(--gold);
@@ -5038,47 +5059,43 @@ var heroEl = document.getElementById('hero');
 if (heroEl) heroObserver.observe(heroEl);
 
 // ============================================================
-// MOBILE BOTTOM NAV - hide on scroll down, show on scroll up
+// MOBILE BOTTOM NAV - permanent with liquid glass drag pill
 // ============================================================
 (function() {
   var bottomNav = document.getElementById('bottomNav');
   if (!bottomNav) return;
-  var lastY = 0;
-  var ticking = false;
-
-  function onScroll() {
-    var y = window.scrollY || window.pageYOffset;
-    if (y > lastY && y > 100) {
-      bottomNav.classList.add('hidden');
-    } else {
-      bottomNav.classList.remove('hidden');
-    }
-    lastY = y;
-    ticking = false;
-  }
-
-  window.addEventListener('scroll', function() {
-    if (!ticking) {
-      requestAnimationFrame(onScroll);
-      ticking = true;
-    }
-  }, { passive: true });
-
-  // Active state + liquid glass pill
   var bnLinks = bottomNav.querySelectorAll('a[data-scroll-to]');
   var bnSections = ['hero','secCakes','secCupcakes','secCustom','secReviews'];
   var pill = document.getElementById('bottomNavPill');
+  var isDragging = false;
+  var dragStartX = 0;
+  var pillStartLeft = 0;
+  var scrollLocked = false;
 
-  function movePill(link) {
+  function movePill(link, animate) {
     if (!pill || !link) return;
     var navRect = bottomNav.getBoundingClientRect();
     var linkRect = link.getBoundingClientRect();
-    pill.style.left = (linkRect.left - navRect.left - 4) + 'px';
-    pill.style.width = (linkRect.width + 8) + 'px';
-    pill.style.top = ((navRect.height - 40) / 2) + 'px';
+    if (animate) {
+      pill.classList.add('animating');
+      pill.classList.remove('dragging');
+    }
+    pill.style.left = (linkRect.left - navRect.left - 6) + 'px';
+    pill.style.width = (linkRect.width + 12) + 'px';
+    pill.style.top = ((navRect.height - 42) / 2) + 'px';
+    if (animate) {
+      setTimeout(function() { pill.classList.remove('animating'); }, 500);
+    }
+  }
+
+  function setActive(link) {
+    bnLinks.forEach(function(a) { a.classList.remove('active'); });
+    link.classList.add('active');
+    movePill(link, true);
   }
 
   function updateBottomActive() {
+    if (isDragging || scrollLocked) return;
     var scrollY = window.scrollY + window.innerHeight / 3;
     var active = 'hero';
     for (var i = 0; i < bnSections.length; i++) {
@@ -5088,7 +5105,7 @@ if (heroEl) heroObserver.observe(heroEl);
     bnLinks.forEach(function(a) {
       if (a.getAttribute('data-scroll-to') === active) {
         a.classList.add('active');
-        movePill(a);
+        movePill(a, false);
       } else {
         a.classList.remove('active');
       }
@@ -5104,17 +5121,80 @@ if (heroEl) heroObserver.observe(heroEl);
 
   window.addEventListener('resize', function() {
     var activeLink = bottomNav.querySelector('a.active');
-    if (activeLink) movePill(activeLink);
+    if (activeLink) movePill(activeLink, false);
   });
 
   // Click handlers
   bnLinks.forEach(function(a) {
     a.addEventListener('click', function(e) {
       e.preventDefault();
+      if (isDragging) return;
+      setActive(a);
       var target = document.getElementById(a.getAttribute('data-scroll-to'));
-      if (target) lenis.scrollTo(target, { offset: -80 });
+      if (target) {
+        scrollLocked = true;
+        lenis.scrollTo(target, { offset: -80 });
+        setTimeout(function() { scrollLocked = false; }, 1200);
+      }
     });
   });
+
+  // Touch drag on the pill / nav bar
+  function getNearestLink(x) {
+    var closest = null;
+    var closestDist = Infinity;
+    bnLinks.forEach(function(a) {
+      var rect = a.getBoundingClientRect();
+      var center = rect.left + rect.width / 2;
+      var dist = Math.abs(x - center);
+      if (dist < closestDist) { closestDist = dist; closest = a; }
+    });
+    return closest;
+  }
+
+  bottomNav.addEventListener('touchstart', function(e) {
+    if (e.touches.length !== 1) return;
+    isDragging = true;
+    dragStartX = e.touches[0].clientX;
+    pillStartLeft = parseFloat(pill.style.left) || 0;
+    pill.classList.remove('animating');
+    pill.classList.add('dragging');
+  }, { passive: true });
+
+  bottomNav.addEventListener('touchmove', function(e) {
+    if (!isDragging) return;
+    var dx = e.touches[0].clientX - dragStartX;
+    var navRect = bottomNav.getBoundingClientRect();
+    var newLeft = pillStartLeft + dx;
+    var pillW = parseFloat(pill.style.width) || 60;
+    // Clamp within nav bounds
+    newLeft = Math.max(4, Math.min(newLeft, navRect.width - pillW - 4));
+    pill.style.left = newLeft + 'px';
+
+    // Highlight nearest link as user drags
+    var nearest = getNearestLink(e.touches[0].clientX);
+    if (nearest) {
+      bnLinks.forEach(function(a) { a.classList.remove('active'); });
+      nearest.classList.add('active');
+    }
+  }, { passive: true });
+
+  bottomNav.addEventListener('touchend', function(e) {
+    if (!isDragging) return;
+    isDragging = false;
+    pill.classList.remove('dragging');
+    // Snap to nearest link and navigate
+    var activeLink = bottomNav.querySelector('a.active');
+    if (activeLink) {
+      movePill(activeLink, true);
+      var target = document.getElementById(activeLink.getAttribute('data-scroll-to'));
+      if (target) {
+        scrollLocked = true;
+        lenis.scrollTo(target, { offset: -80 });
+        setTimeout(function() { scrollLocked = false; }, 1200);
+      }
+    }
+  }, { passive: true });
 })();
 
 // ============================================================
