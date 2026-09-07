@@ -3,13 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-4RPCTZ1Y2S"></script>
+<!-- Google Analytics (loaded after cookie consent) -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-4RPCTZ1Y2S');
+  function loadGA() {
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4RPCTZ1Y2S';
+    document.head.appendChild(s);
+    gtag('js', new Date());
+    gtag('config', 'G-4RPCTZ1Y2S');
+  }
+  // Auto-load if already consented
+  try { if (localStorage.getItem('cakehaus_cookies') === 'accepted') loadGA(); } catch(e) {}
 </script>
 <meta name="description" content="CakeHaus - Handcrafted cakes and cupcakes in Pretoria, South Africa. Coconut almond glaze cakes, chocolate drizzle cakes, buttercream cupcakes, and custom celebration cakes. Order via WhatsApp.">
 <meta property="og:title" content="CakeHaus - Handcrafted Cakes & Cupcakes">
@@ -2220,6 +2227,86 @@ html.dark-mode .review-form textarea {
   }
   .promo-card-content h3 { font-size: 1.4rem; }
   .promo-prices { flex-direction: column; gap: 10px; }
+}
+
+/* ========== COOKIE CONSENT BANNER ========== */
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99998;
+  padding: 0 20px 20px;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+  pointer-events: none;
+}
+.cookie-banner.visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.cookie-banner-inner {
+  max-width: 520px;
+  margin: 0 auto;
+  background: var(--soft-cream);
+  border: 1px solid rgba(176,141,87,0.2);
+  border-radius: 16px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  backdrop-filter: blur(12px);
+}
+.cookie-text {
+  font-family: var(--body);
+  font-size: 0.85rem;
+  color: var(--warm-gray);
+  line-height: 1.5;
+  margin: 0;
+  flex: 1;
+}
+.cookie-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.cookie-btn {
+  font-family: var(--body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+.cookie-accept {
+  background: var(--gold);
+  color: var(--white);
+}
+.cookie-accept:hover {
+  background: var(--light-gold);
+}
+.cookie-decline {
+  background: transparent;
+  color: var(--warm-gray);
+  border: 1px solid rgba(176,141,87,0.25);
+}
+.cookie-decline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+@media (max-width: 768px) {
+  .cookie-banner-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 14px;
+    padding: 18px 20px;
+  }
+  .cookie-text { font-size: 0.8rem; }
 }
 
 /* ========== DARK MODE TOGGLE ========== */
@@ -5367,6 +5454,44 @@ window.addEventListener('DOMContentLoaded', function() {
     }
   }, 5000);
 });
+</script>
+<!-- Cookie Consent Banner -->
+<div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Cookie consent">
+  <div class="cookie-banner-inner">
+    <p class="cookie-text">We use cookies to understand how visitors interact with our site. No personal data is sold or shared with advertisers.</p>
+    <div class="cookie-actions">
+      <button class="cookie-btn cookie-decline" id="cookieDecline" type="button">Decline</button>
+      <button class="cookie-btn cookie-accept" id="cookieAccept" type="button">Accept</button>
+    </div>
+  </div>
+</div>
+<script>
+(function() {
+  var banner = document.getElementById('cookieBanner');
+  var stored = null;
+  try { stored = localStorage.getItem('cakehaus_cookies'); } catch(e) {}
+
+  if (stored) {
+    banner.style.display = 'none';
+    return;
+  }
+
+  // Show banner after short delay
+  setTimeout(function() { banner.classList.add('visible'); }, 1500);
+
+  document.getElementById('cookieAccept').addEventListener('click', function() {
+    try { localStorage.setItem('cakehaus_cookies', 'accepted'); } catch(e) {}
+    banner.classList.remove('visible');
+    setTimeout(function() { banner.style.display = 'none'; }, 400);
+    loadGA();
+  });
+
+  document.getElementById('cookieDecline').addEventListener('click', function() {
+    try { localStorage.setItem('cakehaus_cookies', 'declined'); } catch(e) {}
+    banner.classList.remove('visible');
+    setTimeout(function() { banner.style.display = 'none'; }, 400);
+  });
+})();
 </script>
 </body>
 </html>
