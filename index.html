@@ -2229,6 +2229,255 @@ html.dark-mode .review-form textarea {
   .promo-prices { flex-direction: column; gap: 10px; }
 }
 
+/* ========== NEWSLETTER SECTION ========== */
+.newsletter-section {
+  padding: 60px 24px;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(176,141,87,0.06), rgba(176,141,87,0.12));
+  border-top: 1px solid rgba(176,141,87,0.12);
+  border-bottom: 1px solid rgba(176,141,87,0.12);
+}
+.newsletter-inner {
+  max-width: 480px;
+  margin: 0 auto;
+}
+.newsletter-title {
+  font-family: var(--heading);
+  font-size: 1.6rem;
+  color: var(--dark);
+  margin: 0 0 8px;
+}
+.newsletter-desc {
+  font-family: var(--body);
+  font-size: 0.95rem;
+  color: var(--warm-gray);
+  margin: 0 0 24px;
+  line-height: 1.5;
+}
+.newsletter-form {
+  display: flex;
+  gap: 10px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+.newsletter-input {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid rgba(176,141,87,0.3);
+  border-radius: 30px;
+  background: var(--soft-cream);
+  font-family: var(--body);
+  font-size: 1rem;
+  color: var(--dark);
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+.newsletter-input:focus {
+  border-color: var(--gold);
+}
+.newsletter-btn {
+  padding: 14px 28px;
+  background: var(--gold);
+  color: var(--white);
+  border: none;
+  border-radius: 30px;
+  font-family: var(--body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+  white-space: nowrap;
+}
+.newsletter-btn:hover {
+  background: var(--light-gold);
+  transform: translateY(-2px);
+}
+.newsletter-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+.newsletter-status {
+  font-family: var(--body);
+  font-size: 0.85rem;
+  margin: 12px 0 0;
+  min-height: 1.2em;
+}
+.newsletter-status.success { color: #25D366; }
+.newsletter-status.error { color: #c0392b; }
+
+/* Toast Notification */
+.ck-toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-120%);
+  z-index: 100000;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-family: var(--body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  max-width: 380px;
+  width: calc(100% - 48px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+  opacity: 0;
+}
+.ck-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+.ck-toast.error {
+  background: #FAF7F3;
+  color: #8B3A2F;
+  border: 1px solid rgba(176,141,87,0.3);
+}
+.ck-toast.success {
+  background: #FAF7F3;
+  color: var(--dark);
+  border: 1px solid var(--gold);
+}
+html.dark-mode .ck-toast.error {
+  background: #2a2019;
+  color: #e8a87c;
+  border-color: rgba(197,168,120,0.3);
+}
+html.dark-mode .ck-toast.success {
+  background: #1e1e1e;
+  color: #F5F0EB;
+  border-color: var(--gold);
+}
+.newsletter-privacy {
+  font-family: var(--body);
+  font-size: 0.75rem;
+  color: var(--warm-gray);
+  opacity: 0.6;
+  margin: 12px 0 0;
+}
+@media (max-width: 480px) {
+  .newsletter-form {
+    flex-direction: column;
+  }
+  .newsletter-btn { width: 100%; }
+}
+
+/* ========== CART NEWSLETTER OPT-IN ========== */
+.cart-newsletter-opt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--body);
+  font-size: 0.8rem;
+  color: var(--warm-gray);
+  cursor: pointer;
+  margin-top: 8px;
+}
+.cart-newsletter-opt input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--gold);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ========== CUSTOM DATE PICKER ========== */
+.date-picker-wrapper {
+  position: relative;
+}
+.date-picker-trigger {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid rgba(176,141,87,0.3);
+  border-radius: 10px;
+  background: var(--soft-cream);
+  font-family: var(--body);
+  font-size: 1rem;
+  color: var(--dark);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.3s;
+}
+.date-picker-trigger:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+.date-picker-trigger.placeholder { color: var(--warm-gray); }
+.date-picker-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--soft-cream);
+  border: 1px solid rgba(176,141,87,0.25);
+  border-radius: 14px;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.15);
+  z-index: 100;
+  padding: 16px;
+  display: none;
+}
+.date-picker-dropdown.open { display: block; }
+.dp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.dp-header span {
+  font-family: var(--heading);
+  font-size: 1rem;
+  color: var(--dark);
+  font-weight: 600;
+}
+.dp-nav {
+  background: none;
+  border: 1px solid rgba(176,141,87,0.25);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  font-size: 1rem;
+  transition: border-color 0.3s, background 0.3s;
+}
+.dp-nav:hover { border-color: var(--gold); background: rgba(176,141,87,0.1); }
+.dp-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  margin-bottom: 4px;
+}
+.dp-weekdays span {
+  font-family: var(--body);
+  font-size: 0.7rem;
+  color: var(--warm-gray);
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 4px 0;
+}
+.dp-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+.dp-day {
+  background: none;
+  border: none;
+  padding: 8px 0;
+  border-radius: 8px;
+  font-family: var(--body);
+  font-size: 0.85rem;
+  color: var(--dark);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.dp-day:hover { background: rgba(176,141,87,0.12); }
+.dp-day.today { border: 1px solid var(--gold); }
+.dp-day.selected { background: var(--gold); color: var(--white); font-weight: 600; }
+.dp-day.disabled { color: rgba(140,130,121,0.3); cursor: default; pointer-events: none; }
+.dp-day.other-month { color: rgba(140,130,121,0.25); }
+
 /* ========== COOKIE CONSENT BANNER ========== */
 .cookie-banner {
   position: fixed;
@@ -2690,8 +2939,23 @@ html.dark-mode .cart-empty {
   gap: 8px;
   touch-action: manipulation;
 }
-.order-preview-confirm:hover { background: #20bd5a; transform: translateY(-2px); }
-.order-preview-confirm svg { width: 16px; height: 16px; fill: #fff; }
+.order-preview-confirm:hover { transform: translateY(-2px); }
+.order-preview-confirm svg { width: 16px; height: 16px; }
+.order-preview-place {
+  background: var(--gold);
+}
+.order-preview-place:hover { background: var(--light-gold); }
+.order-preview-place svg { fill: none; stroke: #fff; }
+.order-preview-wa {
+  background: #25D366;
+}
+.order-preview-wa:hover { background: #20bd5a; }
+.order-preview-wa svg { fill: #fff; }
+.order-preview-confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
 
 /* ========== DARK MODE - NEW COMPONENTS ========== */
 html.dark-mode .celebration-popup { background: #1e1e1e; border-color: rgba(197,168,120,0.3); }
@@ -2707,6 +2971,33 @@ html.dark-mode .cart-upload-btn { border-color: rgba(197,168,120,0.3); }
 html.dark-mode .cart-upload-btn:hover { background: rgba(197,168,120,0.08); }
 html.dark-mode .cart-image-thumb { border-color: rgba(197,168,120,0.3); }
 html.dark-mode .order-preview-header h3 { color: var(--gold); }
+
+/* Dark mode - Newsletter */
+html.dark-mode .newsletter-section { background: linear-gradient(135deg, rgba(176,141,87,0.08), rgba(176,141,87,0.04)); border-color: rgba(176,141,87,0.15); }
+html.dark-mode .newsletter-title { color: var(--gold); }
+html.dark-mode .newsletter-desc { color: rgba(245,240,235,0.65); }
+html.dark-mode .newsletter-input { background: rgba(245,240,235,0.06); border-color: rgba(176,141,87,0.25); color: #F5F0EB; }
+html.dark-mode .newsletter-input::placeholder { color: rgba(245,240,235,0.35); }
+html.dark-mode .newsletter-privacy { color: rgba(245,240,235,0.35); }
+html.dark-mode .newsletter-status.success { color: var(--gold); }
+html.dark-mode .newsletter-status.error { color: #e8a87c; }
+
+/* Dark mode - Custom Date Picker */
+html.dark-mode .date-picker-trigger { background: #2a2a2a; border-color: rgba(197,168,120,0.25); color: #F5F0EB; }
+html.dark-mode .date-picker-trigger.placeholder { color: #666; }
+html.dark-mode .date-picker-dropdown { background: #1e1e1e; border-color: rgba(197,168,120,0.25); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+html.dark-mode .dp-header span { color: #F5F0EB; }
+html.dark-mode .dp-nav { color: #F5F0EB; }
+html.dark-mode .dp-nav:hover { background: rgba(197,168,120,0.15); }
+html.dark-mode .dp-weekdays span { color: #888; }
+html.dark-mode .dp-day { color: #F5F0EB; }
+html.dark-mode .dp-day:hover { background: rgba(197,168,120,0.2); }
+html.dark-mode .dp-day.disabled { color: rgba(255,255,255,0.15); }
+html.dark-mode .dp-day.other-month { color: rgba(255,255,255,0.12); }
+
+/* Dark mode - Cart extras */
+html.dark-mode .cart-newsletter-opt { color: #999; }
+html.dark-mode .cart-step-label { color: #F5F0EB; }
 
 /* ========== MOBILE - NEW COMPONENTS ========== */
 @media (max-width: 768px) {
@@ -2724,6 +3015,9 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
 
 <!-- Skip to content -->
 <a href="#secStory" class="skip-link">Skip to content</a>
+
+<!-- Toast Notification -->
+<div class="ck-toast" id="ckToast"></div>
 
 <!-- Scroll Progress Bar -->
 <div class="scroll-progress" id="scrollProgress"></div>
@@ -2970,7 +3264,7 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
         <h3>Custom Box</h3>
         <p class="order-card-desc">Mix and match your favourite flavours in a 6 or 12 cake box.</p>
         <div class="custom-box-teaser">
-          <span class="custom-box-teaser-price">From R15/cake</span>
+          <span class="custom-box-teaser-price">Box of 6 R100 &middot; Box of 12 R200</span>
         </div>
         <button class="custom-box-open-btn" type="button" id="openBoxBuilderBtn">Build Your Box</button>
       </div>
@@ -3272,6 +3566,20 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
   <a class="cta-btn magnetic" href="https://wa.me/27753399401" target="_blank" rel="noopener">Order on WhatsApp</a>
 </section>
 
+<!-- Newsletter Signup -->
+<section class="newsletter-section" id="secNewsletter" aria-label="Newsletter signup">
+  <div class="newsletter-inner">
+    <h3 class="newsletter-title">Stay in the Loop</h3>
+    <p class="newsletter-desc">Get exclusive promos, new flavours, and special offers delivered to your inbox.</p>
+    <form class="newsletter-form" id="newsletterForm" autocomplete="on">
+      <input type="email" class="newsletter-input" id="newsletterEmail" placeholder="Your email address" aria-label="Email address" required maxlength="100">
+      <button type="submit" class="newsletter-btn" id="newsletterBtn">Subscribe</button>
+    </form>
+    <p class="newsletter-status" id="newsletterStatus"></p>
+    <p class="newsletter-privacy">We respect your privacy. Unsubscribe anytime.</p>
+  </div>
+</section>
+
 <!-- Footer -->
 <footer class="v3-footer" role="contentinfo">
   <div class="footer-inner">
@@ -3344,9 +3652,27 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
         <p class="cart-details-label">Your Details</p>
         <input type="text" class="cart-input" id="cartCustomerName" placeholder="Your name" aria-label="Your name" maxlength="60">
         <input type="tel" class="cart-input" id="cartCustomerPhone" placeholder="Phone number" aria-label="Phone number" maxlength="20" pattern="[\d\s\+\-\(\)]{7,20}">
-        <label class="cart-field-label" for="cartCustomerDate">Collection / delivery date</label>
-      <input type="date" class="cart-input" id="cartCustomerDate" aria-label="Collection or delivery date">
+        <input type="email" class="cart-input" id="cartCustomerEmail" placeholder="Email address" aria-label="Email address" maxlength="100">
+        <label class="cart-field-label">Collection date</label>
+        <input type="hidden" id="cartCustomerDate">
+        <div class="date-picker-wrapper" id="datePickerWrapper">
+          <button type="button" class="date-picker-trigger placeholder" id="datePickerTrigger">Select a date</button>
+          <div class="date-picker-dropdown" id="datePickerDropdown">
+            <div class="dp-header">
+              <button type="button" class="dp-nav" id="dpPrev">&lsaquo;</button>
+              <span id="dpMonthYear"></span>
+              <button type="button" class="dp-nav" id="dpNext">&rsaquo;</button>
+            </div>
+            <div class="dp-weekdays">
+              <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+            </div>
+            <div class="dp-days" id="dpDays"></div>
+          </div>
+        </div>
         <textarea class="cart-input cart-textarea" id="cartCustomerNote" placeholder="Special requests or message on cake..." aria-label="Special requests" rows="2" maxlength="500"></textarea>
+        <label class="cart-newsletter-opt">
+          <input type="checkbox" id="cartNewsletterOpt"> Join our mailing list for exclusive promos
+        </label>
         <label class="cart-field-label">Reference images (optional)</label>
         <input type="file" id="cartImageInput" accept="image/*" multiple hidden>
         <button type="button" class="cart-upload-btn" id="cartUploadBtn">
@@ -3443,9 +3769,13 @@ html.dark-mode .order-preview-header h3 { color: var(--gold); }
     </div>
     <div class="order-preview-actions">
       <button class="order-preview-back" id="orderPreviewBack">Go Back</button>
-      <button class="order-preview-confirm" id="orderPreviewConfirm">
-        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2.546 20.2A1.884 1.884 0 003.8 21.454l3.032-.892A9.96 9.96 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.96 7.96 0 01-4.468-1.363l-.32-.192-1.8.529.492-1.836-.21-.334A7.963 7.963 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></svg>
-        Confirm & Send
+      <button class="order-preview-confirm order-preview-place" id="orderPreviewPlace">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        Place Order
+      </button>
+      <button class="order-preview-confirm order-preview-wa" id="orderPreviewConfirm">
+        <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path fill="currentColor" d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2.546 20.2A1.884 1.884 0 003.8 21.454l3.032-.892A9.96 9.96 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+        Send via WhatsApp
       </button>
     </div>
   </div>
@@ -4502,7 +4832,7 @@ cartImageInput.addEventListener('change', function() {
       // Verify the data URL starts with a valid image MIME
       var dataUrl = e.target.result;
       if (!dataUrl.match(/^data:image\/(jpeg|png|webp|gif);base64,/)) {
-        alert('File "' + file.name + '" is not a valid image.');
+        showToast('File "' + file.name + '" is not a valid image.');
         return;
       }
       cartDesignImages.push({ file: file, dataUrl: dataUrl });
@@ -4511,7 +4841,7 @@ cartImageInput.addEventListener('change', function() {
     reader.readAsDataURL(file);
   });
   if (errors.length > 0) {
-    alert(errors[0]); // show first error
+    showToast(errors[0]);
   }
   this.value = '';
 });
@@ -4663,7 +4993,7 @@ function renderCartOrderSummary() {
 
 cartReadyBtn.addEventListener('click', function() {
   if (Object.keys(cart).length === 0) {
-    alert('Your cart is empty. Add some items before continuing.');
+    showToast('Your cart is empty. Add some items first.');
     return;
   }
   goToCartStep(2);
@@ -4675,7 +5005,7 @@ cartBackBtn.addEventListener('click', function() {
 // ============================================================
 // 16c. CUSTOM BOX BUILDER
 // ============================================================
-var BOX_TRAY_PRICES = { original: { 6: 90, 12: 180 }, drizzle: { 6: 100, 12: 200 } };
+var BOX_FLAT_PRICES = { 6: 100, 12: 200 };
 var BOX_FLAVOURS = [
   { key: 'original', name: 'Original (Coconut Almond Glaze)', type: 'original', color: '#D4A574' },
   { key: 'milkybar', name: 'Milkybar Drizzle', type: 'drizzle', color: '#F5E6C8' },
@@ -4702,16 +5032,8 @@ function boxTotalCount() {
   return total;
 }
 function boxTotalPrice() {
-  var total = 0;
-  var size = boxState.size;
-  BOX_FLAVOURS.forEach(function(f) {
-    var c = boxState.counts[f.key];
-    if (c > 0) {
-      var trayPrice = BOX_TRAY_PRICES[f.type][size];
-      total += c * (trayPrice / size);
-    }
-  });
-  return Math.round(total);
+  // Flat pricing: any combination of flavours costs the same
+  return BOX_FLAT_PRICES[boxState.size] || 0;
 }
 
 function resetBoxState() {
@@ -5092,7 +5414,7 @@ function buildWhatsAppMessage() {
 
 cartSendBtn.addEventListener('click', function() {
   if (Object.keys(cart).length === 0) {
-    alert('Your cart is empty. Add some items before sending your order.');
+    showToast('Your cart is empty. Add some items first.');
     return;
   }
   // Validate inputs before showing preview
@@ -5101,11 +5423,11 @@ cartSendBtn.addEventListener('click', function() {
   var note = cartCustomerNote.value.trim();
 
   if (containsProfanity(name + ' ' + note)) {
-    alert('Please keep your order details respectful and appropriate.');
+    showToast('Please keep your order details respectful and appropriate.');
     return;
   }
   if (phone && !isValidPhone(phone)) {
-    alert('Please enter a valid phone number.');
+    showToast('Please enter a valid phone number.');
     cartCustomerPhone.focus();
     return;
   }
@@ -5244,6 +5566,15 @@ function launchConfetti(duration) {
 // ============================================================
 // CELEBRATION POPUP
 // ============================================================
+function showToast(msg, type) {
+  var toast = document.getElementById('ckToast');
+  toast.textContent = msg;
+  toast.className = 'ck-toast ' + (type || 'error');
+  toast.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(function() { toast.classList.remove('show'); }, 3500);
+}
+
 function showCelebration(type) {
   var overlay = document.getElementById('celebrationOverlay');
   var icon = document.getElementById('celebrationIcon');
@@ -5299,20 +5630,31 @@ function showOrderPreview() {
   // Customer details
   var name = document.getElementById('cartCustomerName').value.trim();
   var phone = document.getElementById('cartCustomerPhone').value.trim();
+  var email = document.getElementById('cartCustomerEmail').value.trim();
   var dateRaw = document.getElementById('cartCustomerDate').value;
   var note = document.getElementById('cartCustomerNote').value.trim();
 
-  if (name || phone || dateRaw || note) {
+  if (name || phone || email || dateRaw || note) {
     html += '<div class="order-preview-details">';
     if (name) html += '<div class="order-preview-detail"><strong>Name:</strong> ' + sanitizeHTML(name) + '</div>';
     if (phone) html += '<div class="order-preview-detail"><strong>Phone:</strong> ' + sanitizeHTML(phone) + '</div>';
+    if (email) html += '<div class="order-preview-detail"><strong>Email:</strong> ' + sanitizeHTML(email) + '</div>';
     if (dateRaw) {
       var d = new Date(dateRaw + 'T00:00:00');
       var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      html += '<div class="order-preview-detail"><strong>Collection/Delivery:</strong> ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + '</div>';
+      html += '<div class="order-preview-detail"><strong>Collection:</strong> ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + '</div>';
     }
     if (note) html += '<div class="order-preview-detail"><strong>Note:</strong> ' + sanitizeHTML(note) + '</div>';
     html += '</div>';
+  }
+
+  // Enable/disable Place Order based on required fields
+  var placeBtn = document.getElementById('orderPreviewPlace');
+  if (name && phone && dateRaw) {
+    placeBtn.disabled = false;
+  } else {
+    placeBtn.disabled = true;
+    html += '<p style="font-size:0.75rem;color:var(--warm-gray);margin-top:12px;text-align:center;">Name, phone, and collection date are required to place an order on-site.</p>';
   }
 
   if (cartDesignImages.length > 0) {
@@ -5349,9 +5691,246 @@ document.getElementById('orderPreviewConfirm').addEventListener('click', functio
   document.getElementById('orderPreviewOverlay').classList.remove('show');
   unlockPageScroll();
   var message = buildWhatsAppMessage();
-  // Flag that user is going to WhatsApp to order
   sessionStorage.setItem('cakehaus_ordering', 'true');
   window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message), '_blank');
+});
+
+// ============================================================
+// CUSTOM DATE PICKER
+// ============================================================
+(function() {
+  var trigger = document.getElementById('datePickerTrigger');
+  var dropdown = document.getElementById('datePickerDropdown');
+  var hidden = document.getElementById('cartCustomerDate');
+  var monthYearEl = document.getElementById('dpMonthYear');
+  var daysEl = document.getElementById('dpDays');
+  var prevBtn = document.getElementById('dpPrev');
+  var nextBtn = document.getElementById('dpNext');
+  if (!trigger) return;
+
+  var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var today = new Date();
+  today.setHours(0,0,0,0);
+  var viewYear = today.getFullYear();
+  var viewMonth = today.getMonth();
+  var selectedDate = null;
+
+  function render() {
+    monthYearEl.textContent = MONTHS[viewMonth] + ' ' + viewYear;
+    var firstDay = new Date(viewYear, viewMonth, 1).getDay();
+    var daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+    var daysInPrev = new Date(viewYear, viewMonth, 0).getDate();
+    var html = '';
+
+    // Previous month trailing days
+    for (var i = firstDay - 1; i >= 0; i--) {
+      html += '<button type="button" class="dp-day other-month disabled" disabled>' + (daysInPrev - i) + '</button>';
+    }
+    // Current month days
+    for (var d = 1; d <= daysInMonth; d++) {
+      var dt = new Date(viewYear, viewMonth, d);
+      var classes = 'dp-day';
+      if (dt < today) classes += ' disabled';
+      if (dt.getTime() === today.getTime()) classes += ' today';
+      if (selectedDate && dt.getTime() === selectedDate.getTime()) classes += ' selected';
+      var disabledAttr = dt < today ? ' disabled' : '';
+      html += '<button type="button" class="' + classes + '" data-date="' + viewYear + '-' + String(viewMonth+1).padStart(2,'0') + '-' + String(d).padStart(2,'0') + '"' + disabledAttr + '>' + d + '</button>';
+    }
+    // Next month trailing days
+    var total = firstDay + daysInMonth;
+    var remaining = (7 - (total % 7)) % 7;
+    for (var r = 1; r <= remaining; r++) {
+      html += '<button type="button" class="dp-day other-month disabled" disabled>' + r + '</button>';
+    }
+    daysEl.innerHTML = html;
+  }
+
+  trigger.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    dropdown.classList.toggle('open');
+  });
+
+  prevBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    viewMonth--;
+    if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+    render();
+  });
+
+  nextBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    viewMonth++;
+    if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+    render();
+  });
+
+  daysEl.addEventListener('click', function(e) {
+    var btn = e.target.closest('.dp-day');
+    if (!btn || btn.disabled) return;
+    var val = btn.getAttribute('data-date');
+    selectedDate = new Date(val + 'T00:00:00');
+    hidden.value = val;
+    // Format display
+    var parts = val.split('-');
+    var mo = MONTHS[parseInt(parts[1],10) - 1];
+    trigger.textContent = parseInt(parts[2],10) + ' ' + mo + ' ' + parts[0];
+    trigger.classList.remove('placeholder');
+    dropdown.classList.remove('open');
+    render();
+  });
+
+  // Close on outside click
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('#datePickerWrapper')) {
+      dropdown.classList.remove('open');
+    }
+  });
+
+  render();
+})();
+
+// ============================================================
+// ORDER & NEWSLETTER SCRIPT URL
+// ============================================================
+var ORDER_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZExV1HFYUWEXB9ly0YTmzwZwE6QOI9_13UE6xIbhaY9I-uIUO7ZMb32oMOe_eYhmcJQ/exec';
+
+// ============================================================
+// NEWSLETTER SIGNUP
+// ============================================================
+(function() {
+  var form = document.getElementById('newsletterForm');
+  var emailInput = document.getElementById('newsletterEmail');
+  var btn = document.getElementById('newsletterBtn');
+  var status = document.getElementById('newsletterStatus');
+  if (!form) return;
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = emailInput.value.trim();
+    if (!email) return;
+
+    btn.disabled = true;
+    btn.textContent = 'Subscribing...';
+    status.textContent = '';
+    status.className = 'newsletter-status';
+
+    var data = 'action=subscribe&email=' + encodeURIComponent(email) + '&source=footer&timestamp=' + encodeURIComponent(new Date().toISOString());
+
+    var script = document.createElement('script');
+    script.src = ORDER_SCRIPT_URL + '?' + data;
+    script.onload = function() {
+      status.textContent = 'You are subscribed! Watch your inbox for sweet deals.';
+      status.className = 'newsletter-status success';
+      emailInput.value = '';
+      btn.textContent = 'Subscribed';
+      setTimeout(function() {
+        btn.disabled = false;
+        btn.textContent = 'Subscribe';
+      }, 3000);
+    };
+    script.onerror = function() {
+      status.textContent = 'Something went wrong. Please try again.';
+      status.className = 'newsletter-status error';
+      btn.disabled = false;
+      btn.textContent = 'Subscribe';
+    };
+    document.body.appendChild(script);
+  });
+})();
+
+// ============================================================
+// PLACE ORDER (ON-SITE)
+// ============================================================
+document.getElementById('orderPreviewPlace').addEventListener('click', function() {
+  var btn = this;
+  if (btn.disabled) return;
+
+  var name = document.getElementById('cartCustomerName').value.trim();
+  var phone = document.getElementById('cartCustomerPhone').value.trim();
+  var email = document.getElementById('cartCustomerEmail').value.trim();
+  var dateRaw = document.getElementById('cartCustomerDate').value;
+  var note = document.getElementById('cartCustomerNote').value.trim();
+
+  // Validate required fields
+  if (!name || !phone || !dateRaw) {
+    showToast('Please fill in your name, phone number, and collection date.');
+    return;
+  }
+  if (!isValidPhone(phone)) {
+    showToast('Please enter a valid phone number.');
+    return;
+  }
+
+  // Build order items
+  var items = [];
+  var total = 0;
+  Object.keys(cart).forEach(function(id) {
+    var item = cart[id];
+    var subtotal = item.qty * item.price;
+    total += subtotal;
+    items.push({ name: item.name, qty: item.qty, price: item.price, subtotal: subtotal });
+  });
+
+  var newsletterOpt = document.getElementById('cartNewsletterOpt');
+  var joinNewsletter = newsletterOpt && newsletterOpt.checked && email;
+
+  var orderData = {
+    name: name,
+    phone: phone,
+    email: email,
+    date: dateRaw,
+    note: note,
+    items: JSON.stringify(items),
+    total: total,
+    newsletter: joinNewsletter ? 'yes' : 'no',
+    timestamp: new Date().toISOString()
+  };
+
+  // Disable button and show loading
+  btn.disabled = true;
+  var origText = btn.innerHTML;
+  btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;">Placing order...</span>';
+
+  var params = Object.keys(orderData).map(function(k) {
+    return encodeURIComponent(k) + '=' + encodeURIComponent(orderData[k]);
+  }).join('&');
+
+  var orderSuccess = function() {
+    document.getElementById('orderPreviewOverlay').classList.remove('show');
+    unlockPageScroll();
+    Object.keys(cart).forEach(function(id) { delete cart[id]; });
+    renderCart();
+    goToCartStep(1);
+    document.querySelector('.cart-drawer').classList.remove('open');
+    document.querySelector('.cart-drawer-overlay').classList.remove('open');
+    document.getElementById('cartCustomerName').value = '';
+    document.getElementById('cartCustomerPhone').value = '';
+    document.getElementById('cartCustomerEmail').value = '';
+    document.getElementById('cartCustomerDate').value = '';
+    document.getElementById('cartCustomerNote').value = '';
+    if (document.getElementById('cartNewsletterOpt')) document.getElementById('cartNewsletterOpt').checked = false;
+    var dpTrigger = document.getElementById('datePickerTrigger');
+    if (dpTrigger) { dpTrigger.textContent = 'Select a date'; dpTrigger.classList.add('placeholder'); }
+    showCelebration('order');
+    btn.innerHTML = origText;
+    btn.disabled = false;
+  };
+
+  // Use script injection for cross-origin compatibility (works from file:// and https://)
+  var script = document.createElement('script');
+  script.src = ORDER_SCRIPT_URL + '?' + params + '&callback=_ckOrderCb';
+  window._ckOrderCb = function() { orderSuccess(); };
+  script.onload = function() {
+    // If callback wasn't called by script, still treat as success after load
+    setTimeout(function() { if (btn.disabled) orderSuccess(); }, 500);
+  };
+  script.onerror = function() {
+    showToast('There was an issue placing your order. Please try again or use WhatsApp.');
+    btn.innerHTML = origText;
+    btn.disabled = false;
+  };
+  document.body.appendChild(script);
 });
 
 // ============================================================
