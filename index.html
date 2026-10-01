@@ -616,6 +616,7 @@ a, button, [tabindex], .product-card, .h-card { cursor: pointer; }
   margin-top: 24px;
 }
 .order-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.order-grid-4 { grid-template-columns: repeat(4, 1fr); }
 .order-card {
   background: var(--soft-cream);
   border: 1px solid rgba(176,141,87,0.18);
@@ -767,6 +768,16 @@ a, button, [tabindex], .product-card, .h-card { cursor: pointer; }
   text-align: center;
   margin-top: 10px;
   opacity: 0.7;
+}
+/* Equal-size cards in the regular cupcakes grid */
+#cupcakesOrderGridRegular { align-items: stretch; }
+#cupcakesOrderGridRegular > .order-card,
+#cupcakesOrderGridRegular > .flip-card-wrapper { min-height: 320px; height: 100%; }
+#cupcakesOrderGridRegular > .order-card { display: flex; flex-direction: column; justify-content: center; }
+#cupcakesOrderGridRegular .flip-card-wrapper .order-card { height: 100%; min-height: 0; box-sizing: border-box; }
+@media (max-width: 768px) {
+  #cupcakesOrderGridRegular > .order-card,
+  #cupcakesOrderGridRegular > .flip-card-wrapper { min-height: 280px; }
 }
 @media (max-width: 768px) {
   .flip-btn { display: none; }
@@ -1887,7 +1898,7 @@ html.dark-mode .review-form textarea {
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 900px) {
-  .order-grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .order-grid-3, .order-grid-4 { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 768px) {
   /* ===== LAYOUT & SPACING ===== */
@@ -1921,7 +1932,7 @@ html.dark-mode .review-form textarea {
   .product-card-body p { font-size: 0.75rem; }
 
   /* ===== ORDER CARDS - more breathing room ===== */
-  .order-grid-3 { grid-template-columns: 1fr; gap: 16px; }
+  .order-grid-3, .order-grid-4 { grid-template-columns: 1fr; gap: 16px; }
   .order-card { padding: 20px 22px; }
   .order-card h3 { font-size: 1.1rem; margin-bottom: 4px; }
   .order-card-desc { font-size: 0.85rem; line-height: 1.5; }
@@ -3276,7 +3287,7 @@ html.dark-mode .cart-step-label { color: #F5F0EB; }
     <div style="max-width:1200px;margin:0 auto;padding:0 60px;">
       <p class="section-label">Sweet Bites</p>
       <h2 class="section-title" data-split>Buttercream Cupcakes</h2>
-      <p class="section-text" style="margin-bottom:40px;">Beautifully piped buttercream cupcakes in classic, Lotus Biscoff, and Oreo flavours. Available in regular and mini sizes.</p>
+      <p class="section-text" style="margin-bottom:40px;">Beautifully piped buttercream cupcakes in classic, Lotus Biscoff, and Oreo flavours. Available in regular and mini sizes, plus our Luxe range of custom-designed florals.</p>
     </div>
     <div class="marquee-wrapper">
       <div class="marquee-track marquee-cupcakes" id="cupcakeTrack">
@@ -3308,6 +3319,10 @@ html.dark-mode .cart-step-label { color: #F5F0EB; }
           <div class="img-reveal"><img src="images/IMG_6639.JPG" alt="Eid Special" loading="lazy"></div>
           <div class="h-card-body"><h3>Eid Special</h3></div>
         </div>
+        <div class="h-card" data-tilt data-lightbox="images/luxe-cupcakes.jpg" data-caption="Luxe Cupcakes">
+          <div class="img-reveal"><img src="images/luxe-cupcakes.jpg" alt="Luxe Cupcakes - custom designs with beautiful piping" loading="lazy"></div>
+          <div class="h-card-body"><h3>Luxe Cupcakes</h3></div>
+        </div>
         <!-- Duplicates for seamless loop -->
         <div class="h-card" data-lightbox="images/366b3739-35c1-4f61-9ff1-c6e43583c905.JPG" data-caption="Mini Cupcakes">
           <div class="img-reveal"><img src="images/366b3739-35c1-4f61-9ff1-c6e43583c905.JPG" alt="Mini Cupcakes" loading="lazy"></div>
@@ -3337,6 +3352,10 @@ html.dark-mode .cart-step-label { color: #F5F0EB; }
           <div class="img-reveal"><img src="images/IMG_6639.JPG" alt="Eid Special" loading="lazy"></div>
           <div class="h-card-body"><h3>Eid Special</h3></div>
         </div>
+        <div class="h-card" data-lightbox="images/luxe-cupcakes.jpg" data-caption="Luxe Cupcakes">
+          <div class="img-reveal"><img src="images/luxe-cupcakes.jpg" alt="Luxe Cupcakes - custom designs with beautiful piping" loading="lazy"></div>
+          <div class="h-card-body"><h3>Luxe Cupcakes</h3></div>
+        </div>
         <div class="h-card" data-lightbox="images/e0874193-e876-49c9-bb7a-d052d4ff768e.JPG" data-caption="Rose Collection">
           <div class="img-reveal"><img src="images/e0874193-e876-49c9-bb7a-d052d4ff768e.JPG" alt="Rose Cupcake Collection" loading="lazy"></div>
           <div class="h-card-body"><h3>Rose Collection</h3></div>
@@ -3346,14 +3365,14 @@ html.dark-mode .cart-step-label { color: #F5F0EB; }
 
     <div style="max-width:1200px;margin:0 auto;padding:0 60px;">
     <h3 class="order-section-heading">Order Cupcakes  - Regular (per dozen)</h3>
-    <div class="order-grid order-grid-3" id="cupcakesOrderGridRegular">
+    <div class="order-grid order-grid-4" id="cupcakesOrderGridRegular">
       <div class="order-card" data-tilt tabindex="0">
         <h3>Buttercream</h3>
         <p class="order-card-desc">Classic vanilla buttercream, piped high.</p>
-        <div class="order-line" data-id="cup-butter-reg" data-product="Buttercream Cupcakes - 1 Dozen" data-price="240">
+        <div class="order-line" data-id="cup-butter-reg" data-product="Buttercream Cupcakes - 1 Dozen" data-price="300">
           <div class="order-line-info">
             <span class="order-line-size">1 Dozen</span>
-            <span class="order-line-price">R240</span>
+            <span class="order-line-price">R300</span>
           </div>
           <div class="qty-control">
             <button class="qty-btn qty-minus" type="button" aria-label="Decrease quantity">&minus;</button>
@@ -3414,6 +3433,35 @@ html.dark-mode .cart-step-label { color: #F5F0EB; }
           </div>
           <div class="flip-card-back">
             <img src="images/b6f0a6cc-a9c4-4785-9a80-e66472db240c.JPG" alt="Oreo Cupcakes" loading="lazy">
+            <div class="flip-card-back-overlay">
+              <button class="flip-btn" type="button" aria-label="Back to details"><svg viewBox="0 0 24 24"><path d="M9 15l6-6M9 9h6v6"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card-wrapper" data-flip>
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="order-card" tabindex="0">
+              <button class="flip-btn" type="button" aria-label="See image"><svg viewBox="0 0 24 24"><path d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg></button>
+              <h3>Luxe Cupcakes</h3>
+              <p class="order-card-desc">Custom designs with beautiful, hand-piped buttercream florals.</p>
+              <div class="order-line" data-id="cup-luxe-reg" data-product="Luxe Cupcakes - 1 Dozen" data-price="400">
+                <div class="order-line-info">
+                  <span class="order-line-size">1 Dozen</span>
+                  <span class="order-line-price">R400</span>
+                </div>
+                <div class="qty-control">
+                  <button class="qty-btn qty-minus" type="button" aria-label="Decrease quantity">&minus;</button>
+                  <span class="qty-value">0</span>
+                  <button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button>
+                </div>
+              </div>
+              <p class="flip-hint">Swipe to see</p>
+            </div>
+          </div>
+          <div class="flip-card-back">
+            <img src="images/luxe-cupcakes.jpg" alt="Luxe Cupcakes" loading="lazy">
             <div class="flip-card-back-overlay">
               <button class="flip-btn" type="button" aria-label="Back to details"><svg viewBox="0 0 24 24"><path d="M9 15l6-6M9 9h6v6"/></svg></button>
             </div>
